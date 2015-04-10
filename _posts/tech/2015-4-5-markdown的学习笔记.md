@@ -1,3 +1,11 @@
+---
+layout: post
+category : 技术
+tagline: "markdown学习"
+tags : [markdown, 技巧,学习笔记]
+---
+{% include JB/setup %}
+
 #markdown的学习笔记  
 >对于一个喜欢读书和试图写作的人来说，Microsoft的word实在是太重量级了，而且有太多干扰思维和书写的地方，让人很不爽。但是，notepad太轻量了，只有纯文本，没有格式控制，表达不出某些语气，并且不适合阅读。那么，究竟应该有没有一个文本编辑器，集简洁和功能于一体？
 
