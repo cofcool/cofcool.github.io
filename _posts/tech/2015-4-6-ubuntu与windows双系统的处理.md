@@ -1,8 +1,8 @@
 ---
 layout: post
 category : 技术
-tagline: "Ubuntu上软件安装"
-tags : [Ubuntu, 技巧,软件,安装]
+tagline: "双系统的处理"
+tags : [Ubuntu, 双系统,Windows,安装]
 ---
 {% include JB/setup %}
 
