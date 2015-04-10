@@ -103,7 +103,9 @@ Markdown是一种可以使用普通文本编辑器编写的标记语言，通过
 
 1. \` printf("Hello Word\n"); \`   
 效果如下：   
+
 ` printf("Hello Word\n"); ` 
+
 2. 使用空格高亮（一般多行代码使用）
 
         int mian	(void)	{
