@@ -1,3 +1,11 @@
+---
+layout: post
+category : 技术
+tagline: "Ubuntu上软件安装"
+tags : [Ubuntu, 技巧,软件,安装]
+---
+{% include JB/setup %}
+
 #Ubuntu与windows双系统的处理
 
 >
