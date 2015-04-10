@@ -2,7 +2,7 @@
 layout: post
 category : 技术
 tagline: "双系统的处理"
-tags : [Ubuntu, 双系统,Windows,安装]
+tags : [菜鸟的Ubuntu学习之旅, 双系统,Windows,安装]
 ---
 {% include JB/setup %}
 

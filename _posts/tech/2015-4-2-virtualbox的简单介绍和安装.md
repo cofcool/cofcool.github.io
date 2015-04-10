@@ -2,7 +2,7 @@
 layout: post
 category : 技术
 tagline: "virtualBox的相关知识"
-tags : [virtualBox, 软件安装]
+tags : [virtualBox, 软件安装,菜鸟的Ubuntu学习之旅]
 ---
 {% include JB/setup %}
 
