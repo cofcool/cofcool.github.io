@@ -47,7 +47,7 @@ Markdown是一种可以使用普通文本编辑器编写的标记语言，通过
     
 效果： 
 
-![image](https://github.com/cofcool/cofcool.github.io/blob/master/_posts/images/1.jpg)
+![image]({{ site.url }}/public/upload/images/1.jpg)
 
 ***
 
@@ -77,6 +77,7 @@ Markdown是一种可以使用普通文本编辑器编写的标记语言，通过
     1. A
     2. B
     3. C
+    
    无序：
    
     * A
