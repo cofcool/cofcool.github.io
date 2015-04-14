@@ -14,12 +14,8 @@ tagline: 没有什么特长的计算机爱好者
 
 ## 最近文章
 <ul class="posts">
-  {% for post in site.posts %}
-    { % assign index = 0 % }
-    {% if index < 10 %}
+  {% for post in site.related_posts  %}
     <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
-    {% index++ %}
-    {% endif %}
   {% endfor %}
 </ul>
 
