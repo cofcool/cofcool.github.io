@@ -1,6 +1,7 @@
 ---
 layout: post
-category : 技术
+category : Tech
+title : Mac OS X实用小技巧
 tags : [Mac,技巧]
 ---
 {% include JB/setup %}

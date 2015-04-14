@@ -1,6 +1,7 @@
 ---
 layout: post
-category : 技术
+category : Tech
+title : markdown学习笔记
 tagline: "markdown学习"
 tags : [markdown, 技巧,学习笔记]
 ---

@@ -1,6 +1,7 @@
 ---
 layout: post
-category : 技术
+category : Tech
+title : 在ubuntu上实现spotlight
 tags : [菜鸟的Ubuntu学习之旅,软件]
 ---
 {% include JB/setup %}

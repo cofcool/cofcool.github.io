@@ -1,6 +1,7 @@
 ---
 layout: post
-category : 技术
+category : Tech
+title: 安装ubuntu之后,需要做什么
 tagline: "Ubuntu相关"
 tags : [菜鸟的Ubuntu学习之旅, 技巧]
 ---

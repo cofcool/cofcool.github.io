@@ -1,6 +1,7 @@
 ---
 layout: post
-category : 技术
+category : Tech
+title : 如何在ubuntu上安装软件
 tagline: "Ubuntu上软件安装"
 tags : [菜鸟的Ubuntu学习之旅, 技巧,软件,安装]
 ---

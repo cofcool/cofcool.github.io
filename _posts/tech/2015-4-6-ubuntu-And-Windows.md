@@ -1,6 +1,7 @@
 ---
 layout: post
-category : 技术
+category : Tech
+title : ubuntu与windows双系统的处理
 tagline: "双系统的处理"
 tags : [菜鸟的Ubuntu学习之旅, 双系统,Windows,安装]
 ---
