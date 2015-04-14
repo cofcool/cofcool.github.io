@@ -1,7 +1,7 @@
 ---
 layout: post
 category : Tech
-titile : Elementary OS使用体验
+title : Elementary OS使用体验
 tagline: "尝试一下新的UI"
 tags : [Elementary OS, Linux]
 ---
