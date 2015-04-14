@@ -1,6 +1,6 @@
 ---
 layout: post
-category : 其它
+category : others
 tagline: "写作"
 tags : [写作, 成长, 人生哲学]
 title : 写作的重要意义
