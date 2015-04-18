@@ -14,7 +14,7 @@ tags : [菜鸟的Ubuntu学习之旅]
 
 1.复制图片
 	
-	cp image /boot/grub
+	sudo cp image /boot/grub
 
 2.update Grub
 	
