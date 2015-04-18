@@ -15,7 +15,7 @@ tagline: 没有什么特长的计算机爱好者
 ## 最近文章
 <ul class="posts">
   {% for post in site.posts %}
-    <li><span>{{ site.members | where:"graduation_month","4" }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
+    <li><span>{{ post.date | date_to_string }}{{ site.members | where:"graduation_month","4" }}</span> &raquo; <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
   {% endfor %}
 </ul>
 
