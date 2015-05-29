@@ -23,7 +23,7 @@ Samba是在Linux和UNIX系统上实现SMB协议的一个免费软件，由服务
         [myshare]
           path = /home/cofcool/share 
           guest ok = no
-          valid user = cofcool
+          valid users = cofcool
           writeable = yes
           
          
