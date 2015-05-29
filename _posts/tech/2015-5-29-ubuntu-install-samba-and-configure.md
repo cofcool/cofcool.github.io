@@ -36,4 +36,6 @@ Samba是在Linux和UNIX系统上实现SMB协议的一个免费软件，由服务
         # 重启服务
         sudo service smbd restart
         
-通过以上操作就可以使用文件分享了。
+通过以上操作就可以使用文件分享了。**需要注意的是添加的用户必须对共享文件目录有读写等权限，否则无法连接。**
+
+![image]({{ site.url }}/public/upload/images/shot0039.png)
