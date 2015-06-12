@@ -22,7 +22,7 @@ tags : [ios,开发]
 
 如下图所示：
 
-![image](/Users/yi/Documents/my/blog/快盘/blog/cofcool.github.io/public/upload/images/ios_2.jpg)
+![image]({{ site.url }}/public/upload/images/ios_2.jpg)
 
 当用用户缩放UIScrollView中的内容时，会触发UIScrollView的代理方法。调用**- (UIView \*)viewForZoomingInScrollView:(UIScrollView *)scrollView**方法，返回需要缩放的UI控件。
 
@@ -148,10 +148,10 @@ NSTimer ： 设置时间执行指定任务，可以定时执行指定任务。�
 
   1. 键盘状态改变时，系统会发出对应的通知，并且会附带跟键盘相关事务额外信息。例如：
   
-        UIKeyboardFrameBeginUserInfoKey // 键盘刚开始的frame
-        UIKeyboardFrameEndUserInfoKey // 键盘最终的frame(动画执行完毕后)
-        UIKeyboardAnimationDurationUserInfoKey // 键盘动画的时间
-        UIKeyboardAnimationCurveUserInfoKey // 键盘动画的执行节奏(快慢）
+		UIKeyboardFrameBeginUserInfoKey // 键盘刚开始的frame
+		UIKeyboardFrameEndUserInfoKey // 键盘最终的frame(动画执行完毕后)
+		UIKeyboardAnimationDurationUserInfoKey // 键盘动画的时间
+		UIKeyboardAnimationCurveUserInfoKey // 键盘动画的执行节奏(快慢）
         
 ####5. 控件无法点击
 
