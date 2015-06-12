@@ -68,9 +68,9 @@ tags : [ios,开发]
 	②每一个按钮创建一个方法，以其对应的行为命名，并在该方法中调用上述方法，把对应的行为以字符串的形式传入。
 		
 	*注意*：
-	>
-	1. [UIImage imageNamed:imageName],这样创建的图片在使用完成后，不会直接释放掉，具体释放时间由系统确定，适用于使用小图片的场合。直接从沙盒通过图片路径加载图片，使用完即释放。
-	2. Images.xcassets中的图片不能使用[[NSBundle mainBundle]pathForResource:imageName ofType:nil]方法来访问
+
+	> 1. [UIImage imageNamed:imageName],这样创建的图片在使用完成后，不会直接释放掉，具体释放时间由系统确定，适用于使用小图片的场合。直接从沙盒通过图片路径加载图片，使用完即释放。
+	> 2. Images.xcassets中的图片不能使用[[NSBundle mainBundle]pathForResource:imageName ofType:nil]方法来访问
 
 	  代码：
 	    
