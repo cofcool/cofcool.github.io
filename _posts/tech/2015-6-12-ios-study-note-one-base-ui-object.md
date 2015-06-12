@@ -129,10 +129,11 @@ tags : [ios,开发]
 
 21. 字典转模型
 
-	①字典转模型的好处：   
+	①字典转模型的好处：
+	   
 	 1. 降低代码的耦合度；   
-	 2. 所有字典转模型部分的代码统一集中在一处处理，降低代码出错的几率
-	 3. 在程序中直接使用模型的属性来操作，提高编码效率
+	 2. 所有字典转模型部分的代码统一集中在一处处理，降低代码出错的几率；
+	 3. 在程序中直接使用模型的属性来操作，提高编码效率；
 	 4. 方法 ：
 	 
             - (instancetype)initWithDict:(NSDictionary *)dict;
@@ -154,12 +155,13 @@ tags : [ios,开发]
 		}
 		- (UIImage *)image
 		{
-    		if (!_imageABC) {
-                _imageABC = [UIImage imageNamed:self.icon];
+		    if (!_imageABC) {
+    		    _imageABC = [UIImage imageNamed:self.icon];
     		}
     		return _imageABC;
-		}   		
-在模型中合理地使用只读属性，可以进一步降低代码的耦合度。
+		}   
+		
+    在模型中合理地使用只读属性，可以进一步降低代码的耦合度。
 
 24. UIView的封装
 
