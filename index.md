@@ -1,6 +1,6 @@
 ---
 layout: page
-title: CofCool的网络杂文
+title: CofCool的杂乱之语
 tagline: 奉至修真行，唯有逆者！！！
 ---
 {% include JB/setup %}

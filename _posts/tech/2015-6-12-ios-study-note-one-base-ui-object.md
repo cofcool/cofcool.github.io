@@ -204,4 +204,4 @@ tags : [ios,开发]
 	
 	    NSNumber * min = [array valueForKeyPath:@"@min.age"];
 	    
-KVC性能不高，如果写错对象属性名称，程序在编译时不会报错，运行时才会报错。
+   KVC性能不高，如果写错对象属性名称，程序在编译时不会报错，运行时才会报错。
