@@ -146,7 +146,7 @@ NSTimer ： 设置时间执行指定任务，可以定时执行指定任务。�
 		
 ####4. 键盘退出
 
-  1. 键盘状态改变时，系统会发出对应的通知，并且会附带跟键盘相关事务额外信息。例如：
+键盘状态改变时，系统会发出对应的通知，并且会附带跟键盘相关事务额外信息。例如：
   
 		UIKeyboardFrameBeginUserInfoKey // 键盘刚开始的frame
 		UIKeyboardFrameEndUserInfoKey // 键盘最终的frame(动画执行完毕后)
