@@ -495,15 +495,15 @@ Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象
 
   6. 创建NSManagedObject的子类
   
-    默认情况下，利用Core Data取出的实体都是NSManagedObject类型，能够利用键-值对来存取数据。但是一般情况下，实体在存取数据的基础上，有时还需要添加一些业务方法来完成一些其他任务，那么就必须创建NSManagedObject的子类。
+   默认情况下，利用Core Data取出的实体都是NSManagedObject类型，能够利用键-值对来存取数据。但是一般情况下，实体在存取数据的基础上，有时还需要添加一些业务方法来完成一些其他任务，那么就必须创建NSManagedObject的子类。
     
-    ![image]({{ site.url }}/public/upload/images/ios_17.png)
+   ![image]({{ site.url }}/public/upload/images/ios_17.png)
     
-    ![image]({{ site.url }}/public/upload/images/ios_18.png)
+   ![image]({{ site.url }}/public/upload/images/ios_18.png)
     
-    ![image]({{ site.url }}/public/upload/images/ios_19.png)
+   ![image]({{ site.url }}/public/upload/images/ios_19.png)
 
-    生成一个Person实体对象：
+   生成一个Person实体对象：
     
 		Person *person = [NSEntityDescription insertNewObjectForEntityForName:@"Person" inManagedObjectContext:context];
 		person.name = @"cofcool";
