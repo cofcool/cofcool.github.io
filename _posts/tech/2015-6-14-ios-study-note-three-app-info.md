@@ -7,6 +7,7 @@ tags : [ios,开发]
 ---
 {% include JB/setup %}
 
+本篇是第三部分，关于应用程序的一些内容。
 
 ####1. 从ios7开始，系统提供了2种管理状态栏的方式，控制器和UIApplication。隐藏状态栏：
 

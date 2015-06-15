@@ -7,6 +7,7 @@ tags : [ios,开发]
 ---
 {% include JB/setup %}
 
+本篇是第四二部分，关于控制器的一些内容。
 
 ####1. 控制器加载相关过程
 
@@ -30,11 +31,11 @@ tags : [ios,开发]
    
   1. 直接创建：
   
-        UIViewController *vc = [[UIViewController alloc] init];
+          UIViewController *vc = [[UIViewController alloc] init];
 
   2. 从xib创建
   
-        UIViewController *vc = [[UIViewController alloc] initWithNibName:@”nibView" bundle:nil];
+          UIViewController *vc = [[UIViewController alloc] initWithNibName:@”nibView" bundle:nil];
 
   3. 从storyboard创建
  
@@ -44,10 +45,10 @@ tags : [ios,开发]
             
       2. 初始化
       
-			// 初始化“初始控制器”（箭头所指的控制器)
-			UIViewController *vc = [storyboard instantiateInitialViewController];
-			// 通过一个标识初始化对应的控制器
-			UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@”vc"];
+			  // 初始化“初始控制器”（箭头所指的控制器)
+			  UIViewController *vc = [storyboard instantiateInitialViewController];
+			  // 通过一个标识初始化对应的控制器
+			  UIViewController *vc = [storyboard instantiateViewControllerWithIdentifier:@”vc"];
 
 创建view的几种情况：
 
