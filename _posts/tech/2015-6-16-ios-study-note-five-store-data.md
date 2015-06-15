@@ -106,12 +106,12 @@ tags : [ios,开发]
 
    * 归档一个数组对象：
 
-        // 归档
-		NSArray *array = [NSArray arrayWithObjects:@”a”,@”b”,nil];
-		[NSKeyedArchiver archiveRootObject:array toFile:path];
-		
-		// 恢复
-		NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
+	        // 归档
+			NSArray *array = [NSArray arrayWithObjects:@”a”,@”b”,nil];
+			[NSKeyedArchiver archiveRootObject:array toFile:path];
+			
+			// 恢复
+			NSArray *array = [NSKeyedUnarchiver unarchiveObjectWithFile:path];
   
   * 归档对象
   
@@ -403,7 +403,7 @@ Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象
 
   3. Core Data主要对象
   
-    ![image]({{ site.url }}/public/upload/images/ios_16.png)
+   ![image]({{ site.url }}/public/upload/images/ios_16.png)
 
   4. 搭建Core Data上下文环境：
   
