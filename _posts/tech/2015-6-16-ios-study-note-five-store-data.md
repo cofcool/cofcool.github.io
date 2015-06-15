@@ -388,16 +388,17 @@ Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象
 
   1. 模型文件
   
-    在Core Data，需要进行映射的对象称为实体(entity)，而且需要使用Core Data的模型文件来描述应用的所有实体和实体属性。这里以Person和Card(身份证)2个实体为例子，先看看实体属性和之间的关联关系：
-    ![image]({{ site.url }}/public/upload/images/ios_12.png)
+   在Core Data，需要进行映射的对象称为实体(entity)，而且需要使用Core Data的模型文件来描述应用的所有实体和实体属性。这里以Person和Card(身份证)2个实体为例子，先看看实体属性和之间的关联关系：
+  
+   ![image]({{ site.url }}/public/upload/images/ios_12.png)
     
-    创建模型文件
+   创建模型文件
     
-    ![image]({{ site.url }}/public/upload/images/ios_13.png)
+   ![image]({{ site.url }}/public/upload/images/ios_13.png)
+     
+   ![image]({{ site.url }}/public/upload/images/ios_14.png)
     
-    ![image]({{ site.url }}/public/upload/images/ios_14.png)
-    
-    ![image]({{ site.url }}/public/upload/images/ios_15.png)
+   ![image]({{ site.url }}/public/upload/images/ios_15.png)
     
   2. 通过Core Data从数据库取出的对象，默认情况下都是NSManagedObject对象,NSManagedObject的工作模式有点类似于NSDictionary对象，通过键-值对来存取所有的实体属性:setValue:forKey: 存储属性值(属性名为key);valueForKey: 获取属性值(属性名为key)。
 
