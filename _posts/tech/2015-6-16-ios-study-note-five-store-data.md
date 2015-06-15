@@ -21,7 +21,7 @@ tags : [ios,开发]
 
 每个iOS应用都有自己的应用沙盒(应用沙盒就是文件系统目录)，与其他文件系统隔离。应用数据必须待在自己的沙盒里，其他应用不能访问该沙盒。目录结构如下：
 
-   ![image](./images/ios_10.png)
+   ![image]({{ site.url }}/public/upload/images/ios_10.png)
 
 1. 应用程序包：(上图中的Layer)包含了所有的资源文件和可执行文件。
 2. Documents：保存应用运行时生成的需要持久化的数据，iTunes同步设备时会备份该目录。例如，游戏应用可将游戏存档保存在该目录。
@@ -31,7 +31,7 @@ tags : [ios,开发]
 
 目录路径获取：
 
-1. 应用沙盒根目录：**NSString *home = NSHomeDirectory();**
+1. 应用沙盒根目录：**NSString \*home = NSHomeDirectory();**
 2. Documents：
 
         // 方式1
@@ -380,26 +380,26 @@ FMDB核心类：
 
 Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象转化成数据，保存在SQLite3数据库文件中，也能够将保存在数据库中的数据还原成OC对象。在此数据操作期间，不需要编写任何SQL语句。使用此功能，要添加CoreData.framework和导入主头文件<CoreData/CoreData.h>。
 		
-![image](./images/ios_11.png)
+![image]({{ site.url }}/public/upload/images/ios_11.png)
 
   1. 模型文件
   
     在Core Data，需要进行映射的对象称为实体(entity)，而且需要使用Core Data的模型文件来描述应用的所有实体和实体属性。这里以Person和Card(身份证)2个实体为例子，先看看实体属性和之间的关联关系：
-    ![image](./images/ios_12.png)
+    ![image]({{ site.url }}/public/upload/images/ios_12.png)
     
     创建模型文件
     
-    ![image](./images/ios_13.png)
+    ![image]({{ site.url }}/public/upload/images/ios_13.png)
     
-    ![image](./images/ios_14.png)
+    ![image]({{ site.url }}/public/upload/images/ios_14.png)
     
-    ![image](./images/ios_15.png)
+    ![image]({{ site.url }}/public/upload/images/ios_15.png)
     
   2. 通过Core Data从数据库取出的对象，默认情况下都是NSManagedObject对象,NSManagedObject的工作模式有点类似于NSDictionary对象，通过键-值对来存取所有的实体属性:setValue:forKey: 存储属性值(属性名为key);valueForKey: 获取属性值(属性名为key)。
 
   3. Core Data主要对象
   
-    ![image](./images/ios_16.png)
+    ![image]({{ site.url }}/public/upload/images/ios_16.png)
 
   4. 搭建Core Data上下文环境：
   
@@ -492,11 +492,11 @@ Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象
   
     默认情况下，利用Core Data取出的实体都是NSManagedObject类型，能够利用键-值对来存取数据。但是一般情况下，实体在存取数据的基础上，有时还需要添加一些业务方法来完成一些其他任务，那么就必须创建NSManagedObject的子类。
     
-    ![image](./images/ios_17.png)
+    ![image]({{ site.url }}/public/upload/images/ios_17.png)
     
-    ![image](./images/ios_18.png)
+    ![image]({{ site.url }}/public/upload/images/ios_18.png)
     
-    ![image](./images/ios_19.png)
+    ![image]({{ site.url }}/public/upload/images/ios_19.png)
 
     生成一个Person实体对象：
     
