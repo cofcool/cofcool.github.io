@@ -218,19 +218,20 @@ SQLite将数据划分为以下几种存储类型：integer : 整型值；real : 
 
   1. 创建打开关闭数据库
   
-		创建或打开数据库
-		// path为：~/Documents/person.db
-		sqlite3 *db;
-		int result = sqlite3_open([path UTF8String], &db); 
-		代码解析：
-		sqlite3_open()将根据文件路径打开数据库，如果不存在，则会创建一个新的数据库。如果result等于常量SQLITE_OK，则表示成功打开数据库
-		sqlite3 *db：一个打开的数据库实例
-		数据库文件的路径必须以C字符串(而非NSString)传入
-		关闭数据库：sqlite3_close(db);
+		 // 创建或打开数据库
+		 // path为：~/Documents/person.db
+		 sqlite3 *db;
+		 int result = sqlite3_open([path UTF8String], &db); 
+		 // 代码解析：
+		 // sqlite3_open()将根据文件路径打开数据库，如果不存在，则会创建一个新的数据库。如果result等于常量SQLITE_OK，则表示成功打开数据库
+		 sqlite3 *db：一个打开的数据库实例
+		 // 数据库文件的路径必须以C字符串(而非NSString)传入
+		 // 关闭数据库：sqlite3_close(db);
 
   2. 执行SQL语句
   
 		<1> 执行创表语句
+		
 			char *errorMsg;  // 用来存储错误信息
 			char *sql = "create table if not exists t_person(id integer primary key autoincrement, name text, age integer);";
 			int result = sqlite3_exec(db, sql, NULL, NULL, &errorMsg);
@@ -243,6 +244,7 @@ SQLite将数据划分为以下几种存储类型：integer : 整型值；real : 
 			3. 提交事务：commit;
 		
 		<2> 带占位符插入数据
+		
 			char *sql = "insert into t_person(name, age) values(?, ?);";
 			sqlite3_stmt *stmt;
 			if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK) {
@@ -265,6 +267,7 @@ SQLite将数据划分为以下几种存储类型：integer : 整型值；real : 
 			sqlite_finalize()：销毁sqlite3_stmt *对象
 			
 		<3>查询数据
+		
 			char *sql = "select id,name,age from t_person;";
 			sqlite3_stmt *stmt;
 			if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK) {
@@ -303,6 +306,7 @@ FMDB核心类：
 		if (![db open]) {
 		    NSLog(@"数据库打开失败！");
 		}
+		
 	文件路径有三种情况:
 	
 	1. 具体文件路径：如果不存在会自动创建。
@@ -403,90 +407,90 @@ Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象
 
   4. 搭建Core Data上下文环境：
   
-		// 从应用程序包中加载模型文件
-		NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
-		
-		// 传入模型，初始化NSPersistentStoreCoordinator
-		NSPersistentStoreCoordinator *psc = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model] autorelease];
-		
-		// 构建SQLite文件路径
-		NSString *docs = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-		NSURL *url = [NSURL fileURLWithPath:[docs stringByAppendingPathComponent:@"person.data"]];
-		
-		// 添加持久化存储库，这里使用SQLite作为存储库
-		NSError *error = nil;
-		NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&error];
-		if (store == nil) { // 直接抛异常
-			[NSException raise:@"添加数据库错误" format:@"%@", [error localizedDescription]];
-		}
-		
-		// 初始化上下文，设置persistentStoreCoordinator属性
-		NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
-		context.persistentStoreCoordinator = psc;
-		// 用完之后，还是要[context release];
-
-		// 传入上下文，创建一个Person实体对象
-		NSManagedObject *person = [NSEntityDescription insertNewObjectForEntityForName:@"Person" inManagedObjectContext:context];
-		
-		// 设置简单属性
-		[person setValue:@"MJ" forKey:@"name"];
-		[person setValue:[NSNumber numberWithInt:27] forKey:@"age"];
-		
-		// 传入上下文，创建一个Card实体对象
-		NSManagedObject *card = [NSEntityDescription insertNewObjectForEntityForName:@"Card" inManagedObjectContext:context];
-		[card setValue:@"4414241933432" forKey:@"no"];
-		
-		// 设置Person和Card之间的关联关系
-		[person setValue:card forKey:@"card"];
-		
-		// 利用上下文对象，将数据同步到持久化存储库
-		NSError *error = nil;
-		BOOL success = [context save:&error];
-		if (!success) {
-			[NSException raise:@"访问数据库错误" format:@"%@", [error localizedDescription]];
-		}
-		
-		// 如果是想做更新操作：只要在更改了实体对象的属性后调用[context save:&error]，就能将更改的数据同步到数据库
-		
-		// 初始化一个查询请求
-		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-		
-		// 设置要查询的实体
-		NSEntityDescription *desc = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:context];
-		
-		// 设置排序（按照age降序）
-		NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"age" ascending:NO];
-		request.sortDescriptors = [NSArray arrayWithObject:sort];
-		
-		// 设置条件过滤(name like '%Itcast-1%')
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name like %@", @"*Itcast-1*"];
-		request.predicate = predicate;
-		
-		// 执行请求
-		NSError *error = nil;
-		NSArray *objs = [context executeFetchRequest:request error:&error];
-		if (error) {
-			[NSException raise:@"查询错误" format:@"%@", [error localizedDescription]];
-		}
-		
-		// 遍历数据
-		for (NSManagedObject *obj in objs) {
-			NSLog(@"name=%@", [obj valueForKey:@"name"]);
-		}
-		
-		// 传入需要删除的实体对象
-		[context deleteObject:managedObject];
-		
-		// 将结果同步到数据库
-		NSError *error = nil;
-		[context save:&error];
-		if (error) {
-			[NSException raise:@"删除错误" format:@"%@", [error localizedDescription]];
-		}
+			// 从应用程序包中加载模型文件
+			NSManagedObjectModel *model = [NSManagedObjectModel mergedModelFromBundles:nil];
+			
+			// 传入模型，初始化NSPersistentStoreCoordinator
+			NSPersistentStoreCoordinator *psc = [[[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:model] autorelease];
+			
+			// 构建SQLite文件路径
+			NSString *docs = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+			NSURL *url = [NSURL fileURLWithPath:[docs stringByAppendingPathComponent:@"person.data"]];
+			
+			// 添加持久化存储库，这里使用SQLite作为存储库
+			NSError *error = nil;
+			NSPersistentStore *store = [psc addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:url options:nil error:&error];
+			if (store == nil) { // 直接抛异常
+				[NSException raise:@"添加数据库错误" format:@"%@", [error localizedDescription]];
+			}
+			
+			// 初始化上下文，设置persistentStoreCoordinator属性
+			NSManagedObjectContext *context = [[NSManagedObjectContext alloc] init];
+			context.persistentStoreCoordinator = psc;
+			// 用完之后，还是要[context release];
+	
+			// 传入上下文，创建一个Person实体对象
+			NSManagedObject *person = [NSEntityDescription insertNewObjectForEntityForName:@"Person" inManagedObjectContext:context];
+			
+			// 设置简单属性
+			[person setValue:@"MJ" forKey:@"name"];
+			[person setValue:[NSNumber numberWithInt:27] forKey:@"age"];
+			
+			// 传入上下文，创建一个Card实体对象
+			NSManagedObject *card = [NSEntityDescription insertNewObjectForEntityForName:@"Card" inManagedObjectContext:context];
+			[card setValue:@"4414241933432" forKey:@"no"];
+			
+			// 设置Person和Card之间的关联关系
+			[person setValue:card forKey:@"card"];
+			
+			// 利用上下文对象，将数据同步到持久化存储库
+			NSError *error = nil;
+			BOOL success = [context save:&error];
+			if (!success) {
+				[NSException raise:@"访问数据库错误" format:@"%@", [error localizedDescription]];
+			}
+			
+			// 如果是想做更新操作：只要在更改了实体对象的属性后调用[context save:&error]，就能将更改的数据同步到数据库
+			
+			// 初始化一个查询请求
+			NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+			
+			// 设置要查询的实体
+			NSEntityDescription *desc = [NSEntityDescription entityForName:@"Person" inManagedObjectContext:context];
+			
+			// 设置排序（按照age降序）
+			NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"age" ascending:NO];
+			request.sortDescriptors = [NSArray arrayWithObject:sort];
+			
+			// 设置条件过滤(name like '%Itcast-1%')
+			NSPredicate *predicate = [NSPredicate predicateWithFormat:@"name like %@", @"*Itcast-1*"];
+			request.predicate = predicate;
+			
+			// 执行请求
+			NSError *error = nil;
+			NSArray *objs = [context executeFetchRequest:request error:&error];
+			if (error) {
+				[NSException raise:@"查询错误" format:@"%@", [error localizedDescription]];
+			}
+			
+			// 遍历数据
+			for (NSManagedObject *obj in objs) {
+				NSLog(@"name=%@", [obj valueForKey:@"name"]);
+			}
+			
+			// 传入需要删除的实体对象
+			[context deleteObject:managedObject];
+			
+			// 将结果同步到数据库
+			NSError *error = nil;
+			[context save:&error];
+			if (error) {
+				[NSException raise:@"删除错误" format:@"%@", [error localizedDescription]];
+			}
 
   5. Core Data的延迟加载
  
-    Core Data不会根据实体中的关联关系立即获取相应的关联对象。比如通过Core Data取出Person实体时，并不会立即查询相关联的Card实体；当应用真的需要使用Card时，才会查询数据库，加载Card实体的信息。
+   Core Data不会根据实体中的关联关系立即获取相应的关联对象。比如通过Core Data取出Person实体时，并不会立即查询相关联的Card实体；当应用真的需要使用Card时，才会查询数据库，加载Card实体的信息。
 
   6. 创建NSManagedObject的子类
   
