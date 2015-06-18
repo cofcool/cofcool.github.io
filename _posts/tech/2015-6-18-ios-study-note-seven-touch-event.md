@@ -7,7 +7,7 @@ tags : [ios,开发]
 ---
 {% include JB/setup %}
 
-本篇是第六部分，关于触摸事件的一些内容。
+本篇是第七部分，关于触摸事件的一些内容。
 
 ios的事件可分为三大类型：触摸事件，加速事件，远程事件。本章主要是触摸事件的相关内容。
 
@@ -40,19 +40,19 @@ ios的事件可分为三大类型：触摸事件，加速事件，远程事件�
 
 	  * 一根或者多根手指开始触摸view，系统会自动调用view的下面方法
 	  
-	        - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+	        - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 	
 	  * 一根或者多根手指在view上移动，系统会自动调用view的下面方法（随着手指的移动，会持续调用该方法）
 	  
-			- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+			- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 	
 	  * 一根或者多根手指离开view，系统会自动调用view的下面方法
 	
-			- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+			- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 	
 	  * 触摸结束前，某个系统事件(例如电话呼入)会打断触摸过程，系统会自动调用view的下面方法
 	  
-	        - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+	        - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
 
 3. UITouch
 
@@ -67,13 +67,13 @@ ios的事件可分为三大类型：触摸事件，加速事件，远程事件�
    **<1> 一次完整的触摸过程：**
    
 		// 触摸开始
-	    - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+	    - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
 		// 触摸移动
-		- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+		- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 		// 触摸结束
-		- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+		- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 		// 触摸取消（可能会经历）
-		- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+		- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
 
    4个触摸事件处理方法中，都有touches和event两个参数,在一次完整的触摸过程中，只会产生一个事件对象，4个触摸方法都是同一个event参数。根据touches中UITouch的个数可以判断出是单点触摸还是多点触摸。
 
