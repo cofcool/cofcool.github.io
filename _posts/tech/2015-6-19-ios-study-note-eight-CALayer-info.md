@@ -1,7 +1,7 @@
 ---
 layout: post
 category : Development
-title : ios学习系列7--CALayer
+title : ios学习系列8--CALayer
 tagline: "ios学习笔记"
 tags : [ios,开发]
 ---

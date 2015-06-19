@@ -31,13 +31,16 @@ tags : [菜鸟的Ubuntu学习之旅, 技巧]
 
 ###2.安装Nvidia显卡管理软件:
 
-由于linux kernel的电池管理软件似乎不太有用,并且显卡驱动由于是通用驱动,所以电脑发热很厉害,特别费电。因此我们需要一个强大的电池管理软件.我推荐大家使用bumblebee。大家可以以下地址查看,根据自己的系统选择安装.bumblebee官网。安装之后,独立显卡会关闭,使用如下命令查看
+由于linux kernel的电池管理软件似乎不太有用,并且显卡驱动由于是通用驱动,所以电脑发热很厉害,特别费电。因此我们需要一个强大的电池管理软件.我推荐大家使用bumblebee。大家可以到以下[地址](http://bumblebee-project.org/)查看,根据自己的系统选择安装.bumblebee官网。安装之后,独立显卡会关闭,使用如下命令查看
 
 	lspci |grep VGA
+    
 如果显示如下(显示结果因电脑不同可能会有差别)
 
 	￼01. ￼ VGA compatible controller: NVIDIA Corporation Device 0de9 (rev ff)
+    
 出现"ff",这说明成功关闭. 可参考http://forum.ubuntu.org.cn/viewtopic.php?f=126&t=374321
+
 ###3.关闭错误提示:
 
 由于linux桌面版目前还不是特别完善,因此会有各种各样的问题.经常在使用的时候弹出"错误提示",搞的人很烦.因为
