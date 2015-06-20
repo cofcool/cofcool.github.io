@@ -60,7 +60,7 @@ Core Bluetooth测试比较麻烦，正常情况下，得至少有2台真实的�
 
 Core Bluetooth的核心结构图:
 
-![image](./images/ios_32.png)
+![image]({{ site.url }}/public/upload/images/ios_32.png)
 
 每个蓝牙4.0设备都是通过服务（Service）和特征（Characteristic）来展示自己的，一个设备必然包含一个或多个服务，每个服务下面又包含若干个特征。特征是与外界交互的最小单位，比如说，一台蓝牙4.0设备，用特征A来描述自己的出厂信息，用特征B来收发数据。服务和特征都是用UUID来唯一标识的，通过UUID就能区别不同的服务和特征。设备里面各个服务(service)和特征(characteristic)的功能，均由蓝牙设备硬件厂商提供，比如哪些是用来交互(读写)，哪些可获取模块信息(只读)等。
 

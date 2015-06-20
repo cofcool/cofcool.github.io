@@ -15,25 +15,25 @@ tags : [菜鸟的Ubuntu学习之旅]
 
   1. 安装主题
   
-		sudo add-apt-repository ppa:snwh/pulp
-		sudo apt-get update
-		sudo apt-get install paper-gtk-theme paper-icon-theme
+     sudo add-apt-repository ppa:snwh/pulp
+     sudo apt-get update
+     sudo apt-get install paper-gtk-theme paper-icon-theme
 		
   2. 启用
   
-    使用系统调整工具更改系统主题。在这里，使用Ubuntu Tweak进行调整。（系统调整工具看我上一篇文章：[Ubuntu系统调整工具]()）
+   使用系统调整工具更改系统主题。在这里，使用Ubuntu Tweak进行调整。（系统调整工具看我上一篇文章：[Ubuntu系统调整工具]()）
     
-    具体过程截图：
+   具体过程截图：
     
-    ![image]({{ site.url }}/public/upload/images/shot0042.png)
+   ![image]({{ site.url }}/public/upload/images/shot0042.png)
     
-    ![image]({{ site.url }}/public/upload/images/shot0043.png)
+   ![image]({{ site.url }}/public/upload/images/shot0043.png)
     
-    ![image]({{ site.url }}/public/upload/images/shot0044.png)
+   ![image]({{ site.url }}/public/upload/images/shot0044.png)
     
-    ![image]({{ site.url }}/public/upload/images/shot0045.png)
+   ![image]({{ site.url }}/public/upload/images/shot0045.png)
     
-    ![image]({{ site.url }}/public/upload/images/shot0046.png)
+   ![image]({{ site.url }}/public/upload/images/shot0046.png)
 
 **方法2** 已有主题文件，复制到指定目录：
 

@@ -49,7 +49,7 @@ tags : [ios,开发]
 
 ####2. MPMoviePlayerController
 
-MPMoviePlayerController继承自NSObject，它内部有个view用来展示视频内容，添加其他控制器的view上面即可显示。MPMoviePlayerController可以播放的视频格式有以下两种：H.264、MPEG-4 Part 2 video，支持的文件拓展名为：avi,mkv,mov,m4v,mp4等。
+MPMoviePlayerController继承自NSObject，它内部有个view用来展示视频内容，添加其他控制器的view上面即可显示。MPMoviePlayerController可以播放的视频格式有以下两种：H.264、MPEG-4 Part 2 video，支持的文件扩展名为：avi,mkv,mov,m4v,mp4等。
 
 	// 加载视频资源
 	NSString *urlString = [[NSBundle mainBundle] pathForResource:@"sample_iTunes" ofType:@"mov"];
