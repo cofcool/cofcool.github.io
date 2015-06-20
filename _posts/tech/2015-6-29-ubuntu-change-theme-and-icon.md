@@ -15,9 +15,9 @@ tags : [菜鸟的Ubuntu学习之旅]
 
   1. 安装主题
   
-     sudo add-apt-repository ppa:snwh/pulp
-     sudo apt-get update
-     sudo apt-get install paper-gtk-theme paper-icon-theme
+         sudo add-apt-repository ppa:snwh/pulp
+         sudo apt-get update
+         sudo apt-get install paper-gtk-theme paper-icon-theme
 		
   2. 启用
   
