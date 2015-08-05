@@ -41,8 +41,8 @@ tags : [ios,开发]
 	    
 3. 隐藏导航栏上的返回按钮
 
-    	[self.navigationItem.backBarButtonItem setTitle:@""];
-    	[self.navigationItem setHidesBackButton:YES];
+		[self.navigationItem.backBarButtonItem setTitle:@""];
+		[self.navigationItem setHidesBackButton:YES];
     	
 4. 在设置手动型segue时，需要判断条件来跳转的场景，直接从控制器拖线到另一控制器，segue设置为push，然后使用代码判断。
 5. 销毁modal出来的视图，在该视图的控制器中执行
