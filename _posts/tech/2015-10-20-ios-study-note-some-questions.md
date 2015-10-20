@@ -1,4 +1,11 @@
-#ios学习总结 October 20, 2015
+---
+layout: post
+category : Development
+title : ios学习总结 October 20, 2015
+tagline: "ios学习总结"
+tags : [ios,开发]
+---
+{% include JB/setup %}
 
 在日常的工作中会遇到各种各样的问题，遇到问题时要记的把问题和对应的解决方案记录下来。
 
