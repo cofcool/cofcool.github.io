@@ -238,6 +238,6 @@ tags : [ios,开发]
 
 11. 微信，易信分享sdk使用时，必须先设置url scheme，在ios9以上版本需设置白名单，允许对应identifier的url type通过。
 
-12. UICollectionView拥有selected和deselected，以及highlighted和unhighlighted，来更改view的状态，另外也可以设置它是否多选状态。如果该view的数据不够一屏时上下不会滚动，可以设置alwaysBounceHorizontal（scroll view）属性来开启或关闭。(如果子类找找不到需要的成员属性，可以再父类中寻找)
+12. UICollectionView拥有selected和deselected，以及highlighted和unhighlighted，来更改view的状态，另外也可以设置它是否多选状态。如果该view的数据不够一屏时上下不会滚动，可以设置alwaysBounceHorizontal（scroll view）属性来开启或关闭。(如果在子类中找不到需要的成员属性，可以在父类中寻找)
 
 13. UICollectionView的contentSize并不会随着内容的变化而马上发生改变，只有滑动到底的时候才会改变，因此要想实时获取contentSize的值，可以使用如下属性：customCollectionView.**collectionViewLayout.collectionViewContentSize.height**。UICollectionView和它对应的flowlayout紧密相连，当布局发生变化时，flowlayout会马上发生相应的改变。
