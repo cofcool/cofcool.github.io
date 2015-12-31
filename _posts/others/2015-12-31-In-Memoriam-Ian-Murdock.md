@@ -16,5 +16,7 @@ title : Debian创始人Ian Murdock去世
 
   今早起来看到新闻，不禁一愣，原以为只是他的抱怨，没想到真的发生了。Ian Murdock去世，目前还不得而知具体事件经过，我们也不知道究竟是什么原因让他离开这个世界。但是，他一定很不舍，很不想离开这个他一手创立的Debian社区，他的离开是开源界的重大损失。我们现在唯一能做的就是让他的梦想继续下去。
   
+  Thank you Ian Murdock.
+  
   Debian及广大的Linux社区的人们，可以发送你的哀悼信到<in-memoriam-ian@debian.org>。
 
