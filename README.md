@@ -1,5 +1,5 @@
-www.CofCool.net
+# README
 
-Computer is so Cool!
+This is my Blog, welcome you!
 
-This is my WebPage, welcome you!
+The theme is forked from [jekyll-bootstrap](https://github.com/plusjade/jekyll-bootstrap).

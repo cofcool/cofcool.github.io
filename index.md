@@ -20,4 +20,4 @@ tagline: 奉至修真行，唯有逆者！！！
 
 ## 联系我
 
-邮箱地址:<cofcool@126.com>
+<cofcool@126.com>
