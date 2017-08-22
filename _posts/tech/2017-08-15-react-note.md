@@ -44,6 +44,7 @@ tags : [react, notes]
 * [8. 常见问题](#8-常见问题)
 			* [1. 文件过多时，`npm start`失败](#1-文件过多时npm-start失败)
 			* [2. 使用Pods](#2-使用pods)
+			* [3. webpack环境下，`require`中使用变量](#3-webpack环境下require中使用变量)
 * [引用文档](#引用文档)
 
 <!-- /code_chunk_output -->
@@ -473,6 +474,22 @@ sudo launchctl limit maxfiles 2048 unlimited
 
 
 ##### 2. 使用Pods
+
+##### 3. webpack环境下，`require`中使用变量
+
+在开发中有时需要在`requir`函数中使用变量，可查看官方文档：[dynamic requires](https://webpack.github.io/docs/context.html)。如果参数为变量，则需要确定该参数的值为模块的相对路径。webpack在监测到require中使用变量，则会根据把该值替换为正则表达式，根据匹配的结果生成一个map，模块路径为`key`,模块id为`value`，然后根据参数的值来获取指定模块。
+
+示例：
+
+```js
+require("./template/" + name + ".jade");
+
+{
+    "./table.jade": 22,
+    "./table-row.jade": 23,
+    "./directory/folder.jade": 24
+}
+```
 
 更新中....
 
