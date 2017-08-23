@@ -1,7 +1,7 @@
 ---
 layout: page
 title: CofCool的杂乱之语
-tagline: 奉至修真行，唯有逆者！！！
+tagline: 奉至修真行！！!
 ---
 {% include JB/setup %}
 
