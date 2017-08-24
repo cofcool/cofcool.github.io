@@ -42,9 +42,9 @@ tags : [react, notes]
 * [6. 浅谈Flux](#6-浅谈flux)
 * [7. 浅谈Redux](#7-浅谈redux)
 * [8. 常见问题](#8-常见问题)
-			* [1. 文件过多时，`npm start`失败](#1-文件过多时npm-start失败)
-			* [2. 使用Pods](#2-使用pods)
-			* [3. webpack环境下，`require`中使用变量](#3-webpack环境下require中使用变量)
+	* [1. 文件过多时，npm start失败](#1-文件过多时npm-start失败)
+	* [2. 使用Pods](#2-使用pods)
+	* [3. webpack环境下，require中使用变量](#3-webpack环境下require中使用变量)
 * [引用文档](#引用文档)
 
 <!-- /code_chunk_output -->
@@ -444,7 +444,7 @@ Webpack为例，需要style-loader，css-loader。
 
 ## 8. 常见问题
 
-### 1. 文件过多时，`npm start`失败
+### 1. 文件过多时，npm start失败
 
 错误信息:
 
