@@ -1,7 +1,7 @@
 ---
 layout: post
 category : Tech
-title : React学习笔记
+title : React笔记
 tags : [react, notes]
 ---
 {% include JB/setup %}
