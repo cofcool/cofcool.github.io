@@ -1,7 +1,7 @@
 ---
 layout: post
 category : Snippets
-title : 移除掘金网的“展开全文”按钮
+title : 移除掘金的“展开全文”按钮
 tags : [snippets, js]
 ---
 {% include JB/setup %}
