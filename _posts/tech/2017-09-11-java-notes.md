@@ -134,6 +134,7 @@ netstat -antp
   ```
   chmod +x  rc.local
   ```
+
 ##### 5. Apache映射到Tomcat
 
 1. 搭建Apache虚拟主机
