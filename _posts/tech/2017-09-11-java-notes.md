@@ -138,6 +138,7 @@ netstat -antp
 ##### 5. Apache映射到Tomcat
 
 1. 搭建Apache虚拟主机
+
   ```
   <VirtualHost *:8080>
       DocumentRoot /opt/tomcat7/webapps/rd
@@ -149,11 +150,13 @@ netstat -antp
 ##### 6. https
 
 1. 生成证书
+
   ```
   keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
   # 导出cer证书
   keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
   ```
+
 2. 配置https
   1. 拷贝第一步生成的tomcat.keystore文件到**${TOMCAT_HOME}/conf**目录下
   2. 编辑server.xml
@@ -168,6 +171,7 @@ netstat -antp
                  truststoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" truststorePass="${PASSWD}" />
       ```
 3. 编辑web.xml，http自动跳转为https
+
     ```
     sudo vim ${TOMCAT_HOME}/conf/web.xml
     # 内容如下
@@ -182,6 +186,7 @@ netstat -antp
     </security-constraint>
     ```
  4. 对于沃通的证书，由于支持的加密解密方式不同，需要自己添加加密方式：
+ 
     ```
     # 错误提示
     ERR_SSL_VERSION_OR_CIPHER_MISMATCH
