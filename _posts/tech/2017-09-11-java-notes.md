@@ -214,11 +214,11 @@ netstat -antp
     @Resource(name="XXX")
     ```
 3. 使用`@Autowired`时，可通过`@Qualifier`设置为自动注入策略`byName`。
-  ```
-  @Autowired
+    ```
+    @Autowired
     @Qualifier("userServiceImpl")
     private UserService userService;
-  ```
+    ```
 
 ### 2. AOP
 
