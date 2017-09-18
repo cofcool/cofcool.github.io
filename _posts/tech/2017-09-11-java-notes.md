@@ -28,7 +28,12 @@ tags : [java, notes]
 	* [2. AOP](#2-aop)
 		* [1. 配置](#1-配置-1)
 	* [3. MVC](#3-mvc)
-		* [1. 启用jackson解析JSON](#1-启用jackson解析json)
+		* [1. 基本配置](#1-基本配置)
+		* [2. 启用jackson解析JSON](#2-启用jackson解析json)
+	* [4. 异常监测，统一管理](#4-异常监测统一管理)
+* [3. Shiro](#3-shiro)
+	* [1. 依赖Jar包](#1-依赖jar包)
+	* [2. 配置](#2-配置-1)
 * [3. 常见问题](#3-常见问题)
 	* [1. IDEA 2016 使用junit4](#1-idea-2016-使用junit4)
 	* [2. tomcat无响应](#2-tomcat无响应)
@@ -40,7 +45,7 @@ tags : [java, notes]
 	* [6. lib已存在但抛出java.lang.NoClassDefFoundError](#6-lib已存在但抛出javalangnoclassdeffounderror)
 	* [7. jetty多实例部署](#7-jetty多实例部署)
 	* [8. linux环境下调用so库](#8-linux环境下调用so库)
-	* [9. Spring相关](#9-spring相关)
+* [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
 
@@ -117,50 +122,50 @@ netstat -antp
 ##### 4. Tomcat 在linux下开机自启动
 
 1. 修改/etc/rc.d/rc.local
-	```
-	vim /etc/rc.d/rc.local
-	```
+  ```
+  vim /etc/rc.d/rc.local
+  ```
 2. 添加下面两行脚本
-	```
-	export JAVA_HOME=$JAVA_PATH$
-	/usr/local/tomcat/bin/startup.sh start
-	```
+  ```
+  export JAVA_HOME=$JAVA_PATH$
+  /usr/local/tomcat/bin/startup.sh start
+  ```
 3. 修改rc.local文件为可执行
-	```
-	chmod +x  rc.local
-	```
+  ```
+  chmod +x  rc.local
+  ```
 ##### 5. Apache映射到Tomcat
 
 1. 搭建Apache虚拟主机
-	```
-	<VirtualHost *:8080>
-	    DocumentRoot /opt/tomcat7/webapps/rd
-	    ServerName lb.test.com：8080
-	</VirtualHost>
-	```
+  ```
+  <VirtualHost *:8080>
+      DocumentRoot /opt/tomcat7/webapps/rd
+      ServerName lb.test.com：8080
+  </VirtualHost>
+  ```
 2. 映射到Tomcat使用的8080端口
 
 ##### 6. https
 
 1. 生成证书
-	```
-	keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
-	# 导出cer证书
-	keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
-	```
+  ```
+  keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
+  # 导出cer证书
+  keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
+  ```
 2. 配置https
-	1. 拷贝第一步生成的tomcat.keystore文件到**${TOMCAT_HOME}/conf**目录下
-	2. 编辑server.xml
+  1. 拷贝第一步生成的tomcat.keystore文件到**${TOMCAT_HOME}/conf**目录下
+  2. 编辑server.xml
 
-	    ```
-	    sudo vim ${TOMCAT_HOME}/conf/server.xml
-	    # 内容如下
-	    <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
-	               maxThreads="150" scheme="https" secure="true"
-	               clientAuth="false" sslProtocol="TLS"
-	               keystoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" keystorePass="${PASSWD}"
-	               truststoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" truststorePass="${PASSWD}" />
-	    ```
+      ```
+      sudo vim ${TOMCAT_HOME}/conf/server.xml
+      # 内容如下
+      <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
+                 maxThreads="150" scheme="https" secure="true"
+                 clientAuth="false" sslProtocol="TLS"
+                 keystoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" keystorePass="${PASSWD}"
+                 truststoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" truststorePass="${PASSWD}" />
+      ```
 3. 编辑web.xml，http自动跳转为https
     ```
     sudo vim ${TOMCAT_HOME}/conf/web.xml
@@ -209,11 +214,11 @@ netstat -antp
     @Resource(name="XXX")
     ```
 3. 使用`@Autowired`时，可通过`@Qualifier`设置为自动注入策略`byName`。
-	```
-	@Autowired
+  ```
+  @Autowired
     @Qualifier("userServiceImpl")
     private UserService userService;
-	```
+  ```
 
 ### 2. AOP
 
@@ -231,24 +236,89 @@ netstat -antp
 
 ### 3. MVC
 
-#### 1. 启用jackson解析JSON
+#### 1. 基本配置
+
+**启用**
+
+```xml
+<!-- web.xml -->
+<context-param>
+    <param-name>contextConfigLocation</param-name>
+	<!-- context配置文件路径 -->
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+</context-param>
+<listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+<servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <init-param>
+        <param-name>contextConfigLocation</param-name>
+        <!-- MVC配置文件路径，如果在WEB-INF目录下，且文件名为<servlet-name>-servlet.xml，可省略contextConfigLocation配置 -->
+        <param-value>/WEB-INF/dispatcher-servlet.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+</servlet>
+<servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/*</url-pattern>
+</servlet-mapping>
+```
+
+默认编码设置:
+
+```xml
+ <!-- web.xml -->
+<filter>
+    <filter-name>encodeFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+        <param-name>encoding</param-name>
+        <param-value>utf-8</param-value>
+    </init-param>
+</filter>
+
+<filter-mapping>
+    <filter-name>encodeFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+</filter-mapping>
+```
+
+**applicationContext.xml**
+
+```xml
+<context:annotation-config />
+```
+
+*注意* ⚠️：
+
+`<context:annotation-config>` 是用于激活那些已经在spring容器里注册过的bean（无论是通过xml的方式还是通过package sanning的方式）上面的注解，是一个注解处理工具。
+
+`<context:component-scan>`除了具有`<context:annotation-config>`的功能之外，`<context:component-scan>`还可以在指定的package下扫描以及注册javabean 。
+
+**dispatcher-servlet.xml**
+
+```xml
+<context:component-scan base-package="net.cofcool.mvc" />
+```
+
+#### 2. 启用jackson解析JSON
 
 配置:
-```
+```xml
 <mvc:annotation-driven>
 	<mvc:message-converters>
 	    <bean class="org.springframework.http.converter.StringHttpMessageConverter">
 	        <property name="supportedMediaTypes">
 	            <list>
 	                <value>text/html; charset=UTF-8</value>
-	                <value>application/json;charset=UTF-8</value>
 	            </list>
 	        </property>
 	    </bean>
 	    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 	        <property name="supportedMediaTypes">
 	            <list>
-	                <value>text/html; charset=UTF-8</value>
 	                <value>application/json;charset=UTF-8</value>
 	            </list>
 	        </property>
@@ -267,7 +337,162 @@ netstat -antp
 </mvc:annotation-driven>
 ```
 
-在代码中使用`@ResponseBody`返回JSON。
+在代码中使用`@ResponseBody`标注，会自动把Map，Array等数据类型转为JSON。
+
+### 4. 异常监测，统一管理
+
+1. 开发中经常需要捕获异常避免直接抛出给调用者，但是代码中充斥的try-catch异常的难看，可使用`ExceptionHandler`来统一捕捉异常。
+
+2. `Spring MVC` action filter:
+
+   ![]({{ site.url }}/public/upload/images/0146.png)
+
+3. 简单示例：
+
+   ```xml
+   <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+       <property name="exceptionMappings">
+           <props>
+               <prop key="org.apache.shiro.authz.UnauthorizedException">nopermission</prop>
+               <prop key="IOException">iopage</prop>
+               <prop key="NumberFormatException">numberpage</prop>
+           </props>
+       </property>
+       <property name="statusCodes">
+           <props>
+               <prop key="org.apache.shiro.authz.UnauthorizedException">401</prop>
+           </props>
+       </property>
+   </bean>
+   ```
+
+## 3. Shiro
+
+### 1. 依赖Jar包
+
+```Xml
+<dependency>
+  <groupId>org.apache.shiro</groupId>
+  <artifactId>shiro-core</artifactId>
+  <version>${shiro.version}</version>
+</dependency>
+
+<dependency>
+  <groupId>org.apache.shiro</groupId>
+  <artifactId>shiro-web</artifactId>
+  <version>${shiro.version}</version>
+</dependency>
+
+<dependency>
+  <groupId>org.apache.shiro</groupId>
+  <artifactId>shiro-spring</artifactId>
+  <version>${shiro.version}</version>
+</dependency>
+
+<!-- 扩展模块 -->
+<dependency>
+  <groupId>org.apache.shiro</groupId>
+  <artifactId>shiro-aspectj</artifactId>
+  <version>${shiro.version}</version>
+</dependency>
+
+<dependency>
+  <groupId>org.apache.shiro</groupId>
+  <artifactId>shiro-ehcache</artifactId>
+  <version>${shiro.version}</version>
+</dependency>
+
+```
+
+### 2. 配置
+
+**Shiro配置**
+
+```xml
+<!-- 自定义加密方式，继承自CredentialsMatcher，也可使用org.apache.shiro.authc.credential包下的其它CredentialsMatcher -->
+<bean id="myCredentialsMatcher" class="net.cofcool.mvc.shiro.MyCredentialsMatcher" />
+<!-- 自定义授权验证 -->
+<bean id="myRealm" class="net.cofcool.mvc.shiro.AuthRealm" >
+    <property name="credentialsMatcher" ref="myCredentialsMatcher" />
+</bean>
+<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    <property name="realm" ref="myRealm"/>
+</bean>
+
+<!-- 路径配置 -->
+<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+    <property name="securityManager" ref="securityManager"/>
+    <property name="loginUrl" value="/login/login" />
+    <property name="filterChainDefinitions" >
+        <value>
+            /** = authc,validateFilter,perms,roles
+            /login/login = anon
+        </value>
+    </property>
+    <property name="filters" ref="filters" />
+</bean>
+<util:map id="filters">
+    <entry key="validateFilter" value-ref="validateFilter" />
+</util:map>
+<!-- 接口访问过滤器，继承自AccessControlFilter -->
+<bean id="validateFilter" class="net.cofcool.mvc.shiro.ValidateFilter" />
+```
+
+**Shiro-Spring 配置**
+
+```xml
+<!--为了让Shiro的注解生效，必须保证以下Bean在LifecycleBeanPostProcessor创建之后创建-->
+<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    <property name="securityManager" ref="securityManager"/>
+</bean>
+```
+
+**自定义Realm**
+
+```java
+public class AuthRealm extends AuthorizingRealm {
+
+    // 权限验证
+    // 在做权限验证的时候会调用此方法，包括角色和具体权限，如下
+    // 1. SecurityUtils.getSubject().isPermitted("user:visit");
+    // 2. @RequiresPermissions("user:visit")
+    // 注意，使用注解验证权限时，如果验证不符合，则会抛出异常
+  	@Override
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        return null;
+    }
+
+    // 登录授权验证
+    // 在调用Subject对象的login()方法时调用该方法来验证登录信息
+  	@Override
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
+        throws AuthenticationException {
+        return null;
+    }
+}
+```
+
+**自定义AccessControlFilter**
+
+```java
+public class ValidateFilter extends AccessControlFilter {
+  	// 权限允许时调用
+    @Override
+    protected boolean isAccessAllowed(javax.servlet.ServletRequest servletRequest,
+        javax.servlet.ServletResponse servletResponse, Object o) throws Exception {
+        return false;
+    }
+
+    // 权限拒绝时调用
+    @Override
+    protected boolean onAccessDenied(javax.servlet.ServletRequest servletRequest,
+        javax.servlet.ServletResponse servletResponse) throws Exception {
+        return false;
+    }
+}
+```
 
 ## 3. 常见问题
 
@@ -287,10 +512,8 @@ netstat -antp
 
     新建一个测试类，该类继承 `junit.framework.TestCase`,在需要测试的方法前添加`test`前缀，开始测试时该方法会自动运行。
 
-    ```
+    ```java
     package net.cofcool.junit;
-
-
     import junit.framework.TestCase;
 
     /**
@@ -324,7 +547,7 @@ netstat -antp
         }
     }
 
-    ```
+    ​```
 3. 添加测试配置：
 
     ![img4]({{ site.url }}/public/upload/images/0072.png)
@@ -348,7 +571,7 @@ netstat -antp
 IDEA的maven项目中，默认源代码目录下的xml等资源文件并不会在编译的时候一块打包进classes文件夹。为了保证mybatis的`XML`映射文件打包进`classes`文件夹中，可做如下修改：
 
 **pom.xml**:
-```
+```xml
 <build>
 	<resources>
 		<resource>
@@ -398,34 +621,34 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 
 1. 变量`NAME`的值为该脚本的文件名(不包含后缀)
 
-	```
-	NAME=$(echo $(basename $0) | sed -e 's/^[SK][0-9]*//' -e 's/\.sh$//')
-	```
+  ```
+  NAME=$(echo $(basename $0) | sed -e 's/^[SK][0-9]*//' -e 's/\.sh$//')
+  ```
 2. 通过`findDirectory`找到可写的目录,并在该目录下创建`jetty`文件夹, 最后得到的目录即为`JETTY_RUN`
 
-	```
-	if [ -z "$JETTY_RUN" ]
-	then
-	  JETTY_RUN=$(findDirectory -w /var/run /usr/var/run $JETTY_BASE /tmp)/jetty
-	  [ -d "$JETTY_RUN" ] || mkdir $JETTY_RUN
-	fi
-	```
+  ```
+  if [ -z "$JETTY_RUN" ]
+  then
+    JETTY_RUN=$(findDirectory -w /var/run /usr/var/run $JETTY_BASE /tmp)/jetty
+    [ -d "$JETTY_RUN" ] || mkdir $JETTY_RUN
+  fi
+  ```
 3. 每次jetty启动时会检测当前的`JETTY_RUN`目录时候包含文件名为`${NAME}.pid`的文本文件, 如存在,即不会创建新的jetty实例.
 
-	```
-	#####################################################
-	# Find a pid and state file
-	#####################################################
-	if [ -z "$JETTY_PID" ]
-	then
-	  JETTY_PID="$JETTY_RUN/${NAME}.pid"
-	fi
+  ```
+  #####################################################
+  # Find a pid and state file
+  #####################################################
+  if [ -z "$JETTY_PID" ]
+  then
+    JETTY_PID="$JETTY_RUN/${NAME}.pid"
+  fi
 
-	if [ -z "$JETTY_STATE" ]
-	then
-	  JETTY_STATE=$JETTY_BASE/${NAME}.state
-	fi
-	```
+  if [ -z "$JETTY_STATE" ]
+  then
+    JETTY_STATE=$JETTY_BASE/${NAME}.state
+  fi
+  ```
 
 综上, 可以的出结论: 只要保证每个jetty拥有唯一的`pid`文件即可.
 
@@ -438,9 +661,8 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 
 通过`System.loadLibrary()`来引入so库时, so库的文件名不需要加`lib`前缀.在载入so库时,`public static String mapLibraryName(String libname)`会根据系统的特性来对so库的文件名进行处理, 生成适合特定系统的文件名,然后根据该名称去寻找so库.
 
-### 9. Spring相关
 
-1. 开发中经常需要捕获异常避免直接抛出给调用者，但是代码中充斥的try-catch异常的难看，可使用`ExceptionHandler`来统一捕捉异常。
-2. `Spring MVC` action filter:
 
-	![]({{ site.url }}/public/upload/images/0146.png)
+## 参考资料
+
+* [Spring MVC – Component-Scan, Annotation-Config, Annotation-Driven](https://scotch.io/@ethanmillar/spring-mvc-component-scan-annotation-config-annotation-driven)
