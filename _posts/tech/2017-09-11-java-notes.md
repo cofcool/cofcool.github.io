@@ -138,22 +138,22 @@ netstat -antp
 ##### 5. Apache映射到Tomcat
 
 1. 搭建Apache虚拟主机
-  ```
-  <VirtualHost *:8080>
-      DocumentRoot /opt/tomcat7/webapps/rd
-      ServerName lb.test.com：8080
-  </VirtualHost>
-  ```
+	```
+	<VirtualHost *:8080>
+	  DocumentRoot /opt/tomcat7/webapps/rd
+	  ServerName lb.test.com：8080
+	</VirtualHost>
+	```
 2. 映射到Tomcat使用的8080端口
 
 ##### 6. https
 
 1. 生成证书
-  ```
-  keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
-  # 导出cer证书
-  keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
-  ```
+	```
+	keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
+	# 导出cer证书
+	keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
+	```
 2. 配置https
   1. 拷贝第一步生成的tomcat.keystore文件到**${TOMCAT_HOME}/conf**目录下
   2. 编辑server.xml
@@ -167,36 +167,36 @@ netstat -antp
                  truststoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" truststorePass="${PASSWD}" />
       ```
 3. 编辑web.xml，http自动跳转为https
-    ```
-    sudo vim ${TOMCAT_HOME}/conf/web.xml
-    # 内容如下
-    <security-constraint>
-       <web-resource-collection >
-              <web-resource-name >SSL</web-resource-name>
-              <url-pattern>/*</url-pattern>
-       </web-resource-collection>
-       <user-data-constraint>
-              <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-       </user-data-constraint>
-    </security-constraint>
-    ```
+	```
+	sudo vim ${TOMCAT_HOME}/conf/web.xml
+	# 内容如下
+	<security-constraint>
+	   <web-resource-collection >
+          <web-resource-name >SSL</web-resource-name>
+          <url-pattern>/*</url-pattern>
+	   </web-resource-collection>
+	   <user-data-constraint>
+          <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+	   </user-data-constraint>
+	</security-constraint>
+	```
  4. 对于沃通的证书，由于支持的加密解密方式不同，需要自己添加加密方式：
-    ```
-    # 错误提示
-    ERR_SSL_VERSION_OR_CIPHER_MISMATCH
-    # 解决办法
-    # 在Connector节点下添加
-    ciphers="TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-    				TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-    				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-    				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-    				TLS_ECDHE_RSA_WITH_RC4_128_SHA,
-    				TLS_RSA_WITH_AES_128_CBC_SHA256,
-    				TLS_RSA_WITH_AES_128_CBC_SHA,
-    				TLS_RSA_WITH_AES_256_CBC_SHA256,
-    				TLS_RSA_WITH_AES_256_CBC_SHA,
-    				SSL_RSA_WITH_RC4_128_SHA"
-    ```
+	```
+	# 错误提示
+	ERR_SSL_VERSION_OR_CIPHER_MISMATCH
+	# 解决办法
+	# 在Connector节点下添加
+	ciphers="TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+					TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+					TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+					TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+					TLS_ECDHE_RSA_WITH_RC4_128_SHA,
+					TLS_RSA_WITH_AES_128_CBC_SHA256,
+					TLS_RSA_WITH_AES_128_CBC_SHA,
+					TLS_RSA_WITH_AES_256_CBC_SHA256,
+					TLS_RSA_WITH_AES_256_CBC_SHA,
+					SSL_RSA_WITH_RC4_128_SHA"
+	```
 5. 沃通的证书使用`Oracle JDK`，使用OpenJDK时`https`无法通过验证
 
 ## 2. Spring
