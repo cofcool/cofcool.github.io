@@ -126,6 +126,7 @@ npm ERR! not ok code 0
     ```
 
    更多可参考[atom帮助手册](https://atom.io/docs/latest/using-atom-basic-customization)。
+   
 ### 2. 导出已安装 package
 
 ```
