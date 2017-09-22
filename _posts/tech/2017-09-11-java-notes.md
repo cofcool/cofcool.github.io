@@ -478,7 +478,8 @@ public class AuthRealm extends AuthorizingRealm {
 
 ```java
 public class ValidateFilter extends AccessControlFilter {
-  	// 权限允许时调用
+
+    // 权限允许时调用
     @Override
     protected boolean isAccessAllowed(javax.servlet.ServletRequest servletRequest,
         javax.servlet.ServletResponse servletResponse, Object o) throws Exception {
