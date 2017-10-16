@@ -2,7 +2,7 @@
 layout: post
 category : Tech
 title : Ubuntu Server 网络配置
-tags : [ubuntu]
+tags : [Ubuntu]
 ---
 {% include JB/setup %}
 
