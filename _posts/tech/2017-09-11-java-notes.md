@@ -660,19 +660,14 @@ public class Swagger2Spring extends WebMvcConfigurerAdapter {
 ### 3. 集成UI
 
 1. 下载`swagger-ui`
-
-  ```sh
-  git clone https://github.com/swagger-api/swagger-ui.git
-  ```
-
+	```sh
+	git clone https://github.com/swagger-api/swagger-ui.git
+	```
 2. 把`dist`目录引入项目
-
 3. MVC配置文件中添加静态资源
-
-  ```xml
-  <mvc:resources mapping="/ui/**" location="/ui/" />
-  ```
-
+	```xml
+	<mvc:resources mapping="/ui/**" location="/ui/" />
+	```
 
 ## 5. 常见问题
 
