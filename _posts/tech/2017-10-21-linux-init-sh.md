@@ -2,7 +2,7 @@
 layout: post
 category : Tech
 title : Ubuntu 配置备忘录
-tags : [ubuntu, notes]
+tags : [Ubuntu, notes]
 ---
 {% include JB/setup %}
 
