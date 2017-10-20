@@ -320,6 +320,7 @@ HIST_STAMPS="yyyy-mm-dd""
 
 ## 3. Apps
 
+```
 ├── DataGrip
 ├── DevDocs
 ├── Moeditor
@@ -336,3 +337,4 @@ HIST_STAMPS="yyyy-mm-dd""
 ├── Min
 ├── tomcat
 └── xmind
+```
