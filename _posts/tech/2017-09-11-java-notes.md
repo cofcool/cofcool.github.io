@@ -31,10 +31,15 @@ tags : [java, notes]
 		* [1. 基本配置](#1-基本配置)
 		* [2. 启用jackson解析JSON](#2-启用jackson解析json)
 	* [4. 异常监测，统一管理](#4-异常监测统一管理)
+	* [5. 跨域](#5-跨域)
 * [3. Shiro](#3-shiro)
 	* [1. 依赖Jar包](#1-依赖jar包)
 	* [2. 配置](#2-配置-1)
-* [3. 常见问题](#3-常见问题)
+* [4. 集成Swagger](#4-集成swagger)
+	* [1. 依赖](#1-依赖)
+	* [2. 示例代码](#2-示例代码)
+	* [3. 集成UI](#3-集成ui)
+* [5. 常见问题](#5-常见问题)
 	* [1. IDEA 2016 使用junit4](#1-idea-2016-使用junit4)
 	* [2. tomcat无响应](#2-tomcat无响应)
 		* [1. 数据库连接处于等待中](#1-数据库连接处于等待中)
@@ -138,22 +143,22 @@ netstat -antp
 ##### 5. Apache映射到Tomcat
 
 1. 搭建Apache虚拟主机
-	```
-	<VirtualHost *:8080>
-	  DocumentRoot /opt/tomcat7/webapps/rd
-	  ServerName lb.test.com：8080
-	</VirtualHost>
-	```
+  ```
+  <VirtualHost *:8080>
+    DocumentRoot /opt/tomcat7/webapps/rd
+    ServerName lb.test.com：8080
+  </VirtualHost>
+  ```
 2. 映射到Tomcat使用的8080端口
 
 ##### 6. https
 
 1. 生成证书
-	```
-	keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
-	# 导出cer证书
-	keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
-	```
+  ```
+  keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
+  # 导出cer证书
+  keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
+  ```
 2. 配置https
   1. 拷贝第一步生成的tomcat.keystore文件到**${TOMCAT_HOME}/conf**目录下
   2. 编辑server.xml
@@ -167,36 +172,36 @@ netstat -antp
                  truststoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" truststorePass="${PASSWD}" />
       ```
 3. 编辑web.xml，http自动跳转为https
-	```
-	sudo vim ${TOMCAT_HOME}/conf/web.xml
-	# 内容如下
-	<security-constraint>
-	   <web-resource-collection >
+  ```
+  sudo vim ${TOMCAT_HOME}/conf/web.xml
+  # 内容如下
+  <security-constraint>
+     <web-resource-collection >
           <web-resource-name >SSL</web-resource-name>
           <url-pattern>/*</url-pattern>
-	   </web-resource-collection>
-	   <user-data-constraint>
+     </web-resource-collection>
+     <user-data-constraint>
           <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-	   </user-data-constraint>
-	</security-constraint>
-	```
+     </user-data-constraint>
+  </security-constraint>
+  ```
  4. 对于沃通的证书，由于支持的加密解密方式不同，需要自己添加加密方式：
-	```
-	# 错误提示
-	ERR_SSL_VERSION_OR_CIPHER_MISMATCH
-	# 解决办法
-	# 在Connector节点下添加
-	ciphers="TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-					TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-					TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-					TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-					TLS_ECDHE_RSA_WITH_RC4_128_SHA,
-					TLS_RSA_WITH_AES_128_CBC_SHA256,
-					TLS_RSA_WITH_AES_128_CBC_SHA,
-					TLS_RSA_WITH_AES_256_CBC_SHA256,
-					TLS_RSA_WITH_AES_256_CBC_SHA,
-					SSL_RSA_WITH_RC4_128_SHA"
-	```
+  ```
+  # 错误提示
+  ERR_SSL_VERSION_OR_CIPHER_MISMATCH
+  # 解决办法
+  # 在Connector节点下添加
+  ciphers="TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+  				TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+  				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+  				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+  				TLS_ECDHE_RSA_WITH_RC4_128_SHA,
+  				TLS_RSA_WITH_AES_128_CBC_SHA256,
+  				TLS_RSA_WITH_AES_128_CBC_SHA,
+  				TLS_RSA_WITH_AES_256_CBC_SHA256,
+  				TLS_RSA_WITH_AES_256_CBC_SHA,
+  				SSL_RSA_WITH_RC4_128_SHA"
+  ```
 5. 沃通的证书使用`Oracle JDK`，使用OpenJDK时`https`无法通过验证
 
 ## 2. Spring
@@ -366,6 +371,21 @@ netstat -antp
    </bean>
    ```
 
+### 5. 跨域
+
+添加配置:
+```xml
+<mvc:cors>
+	<mvc:mapping
+		path="/**"
+		allowed-origins="*"
+		allow-credentials="true"
+		max-age="1800"
+		allowed-methods="GET,POST"
+	/>
+</mvc:cors>
+```
+
 ## 3. Shiro
 
 ### 1. 依赖Jar包
@@ -492,10 +512,169 @@ public class ValidateFilter extends AccessControlFilter {
         javax.servlet.ServletResponse servletResponse) throws Exception {
         return false;
     }
+
+	// 跨域设置
+	@Override
+    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletResponse servletResponse = (HttpServletResponse) response;
+        HttpServletRequest servletRequest = (HttpServletRequest) request;
+
+        servletResponse.setHeader("Access-Control-Allow-Origin", "*");
+        servletResponse.setHeader("Access-Control-Allow-Headers", "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, api_key, Authorizationh");
+        servletResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, HEAD");
+
+        if (servletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
+            servletResponse.setStatus(HttpStatus.OK.value());
+            return false;
+        }
+        return super.preHandle(request, servletResponse);
+    }
 }
 ```
 
-## 3. 常见问题
+## 4. 集成Swagger
+
+### 1. 依赖
+
+```xml
+<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger2</artifactId>
+	<version>2.7.0</version>
+</dependency>
+<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger-ui</artifactId>
+	<version>2.7.0</version>
+</dependency>
+```
+
+### 2. 示例代码
+
+配置类:
+
+```java
+@EnableWebMvc
+@EnableSwagger2
+@ComponentScan(basePackages = "net.cofcool.mvc")
+@Configuration
+public class Swagger2Spring extends WebMvcConfigurerAdapter {
+
+    @Bean
+    public Docket petApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+            .select()
+            .apis(RequestHandlerSelectors.any())
+            .paths(PathSelectors.any())
+            .build()
+            .pathMapping("/")
+            .genericModelSubstitutes(ResponseEntity.class)
+            .useDefaultResponseMessages(false)
+            .globalResponseMessage(RequestMethod.GET,
+                newArrayList(new ResponseMessageBuilder()
+                    .code(500)
+                    .message("500 message")
+                    .responseModel(new ModelRef("Error"))
+                    .build()))
+            .securitySchemes(newArrayList(apiKey()))
+            .securityContexts(newArrayList(securityContext()))
+            .globalOperationParameters(
+                newArrayList(new ParameterBuilder()
+                    .name("authorize")
+                    .description("Description of someGlobalParameter")
+                    .modelRef(new ModelRef("string"))
+                    .parameterType("query")
+                    .required(true)
+                    .build()))
+            .tags(new Tag("Pet Service", "All apis relating to pets"))
+            ;
+    }
+
+
+    private ApiKey apiKey() {
+        return new ApiKey("mykey", "api_key", "header");
+    }
+
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+            .securityReferences(defaultAuth())
+            .forPaths(PathSelectors.regex("/anyPath.*"))
+            .build();
+    }
+
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope
+            = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return newArrayList(
+            new SecurityReference("mykey", authorizationScopes));
+    }
+
+    @Bean
+    SecurityConfiguration security() {
+        return new SecurityConfiguration(
+            "test-app-client-id",
+            "test-app-client-secret",
+            "test-app-realm",
+            "test-app",
+            "apiKey",
+            ApiKeyVehicle.HEADER,
+            "api_key",
+            "," /*scope separator*/);
+    }
+
+    @Bean
+    UiConfiguration uiConfig() {
+        return new UiConfiguration(
+            "validatorUrl",// url
+            "none",       // docExpansion          => none | list
+            "alpha",      // apiSorter             => alpha
+            "schema",     // defaultModelRendering => schema
+            UiConfiguration.Constants.DEFAULT_SUBMIT_METHODS,
+            false,        // enableJsonEditor      => true | false
+            true,         // showRequestHeaders    => true | false
+            60000L);      // requestTimeout => in milliseconds, defaults to null (uses jquery xh timeout)
+    }
+
+	// 引入UI
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("swagger-ui.html")
+            .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+            .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+}
+```
+
+在Spring XML配置文件中创建该Bean:
+
+```xml
+<bean class="net.cofcool.mvc.conf.Swagger2Spring"/>
+```
+
+即可通过`http://{IP:PORT}/swagger-ui.html`访问Swagger文档页面。
+
+### 3. 集成UI
+
+1. 下载`swagger-ui`
+
+  ```sh
+  git clone https://github.com/swagger-api/swagger-ui.git
+  ```
+
+2. 把`dist`目录引入项目
+
+3. MVC配置文件中添加静态资源
+
+  ```xml
+  <mvc:resources mapping="/ui/**" location="/ui/" />
+  ```
+
+
+## 5. 常见问题
 
 ### 1. IDEA 2016 使用junit4
 
@@ -547,8 +726,7 @@ public class ValidateFilter extends AccessControlFilter {
             super.setUp();
         }
     }
-
-    ​```
+    ```
 3. 添加测试配置：
 
     ![img4]({{ site.url }}/public/upload/images/0072.png)
@@ -661,8 +839,6 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 ### 8. linux环境下调用so库
 
 通过`System.loadLibrary()`来引入so库时, so库的文件名不需要加`lib`前缀.在载入so库时,`public static String mapLibraryName(String libname)`会根据系统的特性来对so库的文件名进行处理, 生成适合特定系统的文件名,然后根据该名称去寻找so库.
-
-
 
 ## 参考资料
 

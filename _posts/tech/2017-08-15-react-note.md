@@ -45,6 +45,7 @@ tags : [react, notes]
 	* [1. 文件过多时，npm start失败](#1-文件过多时npm-start失败)
 	* [2. 使用Pods](#2-使用pods)
 	* [3. webpack环境下，require中使用变量](#3-webpack环境下require中使用变量)
+	* [4. TypeScriptReact环境下，报React refers to a UMD global, but the current file is a module.错误](#4-typescriptreact环境下报react-refers-to-a-umd-global-but-the-current-file-is-a-module错误)
 * [引用文档](#引用文档)
 
 <!-- /code_chunk_output -->
@@ -489,6 +490,14 @@ require("./template/" + name + ".jade");
     "./table-row.jade": 23,
     "./directory/folder.jade": 24
 }
+```
+
+### 4. TypeScriptReact环境下，报React refers to a UMD global, but the current file is a module.错误
+
+引入`React`即可。
+
+```js
+import * as React  from 'react'
 ```
 
 更新中....
