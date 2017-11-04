@@ -50,6 +50,7 @@ tags : [java, notes]
 	* [6. lib已存在但抛出java.lang.NoClassDefFoundError](#6-lib已存在但抛出javalangnoclassdeffounderror)
 	* [7. jetty多实例部署](#7-jetty多实例部署)
 	* [8. linux环境下调用so库](#8-linux环境下调用so库)
+	* [9. Spring MVC get请求带中文乱码](#9-spring-mvc-get请求带中文乱码)
 * [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -660,14 +661,14 @@ public class Swagger2Spring extends WebMvcConfigurerAdapter {
 ### 3. 集成UI
 
 1. 下载`swagger-ui`
-	```sh
-	git clone https://github.com/swagger-api/swagger-ui.git
-	```
+  ```sh
+  git clone https://github.com/swagger-api/swagger-ui.git
+  ```
 2. 把`dist`目录引入项目
 3. MVC配置文件中添加静态资源
-	```xml
-	<mvc:resources mapping="/ui/**" location="/ui/" />
-	```
+  ```xml
+  <mvc:resources mapping="/ui/**" location="/ui/" />
+  ```
 
 ## 5. 常见问题
 
@@ -834,6 +835,14 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 ### 8. linux环境下调用so库
 
 通过`System.loadLibrary()`来引入so库时, so库的文件名不需要加`lib`前缀.在载入so库时,`public static String mapLibraryName(String libname)`会根据系统的特性来对so库的文件名进行处理, 生成适合特定系统的文件名,然后根据该名称去寻找so库.
+
+### 9. Spring MVC get请求带中文乱码
+
+修改项目下的`web.xml`不会对`GET`请求生效，要处理GET请求需要设置`Tomcat`中的`server.xml`下的`Connector`:
+
+```xml
+<Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443" URIEncoding="true"/>
+```
 
 ## 参考资料
 
