@@ -16,7 +16,7 @@ tags : [java, notes]
 3. 通过Git提取Patch，文本替换来生成新的Patch文件, 最后合并到代码分支。
 
 
-还有个更好的方法就是修改Generator的源代码，根据需求把项目的相关代码一并生产。这里我们介绍第一种方法，因为简单快速！
+还有个更好的方法就是修改Generator的源代码，根据需求把项目的相关代码一并生成。这里我们介绍第一种方法，因为简单快速！
 
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=3 depthTo=6 orderedList=false} -->
