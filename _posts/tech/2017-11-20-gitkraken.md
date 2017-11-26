@@ -1,7 +1,7 @@
 ---
 layout: post
 category : Tech
-title : 快速使用 Gitkraken
+title : Gitkraken的简单使用
 tags : [git]
 ---
 {% include JB/setup %}
