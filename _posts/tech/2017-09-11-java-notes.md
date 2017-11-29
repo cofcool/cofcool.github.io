@@ -51,6 +51,7 @@ tags : [java, notes]
 	* [7. jetty多实例部署](#7-jetty多实例部署)
 	* [8. linux环境下调用so库](#8-linux环境下调用so库)
 	* [9. Spring MVC get请求带中文乱码](#9-spring-mvc-get请求带中文乱码)
+	* [10. Maven同时编译Jar和War包](#10-maven同时编译jar和war包)
 * [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -842,6 +843,53 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 
 ```xml
 <Connector connectionTimeout="20000" port="8080" protocol="HTTP/1.1" redirectPort="8443" URIEncoding="true"/>
+```
+
+### 10. Maven同时编译Jar和War包
+
+```xml
+<packaging>war</packaging>
+
+......
+
+  <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-jar-plugin</artifactId>
+      <executions>
+          <execution>
+              <phase>compile</phase>
+              <goals>
+                  <goal>jar</goal>
+              </goals>
+              <configuration>
+                  <finalName>${project.artifactId}-${project.version}</finalName>
+                  <outputDirectory>${project.build.directory}</outputDirectory>
+              </configuration>
+          </execution>
+      </executions>
+  </plugin>
+  <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-install-plugin</artifactId>
+      <executions>
+          <execution>
+              <phase>install</phase>
+              <goals>
+                  <goal>install-file</goal>
+              </goals>
+              <!-- 引用编译完成的jar包，并安装到mvn依赖系统中 -->
+              <configuration>
+                  <packaging>jar</packaging>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <groupId>${project.groupId}</groupId>
+                  <version>${project.version}</version>
+                  <file>
+                      ${project.build.directory}/${project.artifactId}-${project.version}.jar
+                  </file>
+              </configuration>
+          </execution>
+      </executions>
+  </plugin>
 ```
 
 ## 参考资料
