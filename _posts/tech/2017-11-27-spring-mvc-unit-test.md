@@ -15,11 +15,11 @@ tags : [java]
 * [1. 依赖配置](#1-依赖配置)
 * [2. 编写测试代码](#2-编写测试代码)
 * [3. 常见问题](#3-常见问题)
-  * [3.1 项目集成Swagger](#31-项目集成swagger)
-  * [3.2 添加数据源](#32-添加数据源)
-  * [3.3 使用Hibernate Validator](#33-使用hibernate-validator)
-  * [3.4 Junit版本](#34-junit版本)
-  * [3.5 执行Maven打包时跳过测试](#35-执行maven打包时跳过测试)
+	* [3.1 项目集成Swagger](#31-项目集成swagger)
+	* [3.2 添加数据源](#32-添加数据源)
+	* [3.3 使用Hibernate Validator](#33-使用hibernate-validator)
+	* [3.4 Junit版本](#34-junit版本)
+	* [3.5 执行Maven打包时跳过测试](#35-执行maven打包时跳过测试)
 
 <!-- /code_chunk_output -->
 
@@ -29,17 +29,17 @@ tags : [java]
 ```xml
 <!--> maven 依赖 <-->
 <dependencies>
-  <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-  </dependency>
-  <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <version>${spring.version}</version>
-  </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-test</artifactId>
+        <version>${spring.version}</version>
+    </dependency>
 </dependencies>
 ...
 <build>
@@ -60,7 +60,7 @@ tags : [java]
 @WebAppConfiguration
 public class SpringTest {
 
-	@Resource
+    @Resource
     private TestService testService;
 
     @Test
@@ -92,7 +92,7 @@ public class TestAll {
 
 ```xml
 <bean id="dataSource"
-	class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+    class="org.springframework.jdbc.datasource.DriverManagerDataSource"
     p:driverClassName="com.mysql.jdbc.Driver"
     p:url="jdbc:mysql://${ADDRESS}"
     p:username="${USER}"
@@ -101,7 +101,7 @@ public class TestAll {
 
 #### 3.3 使用Hibernate Validator
 
-抛出缺少`javax.el`依赖的话，添加如下依赖：
+若抛出缺少`javax.el`异常的话，添加如下依赖：
 
 ```xml
  <dependency>
@@ -118,7 +118,7 @@ Spring 4.3要求4.12以上版本的的Junit。
 ```java
 // 参考SpringJUnit4ClassRunner类
 if (!ClassUtils.isPresent("org.junit.internal.Throwables", SpringJUnit4ClassRunner.class.getClassLoader())) {
-	throw new IllegalStateException("SpringJUnit4ClassRunner requires JUnit 4.12 or higher.");
+  throw new IllegalStateException("SpringJUnit4ClassRunner requires JUnit 4.12 or higher.");
 }
 ```
 
@@ -126,14 +126,14 @@ if (!ClassUtils.isPresent("org.junit.internal.Throwables", SpringJUnit4ClassRunn
 
 ```xml
 <build>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-surefire-plugin</artifactId>
-			<configuration>
-				<skip>true</skip>
-			</configuration>
-		</plugin>
-	</plugins>
+  <plugins>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-surefire-plugin</artifactId>
+      <configuration>
+        <skip>true</skip>
+      </configuration>
+    </plugin>
+  </plugins>
 </build>
 ```
