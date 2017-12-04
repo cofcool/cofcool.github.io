@@ -2,7 +2,7 @@
 layout: post
 category : Tech
 title : Linux 自定义应用程序快捷方式
-tags : [linux]
+tags : [Linux]
 ---
 {% include JB/setup %}
 
