@@ -15,16 +15,16 @@ Jackson具有很高的扩展性，如果默认实现满足不了需求，可以�
 ```java
 public ObjectMapper getObjectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
-	// 忽略值为NULL的字段
+    // 忽略值为NULL的字段
     objectMapper.setSerializationInclusion(Include.NON_NULL);
- 	// 未知字段不会抛出异常
+    // 未知字段不会抛出异常
     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
- 	// 添加反序列化类
+    // 添加反序列化类
     SimpleModule module = new SimpleModule();
     module.addDeserializer(String.class, new StringDeserializer());
 
- 	// 注册module
+    // 注册module
     objectMapper.registerModule(module);
 
     return objectMapper;
@@ -74,9 +74,8 @@ public class StringDeserializer extends StdDeserializer<String> {
  * Method for registering a module that can extend functionality
  * provided by this mapper; for example, by adding providers for
  * custom serializers and deserializers.
- * 
+ *
  * @param module Module to register
  */
 public ObjectMapper registerModule(Module module)
 ```
-
