@@ -52,6 +52,7 @@ tags : [java, notes]
 	* [8. linux环境下调用so库](#8-linux环境下调用so库)
 	* [9. Spring MVC get请求带中文乱码](#9-spring-mvc-get请求带中文乱码)
 	* [10. Maven同时编译Jar和War包](#10-maven同时编译jar和war包)
+	* [11. Spring MVC中Cacheable未生效](#11-spring-mvc中cacheable未生效)
 * [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -891,6 +892,10 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
       </executions>
   </plugin>
 ```
+
+### 11. Spring MVC中Cacheable未生效
+
+`@Cacheable`标注的方法，如果其所在的类实现了某一个接口，那么该方法必须在接口中定义。Spring是根据AOP来实现缓存功能，如果该类的接口未定义该方法，导致代理中也没有该方法，所以缓存并没有生效。
 
 ## 参考资料
 
