@@ -1,4 +1,10 @@
-# Spring MVC 自定义接口参数解析器
+---
+layout: post
+category : Tech
+title : Spring MVC 自定义接口参数解析器
+tags : [java]
+---
+{% include JB/setup %}
 
 在开发中，MVC提供的接口参数解析类型满足不了需求，这时就需要去自定义自己的参数解析器，无论是XML，JSON等数据类型。其实Spring MVC已经提供了方法来解决该问题。可使用`mvc:argument-resolvers`来注入自定义的参数解析器。
 
@@ -105,7 +111,7 @@ protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
             invocableMethod = invocableMethod.wrapConcurrentResult(result);
         }
 
-		// 请求参数和返回值处理
+        // 请求参数和返回值处理
         invocableMethod.invokeAndHandle(webRequest, mavContainer);
         if (asyncManager.isConcurrentHandlingStarted()) {
             return null;
@@ -174,7 +180,7 @@ private List<HandlerMethodArgumentResolver> getDefaultArgumentResolvers() {
 // ServletInvocableHandlerMethod
 public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,
         Object... providedArgs) throws Exception {
-	// 处理请求参数, 调用父类InvocableHandlerMethod的invokeForRequest方法
+    // 处理请求参数, 调用父类InvocableHandlerMethod的invokeForRequest方法
     Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);
     setResponseStatus(webRequest);
 
@@ -184,7 +190,7 @@ public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer 
 // InvocableHandlerMethod
 public Object invokeForRequest(NativeWebRequest request, ModelAndViewContainer mavContainer,
         Object... providedArgs) throws Exception {
-	// 进行参数解析处理
+    // 进行参数解析处理
     Object[] args = getMethodArgumentValues(request, mavContainer, providedArgs);
 
   	......
@@ -232,17 +238,6 @@ private Object[] getMethodArgumentValues(NativeWebRequest request, ModelAndViewC
 ```
 
 以上就是参数解析的大概过程，如下图所示：
-
-```plantuml
-@startuml
-DispatcherServlet -> HandlerAdapter: doDispatch
-HandlerAdapter -> AbstractHandlerMethodAdapter :handle
-AbstractHandlerMethodAdapter -> RequestMappingHandlerAdapter : handleInternal
-RequestMappingHandlerAdapter -> InvocableHandlerMethod : invokeHandlerMethod
-InvocableHandlerMethod -> HandlerMethodArgumentResolverComposite : invokeAndHandle,  invokeForRequest, getMethodArgumentValues
-HandlerMethodArgumentResolverComposite -> HandlerMethodArgumentResolver : supportsParameter, resolveArgument
-@enduml
-```
 
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="274px" preserveAspectRatio="none" style="width:1752px;height:274px;" version="1.1" viewBox="0 0 1752 274" width="1752px" zoomAndPan="magnify"><defs><filter height="300%" id="f1qtmtzpfsdrhs" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"></feGaussianBlur><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"></feColorMatrix><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"></feOffset><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"></feBlend></filter></defs><g><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="76" x2="76" y1="38.4883" y2="234.3516"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="218" x2="218" y1="38.4883" y2="234.3516"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="410" x2="410" y1="38.4883" y2="234.3516"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="659" x2="659" y1="38.4883" y2="234.3516"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="884" x2="884" y1="38.4883" y2="234.3516"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="1321" x2="1321" y1="38.4883" y2="234.3516"></line><line style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="1619" x2="1619" y1="38.4883" y2="234.3516"></line><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="133" x="8" y="3"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="119" x="15" y="23.5352">DispatcherServlet</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="133" x="8" y="233.3516"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="119" x="15" y="253.8867">DispatcherServlet</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="123" x="155" y="3"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="109" x="162" y="23.5352">HandlerAdapter</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="123" x="155" y="233.3516"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="109" x="162" y="253.8867">HandlerAdapter</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="232" x="292" y="3"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="218" x="299" y="23.5352">AbstractHandlerMethodAdapter</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="232" x="292" y="233.3516"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="218" x="299" y="253.8867">AbstractHandlerMethodAdapter</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="238" x="538" y="3"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="224" x="545" y="23.5352">RequestMappingHandlerAdapter</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="238" x="538" y="233.3516"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="224" x="545" y="253.8867">RequestMappingHandlerAdapter</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="185" x="790" y="3"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="171" x="797" y="23.5352">InvocableHandlerMethod</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="185" x="790" y="233.3516"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="171" x="797" y="253.8867">InvocableHandlerMethod</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="321" x="1159" y="3"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="307" x="1166" y="23.5352">HandlerMethodArgumentResolverComposite</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="321" x="1159" y="233.3516"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="307" x="1166" y="253.8867">HandlerMethodArgumentResolverComposite</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="247" x="1494" y="3"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="233" x="1501" y="23.5352">HandlerMethodArgumentResolver</text><rect fill="#FEFECE" filter="url(#f1qtmtzpfsdrhs)" height="30.4883" style="stroke: #A80036; stroke-width: 1.5;" width="247" x="1494" y="233.3516"></rect><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="233" x="1501" y="253.8867">HandlerMethodArgumentResolver</text><polygon fill="#A80036" points="206.5,65.4883,216.5,69.4883,206.5,73.4883,210.5,69.4883" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="76.5" x2="212.5" y1="69.4883" y2="69.4883"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="72" x="83.5" y="65.0566">doDispatch</text><polygon fill="#A80036" points="398,94.7988,408,98.7988,398,102.7988,402,98.7988" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="218.5" x2="404" y1="98.7988" y2="98.7988"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="42" x="225.5" y="94.3672">handle</text><polygon fill="#A80036" points="647,124.1094,657,128.1094,647,132.1094,651,128.1094" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="410" x2="653" y1="128.1094" y2="128.1094"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="90" x="417" y="123.6777">handleInternal</text><polygon fill="#A80036" points="872.5,153.4199,882.5,157.4199,872.5,161.4199,876.5,157.4199" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="659" x2="878.5" y1="157.4199" y2="157.4199"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="138" x="666" y="152.9883">invokeHandlerMethod</text><polygon fill="#A80036" points="1309.5,182.7305,1319.5,186.7305,1309.5,190.7305,1313.5,186.7305" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="884.5" x2="1315.5" y1="186.7305" y2="186.7305"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="413" x="891.5" y="182.2988">invokeAndHandle,  invokeForRequest, getMethodArgumentValues</text><polygon fill="#A80036" points="1607.5,212.041,1617.5,216.041,1607.5,220.041,1611.5,216.041" style="stroke: #A80036; stroke-width: 1.0;"></polygon><line style="stroke: #A80036; stroke-width: 1.0;" x1="1321.5" x2="1613.5" y1="216.041" y2="216.041"></line><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="233" x="1328.5" y="211.6094">supportsParameter, resolveArgument</text></g></svg>
 
@@ -306,10 +301,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ServletModelAttribu
 @Slf4j
 public class MultiArgumentResolvers implements HandlerMethodArgumentResolver {
 
-	// POST请求，Content-Type为JSON
+    // POST请求，Content-Type为JSON
     private HandlerMethodArgumentResolver jsonResolver;
 
-	// get请求
+    // get请求
     private HandlerMethodArgumentResolver requestParamResolver = new ServletModelAttributeMethodProcessor(false);
 
 
