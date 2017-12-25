@@ -10,7 +10,7 @@ tags : [Windows]
 <!-- @import "[TOC]" {cmd="toc" depthFrom=3 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
-* [1.  构建键锁屏软件](#1-构建键锁屏软件)
+* [1.  构建锁屏软件](#1-构建锁屏软件)
 * [2. 建立计划任务](#2-建立计划任务)
 	* [2.1 创建基本任务](#21-创建基本任务)
 	* [2.2 配置计划任务](#22-配置计划任务)
@@ -18,7 +18,7 @@ tags : [Windows]
 <!-- /code_chunk_output -->
 
 
-### 1.  构建键锁屏软件
+### 1.  构建锁屏软件
 
 ```c#
 using System;
@@ -58,6 +58,6 @@ namespace OneKeyLock
 
 ![autolock](http://cofcool.net/imgs/autolock-02.jpg)
 
-触发器配置如下图所示（重复任务间隔可不勾选）：
+触发器配置如下图所示：
 
 ![autolock](http://cofcool.net/imgs/autolock-03.jpg)
