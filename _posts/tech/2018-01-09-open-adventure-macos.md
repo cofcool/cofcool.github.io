@@ -6,7 +6,7 @@ tags : [game]
 ---
 {% include JB/setup %}
 
-无意中看到 [巨洞冒险：史上最有名的经典文字冒险游戏 ](https://linux.cn/article-9209-1.html)，发现这个游戏还挺有意思。想要在macOS上试试，但是并没有该文章并没有说明在macOS如何安装。大概看了看该游戏的源码，该代码同样可以在macOS上编译。
+无意中看到 [巨洞冒险：史上最有名的经典文字冒险游戏 ](https://linux.cn/article-9209-1.html)，发现这个游戏还挺有意思。想要在macOS上试试，但是该文章并没有说明如何在macOS上安装。大概看了看该游戏的源码，该代码同样可以在macOS上编译。
 
 步骤如下：
 
@@ -39,7 +39,7 @@ make
 ./advent
 ```
 
-我们开始愉快的游戏吧!!!
+我们愉快的开始游戏吧!!!
 
 ```
 Welcome to Adventure!!  Would you like instructions?
