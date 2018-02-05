@@ -478,7 +478,7 @@ sudo launchctl limit maxfiles 2048 unlimited
 
 ### 3. webpack环境下，require中使用变量
 
-在开发中有时需要在`requir`函数中使用变量，可查看官方文档：[dynamic requires](https://webpack.github.io/docs/context.html)。如果参数为变量，则需要确定该参数的值为模块的相对路径。webpack在监测到require中使用变量，则会根据把该值替换为正则表达式，根据匹配的结果生成一个map，模块路径为`key`,模块id为`value`，然后根据参数的值来获取指定模块。
+在开发中有时需要在`require`函数中使用变量，可查看官方文档：[dynamic requires](https://webpack.github.io/docs/context.html)。如果参数为变量，则需要确定该参数的值为模块的相对路径。webpack在监测到require中使用变量，则会根据把该值替换为正则表达式，根据匹配的结果生成一个map，模块路径为`key`,模块id为`value`，然后根据参数的值来获取指定模块。
 
 示例：
 
