@@ -1,6 +1,10 @@
-# 系统管理神器 osquery
-
-
+---
+layout: post
+category : Tech
+title : 系统管理利器 osquery
+tags : [ops]
+---
+{% include JB/setup %}
 
 ## 1. 简要介绍
 
@@ -10,7 +14,8 @@
 >
 > The tools make low-level operating system analytics and monitoring both performant and intuitive.
 
-<div style="position: relative; width: 100%; height: 100%; background-color: black;"><video preload="none" playsinline="" style="width: 100%; height: 100%; position: absolute; transform: rotate(0deg) scale(1);" poster="https://pbs.twimg.com/tweet_video_thumb/DVNL6TaU0AAZa1P.jpg" src="https://video.twimg.com/tweet_video/DVNL6TaU0AAZa1P.mp4" type="video/mp4"></video></div>
+
+![osquery-01](http://cofcool.net/imgs/osquery-01.gif)
 
 官方示例:
 
