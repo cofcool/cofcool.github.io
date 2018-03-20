@@ -133,7 +133,7 @@ public class MyCredentialsMatcher implements CredentialsMatcher {
 
 下面我们来看看Shrio是如何登陆的。
 
-Shiro通过`Subject`实例的`void login(AuthenticationToken token) throws AuthenticationException`方法进行登陆。它的子类`DelegatingSubject`实现了login方法。
+Shiro通过`Subject`实例的`void login(AuthenticationToken token) throws AuthenticationException`方法进行登陆。`DelegatingSubject`实现了login方法。
 
 ```java
 public void login(AuthenticationToken token) throws AuthenticationException {
@@ -327,7 +327,7 @@ public final AuthenticationInfo getAuthenticationInfo(AuthenticationToken token)
 
 以上就是执行登陆需要的操作。
 
-我们重点看看`ModularRealmAuthenticator`的`doMultiRealmAuthentication`的实现：
+我们重点看看`ModularRealmAuthenticator`的`doMultiRealmAuthentication`的授权代码部分：
 ```java
 for (Realm realm : realms) {
 
@@ -440,3 +440,5 @@ public class WxAuthenticationStrategy extends AbstractAuthenticationStrategy {
     }
 }
 ```
+
+除了以上方法外，也可重写`AbstractAuthenticationStrategy`的`afterAttempt`和`afterAllAttempts`来实现，这样就不需要重写`ModularRealmAuthenticator`的`doMultiRealmAuthentication`方法。
