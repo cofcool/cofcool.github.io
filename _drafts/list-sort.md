@@ -1,14 +1,34 @@
 # List的sort函数实现解析
 
-最近在使用List的`void sort(Comparator<? super E> c)`函数时，comparator对象定义为`Comparator<Integer> comparator = (a1, a2) -> a1 - a2;`，预想结果为从大到小排序，但运行结果为从小到大排序。
+最近在使用List的`void sort(Comparator<? super E> c)`函数时在想了解内部是如何实现的，于是看了源码，该默认方法在JDK1.8的时候添加，排序算法采用TimSort算法，如下所述。
 
-查看该函数的实现，发现sort函数把`compare的结果小于零`的放在左边，也就是说如果想要从小到大排序，Comparator的比较结果应小于零；从大到小的话，Comparator的比较结果应大于零。
+```
+The implementation was adapted from Tim Peters's list sort for Python
+ (<a href="http://svn.python.org/projects/python/trunk/Objects/listsort.txt">
+ TimSort</a>).  It uses techniques from Peter McIlroy's "Optimistic
+ Sorting and Information Theoretic Complexity", in Proceedings of the
+ Fourth Annual ACM-SIAM Symposium on Discrete Algorithms, pp 467-474,
+ January 1993.
+```
+
+ArrayList的实现与List接口的默认实现稍有不同，如果排序时修改了对象内部元素的值，ArrayList的sort方法会抛出`ConcurrentModificationException`异常。
+
+## 1. TimSort算法介绍
+
+
+
+## 2. 源码解析
 
 **List**:
 ```java
 default void sort(Comparator<? super E> c) {
     Object[] a = this.toArray();
+
+    // 在此处调用Arrays的sort方法
+    // 该方法要求传入一个数组和Comparator对象
     Arrays.sort(a, (Comparator) c);
+
+    // 把排序好的数组回写到list对象中
     ListIterator<E> i = this.listIterator();
     for (Object e : a) {
         i.next();
@@ -20,11 +40,18 @@ Arrays
 ```java
 public static <T> void sort(T[] a, Comparator<? super T> c) {
     if (c == null) {
+        // 未传入Comparator对象时调用
+        // 该sort函数调用ComparableTimSort.sort(a, 0, a.length, null, 0, 0)来实现排序，与TimSort的实现类似
         sort(a);
     } else {
+        // 传统的排序算法，此处是为了兼容旧版本JDK，在未来会移除
+        // 该排序实现：
+        // 1. 数组长度小于7时，采用冒泡排序
+        // 2. 长度大于7的数组用归并排序
         if (LegacyMergeSort.userRequested)
             legacyMergeSort(a, c);
         else
+            // TimSort算法
             TimSort.sort(a, 0, a.length, c, null, 0, 0);
     }
 }
@@ -145,3 +172,7 @@ private static <T> int countRunAndMakeAscending(T[] a, int lo, int hi,
     return runHi - lo;
 }
 ```
+
+## 引用
+
+1. [维基百科上关于TimSort算法的介绍](https://en.wikipedia.org/wiki/Timsort)
