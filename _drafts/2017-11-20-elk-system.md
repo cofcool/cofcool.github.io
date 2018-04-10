@@ -51,6 +51,27 @@ $ curl localhost:9200
 }
 ```
 
+filebeat
+```
+# wget  https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.2.3-linux-x86_64.tar.gz
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.2.3-amd64.deb
+sudo dpkg -i filebeat-6.2.3-amd64.deb
+
+# configue
+filebeat.prospectors:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/*.log
+
+output.elasticsearch:
+    hosts: ["localhost:9200"]
+
+setup.kibana:
+  host: "localhost:5601"
+
+```
+
 logstash
 ```
 wget https://artifacts.elastic.co/downloads/logstash/logstash-6.2.2.tar.gz
