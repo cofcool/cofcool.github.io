@@ -83,5 +83,5 @@ Collecting pytz (from django)
 Installing collected packages: pytz, django
 Successfully installed django-1.11.12 pytz-2018.4
 django ~ django > deactivate
-~ >
+~ django >
 ```
