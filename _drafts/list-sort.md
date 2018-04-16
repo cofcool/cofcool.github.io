@@ -65,9 +65,9 @@ static <T> void sort(T[] a, int lo, int hi, Comparator<? super T> c,
 
     int nRemaining  = hi - lo;
     if (nRemaining < 2)
-        return;  // Arrays of size 0 and 1 are always sorted
+        return; // 长度为0或1的已处于有序状态
 
-    // If array is small, do a "mini-TimSort" with no merges
+    // 长度较小(32)时不需要合并，直接排序即可
     if (nRemaining < MIN_MERGE) {
         int initRunLen = countRunAndMakeAscending(a, lo, hi, c);
         binarySort(a, lo, hi, lo + initRunLen, c);
@@ -150,6 +150,16 @@ private static <T> void binarySort(T[] a, int lo, int hi, int start,
         }
         a[left] = pivot;
     }
+}
+
+private static int minRunLength(int n) {
+    assert n >= 0;
+    int r = 0;      // Becomes 1 if any 1 bits are shifted off
+    while (n >= MIN_MERGE) {
+        r |= (n & 1);
+        n >>= 1;
+    }
+    return n + r;
 }
 
 private static <T> int countRunAndMakeAscending(T[] a, int lo, int hi,
