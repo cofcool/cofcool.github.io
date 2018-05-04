@@ -33,6 +33,20 @@
    1. FileStore
    2. JDBCStore
 
+## 3. Http
+
+### 3.1 HttpServlet
+
+实现类为`org.apache.catalina.servletsDefaultServlet`
+
+### 3.1 Request
+
+实现类为`org.apache.catalina.connector.Request`
+
+### 3.2 Response
+
+实现类为`org.apache.catalina.connector.Response`
+
 ## 资料引用
 
 1. 程序员突击:Tomcat原理与JavaWeb系统开发, 陈菁菁

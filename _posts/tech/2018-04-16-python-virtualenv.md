@@ -1,7 +1,7 @@
 ---
 layout: post
 category : Tech
-title : Python虚拟环境搭建
+title : Python虚拟环境搭建(VirtualEnv/Pipenv)
 tags : [python]
 ---
 {% include JB/setup %}
@@ -16,6 +16,7 @@ tags : [python]
 	* [2.2 激活虚拟环境](#22-激活虚拟环境)
 	* [2.3 退出虚拟环境](#23-退出虚拟环境)
 * [3. 示例](#3-示例)
+* [4. Pipenv](#4-pipenv)
 
 <!-- /code_chunk_output -->
 
@@ -85,3 +86,23 @@ Successfully installed django-1.11.12 pytz-2018.4
 django ~ django > deactivate
 ~ django >
 ```
+
+## 4. Pipenv
+
+Pipenv用于简化VirtualEnv操作，使Python虚拟环境更加方便。Pipenv为官方推荐工具，是一个旨在将最好的包管理器(bundler, composer, npm, cargo, yarn, etc.)带到Python世界的工具。
+
+```sh
+# 安装
+pip3 install pipenv
+
+# 安装pip包
+cd myProject
+pipenv install html2text
+
+# 激活当前环境
+pipenv shell
+
+# 运行处在当前环境下的项目
+# pipenv run python3 dhtml2text.py
+```
+更多使用方法可查看[pipenv.org](https://docs.pipenv.org/)。
