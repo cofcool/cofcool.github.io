@@ -17,7 +17,7 @@ title: CofCool的杂乱之语
       <span style="color:#A6A8B0;">{{ post.category }}</span>
       <h4><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h4>
       <div style="margin-bottom: 10px;color: gray;">
-         {{ post.content | markdownify | strip_html | truncatewords: 10 }}
+         {{ post.content | strip_html | truncatewords: 10 }}
       </div>
       <div>
         {% for tag in post.tags %}
