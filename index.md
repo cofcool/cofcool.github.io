@@ -14,13 +14,14 @@ title: CofCool的杂乱之语
 <ul class="posts">
   {% for post in site.posts  limit:20 %}
     <li>
-      <span style="color:'#A6A8B0';">{{ post.category }}</span> |
-      <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a>
-      <span style="float:right;">{{ post.date | date_to_string }}</span>
+      <span style="color:'#A6A8B0';">{{ post.category }}</span>
+      <h4><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h4>
+      <div>
+        {% for tag in post.tags %}
+          <span>{{ post.tag }}</span> &nbsp;
+        {% endfor %}
+        <span style="float:right;">{{ post.date | date_to_string }}</span>
+      </div>
     </li>
-     {% for tag in post.tags %}
-       <span>{{ post.tags }}</span> &nbsp;
-     {% endfor %}
-    <hr style="margin: 10px 0;">
   {% endfor %}
 </ul>
