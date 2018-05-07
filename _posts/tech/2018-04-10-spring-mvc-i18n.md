@@ -2,7 +2,7 @@
 layout: post
 category : Tech
 title : Spring MVC和Hibernate Validator 国际化
-tags : [java]
+tags : [java, shiro]
 ---
 {% include JB/setup %}
 

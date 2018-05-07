@@ -2,7 +2,7 @@
 layout: post
 category : Tech
 title : Shiro 登陆原理解析以及配置多个Realm
-tags : [java]
+tags : [java, shiro]
 ---
 {% include JB/setup %}
 
