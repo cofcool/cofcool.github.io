@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : 系统管理利器 osquery
 tags : [ops]
+excerpt: osquery，这是Facebook为系统管理，运维开发的一款管理工具，适用于OS X/macOS, Windows, and Linux。可以使用SQL直接查询系统环境变量，运行状况，资源占用等。
 ---
 {% include JB/setup %}
 
@@ -10,7 +11,7 @@ tags : [ops]
 
 [osquery](https://osquery.io/)，这是Facebook为系统管理，运维开发的一款管理工具，适用于OS X/macOS, Windows, and Linux。可以使用SQL直接查询系统环境变量，运行状况，资源占用等。
 
-> osquery is an operating system instrumentation framework for OS X/macOS, Windows, and Linux. 
+> osquery is an operating system instrumentation framework for OS X/macOS, Windows, and Linux.
 >
 > The tools make low-level operating system analytics and monitoring both performant and intuitive.
 
@@ -25,21 +26,21 @@ osquery> SELECT name, path, pid FROM processes WHERE on_disk = 0;
 
 osquery> SELECT * FROM mounts m, disk_encryption dWHERE m.device_alias = d.nameAND m.path = "/"AND d.encrypted = 0;
   device = /dev/disk1
-  device_alias = /dev/disk1                          
-  path = /              
-  type = hfs       
-  blocks_size = 4096            
-  blocks = 121815040       
-  blocks_free = 48994214  
-  blocks_available = 48930214            
-  inodes = 4294967279       
-  inodes_free = 4292826261             
-  flags = 75550720              
-  name = /dev/disk1              
-  uuid = 23446C9A-18F9-4BCF-A088-801E376691FA         
-  encrypted = 0              
-  type =               
-  uid =         
+  device_alias = /dev/disk1
+  path = /
+  type = hfs
+  blocks_size = 4096
+  blocks = 121815040
+  blocks_free = 48994214
+  blocks_available = 48930214
+  inodes = 4294967279
+  inodes_free = 4292826261
+  flags = 75550720
+  name = /dev/disk1
+  uuid = 23446C9A-18F9-4BCF-A088-801E376691FA
+  encrypted = 0
+  type =
+  uid =
   user_uuid =
 ```
 

@@ -3,8 +3,11 @@ layout: post
 category : Tech
 title : Python虚拟环境搭建(VirtualEnv/Pipenv)
 tags : [python]
+excerpt: Python版本众多，在开发中经常需要使用不同版本的Python，不同项目也可能会使用不同版本的第三方库，这是我们就需要搭建多个Python虚拟环境。
 ---
 {% include JB/setup %}
+
+Python版本众多，在开发中经常需要使用不同版本的Python，不同项目也可能会使用不同版本的第三方库，这是我们就需要搭建多个Python虚拟环境。
 
 目录:
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->

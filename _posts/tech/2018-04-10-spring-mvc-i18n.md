@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Spring MVC和Hibernate Validator 国际化
 tags : [java, shiro]
+excerpt: 今天我们来看看SprngMVC如何国际化。
 ---
 {% include JB/setup %}
 

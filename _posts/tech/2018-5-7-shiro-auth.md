@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Spring MVC + Shiro 原理解析
 tags : [java, shiro]
+excerpt: 在Spring MVC中，`DelegatingFilterProxy`会代理Spring上下文中实现`Servlet Filter`接口的类，该类负责控制调用项目中的`Servlet Filter`类，包括`ShiroFilter`。下面我们来看看具体流程和实现。
 ---
 {% include JB/setup %}
 

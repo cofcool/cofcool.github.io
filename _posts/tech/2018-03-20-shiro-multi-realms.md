@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Shiro 登陆原理解析以及配置多个Realm
 tags : [java, shiro]
+excerpt: Apache Shiro是一个强大且易用的Java安全框架,执行身份验证、授权、密码学和会话管理，内置了众多的基础角色和权限验证功能。它通过Realm来执行具体授权的验证，如账号查询，密码验证等。
 ---
 {% include JB/setup %}
 
