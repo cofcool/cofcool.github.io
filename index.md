@@ -13,9 +13,14 @@ title: CofCool的杂乱之语
 ## 最近文章
 <ul class="posts">
   {% for post in site.posts  limit:20 %}
-    <li><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></li>
-    <span>{{ post.category }}</span> &nbsp;&nbsp; <span>{{ post.tags }}</span>
-     &nbsp;&nbsp;  &nbsp;&nbsp; <span>{{ post.date | date_to_string }}</span>
-    <hr>
+    <li>
+      <span style="color:'#A6A8B0';">{{ post.category }}</span> |
+      <a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a>
+      <span style="float:right;">{{ post.date | date_to_string }}</span>
+    </li>
+     {% for tag in post.tags %}
+       <span>{{ post.tags }}</span> &nbsp;
+     {% endfor %}
+    <hr style="margin: 10px 0;">
   {% endfor %}
 </ul>
