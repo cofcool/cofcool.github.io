@@ -17,12 +17,12 @@ title: CofCool的杂乱之语
       <span style="color:#A6A8B0;">{{ post.category }}</span>
       <h4><a href="{{ BASE_PATH }}{{ post.url }}">{{ post.title }}</a></h4>
       <div style="margin-bottom: 10px;color: gray;">
-         {{ post.content | markdownify | strip_html | truncatewords: 50 }}
+         {{ post.content | markdownify | strip_html | truncatewords: 10 }}
       </div>
       <div>
         {% for tag in post.tags %}
           <span style="border-radius: 6px;border: 1px solid gray;padding: 1px 4px;text-align: center;align-content: center;color:gray;font-size: small;display: inline-block;">
-            <a href="/tag/{{ tag }}">{{ tag }}</a>
+            <a href="/tags.html#{{ tag }}-ref">{{ tag }}</a>
           </span> &nbsp;
         {% endfor %}
         <span style="float:right;color:gray;">{{ post.date | date_to_string }}</span>
