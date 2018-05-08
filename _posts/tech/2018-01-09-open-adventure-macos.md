@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : 在macOS上玩巨洞冒险
 tags : [game]
+excerpt: 巨洞冒险：史上最有名的经典文字冒险游戏
 ---
 {% include JB/setup %}
 

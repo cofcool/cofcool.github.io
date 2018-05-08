@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Linux 自定义应用程序快捷方式
 tags : [Linux]
+excerpt: 一个简单文件即可在Linux上实现类似于Windows中的快捷方式。
 ---
 {% include JB/setup %}
 

@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Gitkraken的简单使用
 tags : [git]
+excerpt: Gitkraken是一款Git的图形化管理工具，简单易用，支持常用的Git操作。
 ---
 {% include JB/setup %}
 
@@ -44,4 +45,3 @@ tags : [git]
 **6**. 针对某次的提交进行操作，包括checkout，reset，添加tag等。
 
 ![](http://cofcool.net/imgs/gitkraken-07.png)
-

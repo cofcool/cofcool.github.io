@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Windows实现定时自动锁屏
 tags : [Windows]
+excerpt: Windows使用脚本实现自动锁频。
 ---
 
 目录：

@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Android Gradle编译的一些问题
 tags : [android]
+excerpt: Android开发中遇到的一些问题，仅以纪录。
 ---
 {% include JB/setup %}
 

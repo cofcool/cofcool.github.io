@@ -3,7 +3,7 @@ layout: post
 category : Tech
 title : Python快速下载网页并转为文本
 tags : [python]
-excerpt: 作为一个程序员经常需要在网上查资料，但是不想在线看，有什么办法可以简单迅速的实现大量网页下载？这时`Python`作为一门简单易用的语言便可发挥作用了。
+excerpt: 作为一个程序员经常需要在网上查资料，但是不想在线看，有什么办法可以简单迅速的实现大量网页下载？这时Python作为一门简单易用的语言便可发挥作用了。
 ---
 {% include JB/setup %}
 

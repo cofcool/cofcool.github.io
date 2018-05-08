@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Jackson 自定义反序列化行为
 tags : [java]
+excerpt: Jackson具有很高的扩展性，如果默认实现满足不了需求，可以自由扩展。
 ---
 {% include JB/setup %}
 

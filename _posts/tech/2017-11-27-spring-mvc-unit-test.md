@@ -3,6 +3,7 @@ layout: post
 category : Tech
 title : Spring MVC 单元测试
 tags : [java]
+excerpt: 在开发中，测试的重要性不言而喻。今天我们来看看，Spring MVC如何进行单元测试。
 ---
 {% include JB/setup %}
 
