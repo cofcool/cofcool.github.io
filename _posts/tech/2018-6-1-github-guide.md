@@ -3,9 +3,14 @@ layout: post
 category : Tech
 title : Github简单使用
 tags : [git]
+excerpt: Github在开发中的作用越来越重要，会频繁的使用开源软件和开源代码。那么，如何自己创建一个项目了。
+
 ---
 {% include JB/setup %}
 
+Github在开发中的作用越来越重要，会频繁的使用开源软件和开源代码。那么，如何自己创建一个项目了。
+
+目录:
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=2 orderedList=false} -->
 <!-- code_chunk_output -->
 
@@ -14,8 +19,6 @@ tags : [git]
 * [3. 项目提交](#3-项目提交)
 
 <!-- /code_chunk_output -->
-
-目录:
 
 ## 1. 创建项目
 
@@ -65,7 +68,7 @@ Your branch is ahead of 'origin/master' by 1 commit.
 nothing to commit, working tree clean
 ```
 
-推送到GitHub
+推送到GitHub，如提示需要`username`,`password`，正确输入即可。
 
 ```sh
 git push
