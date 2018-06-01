@@ -64,8 +64,13 @@ filebeat.prospectors:
   paths:
     - /var/log/*.log
 
-output.elasticsearch:
-    hosts: ["localhost:9200"]
+# 只能启用一个output
+# output.elasticsearch:
+    # hosts: ["localhost:9200"]
+
+output.logstash:
+  # The Logstash hosts
+  hosts: ["localhost:5000"]
 
 setup.kibana:
   host: "localhost:5601"
@@ -80,6 +85,8 @@ cd logstash-6.2.2
 
 # install log4j plugin
 ./bin/logstash-plugin install logstash-input-log4j
+# install beats plugin
+./bin/logstash-plugin install logstash-input-beats
 
 vim config/log4j_to_es.conf
 
@@ -93,9 +100,15 @@ input {
     host => "localhost"
     port => 4567
   }
+
+  # use filebeat
+  beats {
+    port => 5000
+  }
 }
+
 filter {
-  #Only matched data are send to output.
+  # filter
 }
 output {
   # For detail config for elasticsearch as output,

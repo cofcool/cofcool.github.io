@@ -279,7 +279,10 @@ cp ${PICTURE} /boot/grub/
 ### 2.2 Vim配置文件
 
 ```sh
-wget -qO- https://raw.github.com/ma6174/vim/master/setup.sh | sh -x
+# wget -qO- https://raw.github.com/ma6174/vim/master/setup.sh | sh -x
+# https://github.com/spf13/spf13-vim
+# spf13-vim
+curl https://j.mp/spf13-vim3 -L -o - | sh
 ```
 
 ### 2.3 PATH
