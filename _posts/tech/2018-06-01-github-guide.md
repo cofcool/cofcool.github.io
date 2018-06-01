@@ -1,13 +1,14 @@
 ---
 layout: post
-category : Tech
-title : Github简单使用
-tags : [git]
-excerpt: Github在开发中的作用越来越重要，会频繁的使用开源软件和开源代码。那么，如何自己创建一个项目。
+category: Tech
+title: Github简单使用
+tags: [git]
+excerpt: Github在开发中的作用越来越重要，开发时会频繁的使用开源软件和开源代码。那么，如何自己创建一个项目。
 ---
+
 {% include JB/setup %}
 
-Github在开发中的作用越来越重要，会频繁的使用开源软件和开源代码。那么，如何自己创建一个项目。
+Github在开发中的作用越来越重要，开发时会频繁的使用开源软件和开源代码。那么，如何自己创建一个项目。
 
 目录:
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=2 orderedList=false} -->
