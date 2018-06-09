@@ -53,6 +53,7 @@ tags : [java, notes]
 	* [9. Spring MVC get请求带中文乱码](#9-spring-mvc-get请求带中文乱码)
 	* [10. Maven同时编译Jar和War包](#10-maven同时编译jar和war包)
 	* [11. Spring MVC中Cacheable未生效](#11-spring-mvc中cacheable未生效)
+	* [12. 同一对象的两个synchronized方法不能同时被访问](#12-同一对象的两个synchronized方法不能同时被访问)
 * [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -897,6 +898,11 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 
 `@Cacheable`标注的方法，如果其所在的类实现了某一个接口，那么该方法必须在接口中定义。Spring是根据AOP来实现缓存功能，如果该类的接口未定义该方法，导致代理中也没有该方法，所以缓存并没有生效。
 
+### 12. 同一对象的两个synchronized方法不能同时被访问
+
+当`synchronized`修饰同一类的多个方法时，同一时间只有一个线程允许访问被修饰的方法，`synchronized`会锁住对象本身，因为只有一个方法的锁被释放之后才可继续访问其它同步方法。当线程访问一个对象的同步方法时，可以调用这个对象的其它同步方法，也包含正在执行的方法，而不必重新获取方法的访问权。也就是说同一对象的两个同步方法不能同时被多个线程访问。为了更好的性能，临界区的访问时间应该尽可能的短。
+
 ## 参考资料
 
 * [Spring MVC – Component-Scan, Annotation-Config, Annotation-Driven](https://scotch.io/@ethanmillar/spring-mvc-component-scan-annotation-config-annotation-driven)
+* [If i synchronized two methods on the same class, can they run simultaneously?](https://stackoverflow.com/questions/15438727/if-i-synchronized-two-methods-on-the-same-class-can-they-run-simultaneously)
