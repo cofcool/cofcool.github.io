@@ -42,8 +42,6 @@ tags : [java, notes]
 * [5. 常见问题](#5-常见问题)
 	* [1. IDEA 2016 使用junit4](#1-idea-2016-使用junit4)
 	* [2. tomcat无响应](#2-tomcat无响应)
-		* [1. 数据库连接处于等待中](#1-数据库连接处于等待中)
-		* [2. 连接数过多](#2-连接数过多)
 	* [3. Maven项目（spring, mybatis...）在eclipse中可以运行，无法在Idea中运行](#3-maven项目spring-mybatis在eclipse中可以运行无法在idea中运行)
 	* [4. 使用Idea时提示无法找到配置文件](#4-使用idea时提示无法找到配置文件)
 	* [5. 引入第三方库](#5-引入第三方库)
@@ -147,65 +145,76 @@ netstat -antp
 ##### 5. Apache映射到Tomcat
 
 1. 搭建Apache虚拟主机
-  ```
-  <VirtualHost *:8080>
-    DocumentRoot /opt/tomcat7/webapps/rd
-    ServerName lb.test.com：8080
-  </VirtualHost>
-  ```
+
+```
+<VirtualHost *:8080>
+DocumentRoot /opt/tomcat7/webapps/rd
+ServerName lb.test.com：8080
+</VirtualHost>
+```
+
 2. 映射到Tomcat使用的8080端口
 
 ##### 6. https
 
 1. 生成证书
-  ```
-  keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
-  # 导出cer证书
-  keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
-  ```
+
+```
+keytool -genkey -v -alias tomcat -keyalg RSA -keystore tomcat.keystore -validity 36500
+# 导出cer证书
+keytool -keystore tomcat.keystore -export -alias tomcat -file tomcat.cer
+```
+
 2. 配置https
-  1. 拷贝第一步生成的tomcat.keystore文件到**${TOMCAT_HOME}/conf**目录下
-  2. 编辑server.xml
-      ```
-      sudo vim ${TOMCAT_HOME}/conf/server.xml
-      # 内容如下
-      <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
-                 maxThreads="150" scheme="https" secure="true"
-                 clientAuth="false" sslProtocol="TLS"
-                 keystoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" keystorePass="${PASSWD}"
-                 truststoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" truststorePass="${PASSWD}" />
-      ```
+
+```
+# 拷贝第一步生成的tomcat.keystore文件到${TOMCAT_HOME}/conf目录下
+# 编辑server.xml
+
+sudo vim ${TOMCAT_HOME}/conf/server.xml
+# 内容如下
+<Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
+         maxThreads="150" scheme="https" secure="true"
+         clientAuth="false" sslProtocol="TLS"
+         keystoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" keystorePass="${PASSWD}"
+         truststoreFile="${TOMCAT_HOME}/conf/tomcat.keystore" truststorePass="${PASSWD}" />
+```
+
 3. 编辑web.xml，http自动跳转为https
-  ```
-  sudo vim ${TOMCAT_HOME}/conf/web.xml
-  # 内容如下
-  <security-constraint>
-     <web-resource-collection >
-          <web-resource-name >SSL</web-resource-name>
-          <url-pattern>/*</url-pattern>
-     </web-resource-collection>
-     <user-data-constraint>
-          <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-     </user-data-constraint>
-  </security-constraint>
-  ```
- 4. 对于沃通的证书，由于支持的加密解密方式不同，需要自己添加加密方式：
-  ```
-  # 错误提示
-  ERR_SSL_VERSION_OR_CIPHER_MISMATCH
-  # 解决办法
-  # 在Connector节点下添加
-  ciphers="TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
-  				TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
-  				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
-  				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
-  				TLS_ECDHE_RSA_WITH_RC4_128_SHA,
-  				TLS_RSA_WITH_AES_128_CBC_SHA256,
-  				TLS_RSA_WITH_AES_128_CBC_SHA,
-  				TLS_RSA_WITH_AES_256_CBC_SHA256,
-  				TLS_RSA_WITH_AES_256_CBC_SHA,
-  				SSL_RSA_WITH_RC4_128_SHA"
-  ```
+
+```
+sudo vim ${TOMCAT_HOME}/conf/web.xml
+# 内容如下
+<security-constraint>
+ <web-resource-collection >
+      <web-resource-name >SSL</web-resource-name>
+      <url-pattern>/*</url-pattern>
+ </web-resource-collection>
+ <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+ </user-data-constraint>
+</security-constraint>
+```
+
+4. 对于沃通的证书，由于支持的加密解密方式不同，需要自己添加加密方式：
+
+```
+# 错误提示
+ERR_SSL_VERSION_OR_CIPHER_MISMATCH
+# 解决办法
+# 在Connector节点下添加
+ciphers="TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,
+				TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,
+				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,
+				TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+				TLS_ECDHE_RSA_WITH_RC4_128_SHA,
+				TLS_RSA_WITH_AES_128_CBC_SHA256,
+				TLS_RSA_WITH_AES_128_CBC_SHA,
+				TLS_RSA_WITH_AES_256_CBC_SHA256,
+				TLS_RSA_WITH_AES_256_CBC_SHA,
+				SSL_RSA_WITH_RC4_128_SHA"
+```
+
 5. 沃通的证书使用`Oracle JDK`，使用OpenJDK时`https`无法通过验证
 
 ## 2. Spring
@@ -216,32 +225,40 @@ netstat -antp
 
 1. 通过`@Autowired`获取`Bean`时需根据接口来引用变量, 因为自动注入策略默认为`byType`
 2. 多个类实现同一接口，并通过`@Autowired`获取`Bean`，出现异常`expected single matching bean but found 2`，需通过实现类的注解指定该Bean的变量名，可通过`@Resource(name="xxx")`的形式来引用该实例,也可使用`@Qualifier`。
-    ```
-    // 实现类
-    @Component("XXX")
-    // 引用
-    @Resource(name="XXX")
-    ```
+
+```
+// 实现类
+@Component("XXX")
+// 引用
+@Resource(name="XXX")
+```
+
 3. 使用`@Autowired`时，可通过`@Qualifier`设置为自动注入策略`byName`。
-    ```
-    @Autowired
-    @Qualifier("userServiceImpl")
-    private UserService userService;
-    ```
+
+```
+@Autowired
+@Qualifier("userServiceImpl")
+private UserService userService;
+```
 
 ### 2. AOP
 
 #### 1. 配置
-1. 启用
-    在spring配置文件的scheme中引入
-    ```
-    xmlns:aop="http://www.springframework.org/schema/aop"
-    xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
-    ```
-    启用`@Aspect`
-    ```
-    <aop:aspectj-autoproxy />
-    ```
+
+启用:
+
+在spring配置文件的scheme中引入
+
+```
+xmlns:aop="http://www.springframework.org/schema/aop"
+xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+```
+
+启用`@Aspect`
+
+```
+<aop:aspectj-autoproxy />
+```
 
 ### 3. MVC
 
@@ -354,30 +371,31 @@ netstat -antp
 
 2. `Spring MVC` action filter:
 
-   ![]({{ site.url }}/public/upload/images/0146.png)
+![]({{ site.url }}/public/upload/images/0146.png)
 
 3. 简单示例：
 
-   ```xml
-   <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-       <property name="exceptionMappings">
-           <props>
-               <prop key="org.apache.shiro.authz.UnauthorizedException">nopermission</prop>
-               <prop key="IOException">iopage</prop>
-               <prop key="NumberFormatException">numberpage</prop>
-           </props>
-       </property>
-       <property name="statusCodes">
-           <props>
-               <prop key="org.apache.shiro.authz.UnauthorizedException">401</prop>
-           </props>
-       </property>
-   </bean>
-   ```
+```xml
+<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+   <property name="exceptionMappings">
+       <props>
+           <prop key="org.apache.shiro.authz.UnauthorizedException">nopermission</prop>
+           <prop key="IOException">iopage</prop>
+           <prop key="NumberFormatException">numberpage</prop>
+       </props>
+   </property>
+   <property name="statusCodes">
+       <props>
+           <prop key="org.apache.shiro.authz.UnauthorizedException">401</prop>
+       </props>
+   </property>
+</bean>
+```
 
 ### 5. 跨域
 
 添加配置:
+
 ```xml
 <mvc:cors>
 	<mvc:mapping
@@ -664,14 +682,15 @@ public class Swagger2Spring extends WebMvcConfigurerAdapter {
 ### 3. 集成UI
 
 1. 下载`swagger-ui`
-  ```sh
-  git clone https://github.com/swagger-api/swagger-ui.git
-  ```
+```sh
+git clone https://github.com/swagger-api/swagger-ui.git
+```
 2. 把`dist`目录引入项目
 3. MVC配置文件中添加静态资源
-  ```xml
-  <mvc:resources mapping="/ui/**" location="/ui/" />
-  ```
+
+```xml
+<mvc:resources mapping="/ui/**" location="/ui/" />
+```
 
 ## 5. 常见问题
 
@@ -681,67 +700,66 @@ public class Swagger2Spring extends WebMvcConfigurerAdapter {
 
 1. 添加jar包
 
-    ![img1]({{ site.url }}/public/upload/images/0067.png)
+![img1]({{ site.url }}/public/upload/images/0067.png)
 
-    ![img2]({{ site.url }}/public/upload/images/0068.png)
+![img2]({{ site.url }}/public/upload/images/0068.png)
 
-    ![img3]({{ site.url }}/public/upload/images/0069.png)
+![img3]({{ site.url }}/public/upload/images/0069.png)
 
 2. 新建类
 
-    新建一个测试类，该类继承 `junit.framework.TestCase`,在需要测试的方法前添加`test`前缀，开始测试时该方法会自动运行。
+新建一个测试类，该类继承 `junit.framework.TestCase`,在需要测试的方法前添加`test`前缀，开始测试时该方法会自动运行。
 
-    ```java
-    package net.cofcool.junit;
-    import junit.framework.TestCase;
+```java
+package net.cofcool.junit;
+import junit.framework.TestCase;
 
-    /**
-     * Created by CofCool on 4/6/16.
-     */
-    public class JunitTest extends TestCase {
+/**
+ * Created by CofCool on 4/6/16.
+ */
+public class JunitTest extends TestCase {
 
-        public void testAdd() {
-            int result = Demo.add(2, 5);
-            assertEquals(7, result);
-        }
-
-        public void testFail() {
-            fail("test failure");
-        }
-
-        /*
-        * do something after test
-        * */
-        @Override
-        protected void tearDown() throws Exception {
-            super.tearDown();
-        }
-
-        /*
-        * do something before test
-        * */
-        @Override
-        protected void setUp() throws Exception {
-            super.setUp();
-        }
+    public void testAdd() {
+        int result = Demo.add(2, 5);
+        assertEquals(7, result);
     }
-    ```
+
+    public void testFail() {
+        fail("test failure");
+    }
+
+    /*
+    * do something after test
+    * */
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
+
+    /*
+    * do something before test
+    * */
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
+}
+```
 3. 添加测试配置：
 
-    ![img4]({{ site.url }}/public/upload/images/0072.png)
+![img4]({{ site.url }}/public/upload/images/0072.png)
 
-    ![img5]({{ site.url }}/public/upload/images/0070.png)
+![img5]({{ site.url }}/public/upload/images/0070.png)
 
-    ![img6]({{ site.url }}/public/upload/images/0071.png)
+![img6]({{ site.url }}/public/upload/images/0071.png)
 
-    更多信息参考[junit](http://junit.org/junit4/)。
+更多信息参考[junit](http://junit.org/junit4/)。
 
 ### 2. tomcat无响应
 
-#### 1. 数据库连接处于等待中
-
-#### 2. 连接数过多
-
+1. 数据库连接处于等待中
+2. 连接数过多
+4. 内存不足
 ......
 
 ### 3. Maven项目（spring, mybatis...）在eclipse中可以运行，无法在Idea中运行

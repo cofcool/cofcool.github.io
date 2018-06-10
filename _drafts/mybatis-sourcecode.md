@@ -5,14 +5,16 @@
 * mybatis-spring 1.3.0
 
 Mybatis SQL执行源码分析系列文章：
-* Mybatis SQL执行源码分析 (一) 流程分析
-* [Mybatis SQL执行源码分析 (二) SqlSession创建](./mybatis-sourcecode-1.md)
-* [Mybatis SQL执行源码分析 (三) 事务处理](./mybatis-sourcecode-2.md)
-* [Mybatis SQL执行源码分析 (四) SQL执行](./mybatis-sourcecode-3.md)
+* Mybatis SQL执行源码分析 (一) 流程分析
+* [Mybatis SQL执行源码分析 (二) Mapper扫描及代理](./mybatis-sourcecode-1.md)
+* [Mybatis SQL执行源码分析 (三) SqlSession创建](./mybatis-sourcecode-2.md)
+* [Mybatis SQL执行源码分析 (四) 事务处理](./mybatis-sourcecode-3.md)
+* [Mybatis SQL执行源码分析 (五) SQL执行](./mybatis-sourcecode-4.md)
+
 
 MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和Java的POJOs映射成数据库中的记录。
 
-本系列文章主要从源代码的角度解析`Mybatis`在`Spirng`框架上如何创建扫描，创建实例，以及SQL如何执行等核心功能。本文主要介绍Mybatis基本的执行流程。
+本系列文章主要从源代码的角度解析`Mybatis`在`Spirng`框架上如何创建扫描，创建实例，以及SQL如何执行等核心功能。本文主要介绍Mybatis基本的执行流程。
 
 目录：
 
@@ -27,15 +29,25 @@ MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过�
 <!-- /code_chunk_output -->
 
 ## 1. Mapper扫描流程
+
+Mybatis依靠XML文件来映射数据库和对象之间关系，配置`Mapper`如下所示（也可使用MapperScan注解），其中`basePackage`定义了需要扫描的包路径。
+```xml
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="net.cofcool.api.server.dao" />
+</bean>
+```
+
+我们来看看它的扫描过程。`MapperScannerConfigurer`负责读取配置和在项目启动时触发扫描过程，`ClassPathMapperScanner`负责执行扫描。
+
 ```plantuml
-title: 扫描流程
+title: 扫描流程
 
 MapperScannerConfigurer -> ClassPathMapperScanner: scan
 ClassPathMapperScanner -> ClassPathMapperScanner: doScan
-note left: 扫描配置的XML和Class，\n缓存对应关系，并把\n真实类替换为MapperFactoryBean，\n由它负责产生真正的类，\n也就是由MapperProxy代理的DAO接口类
+note left: 扫描配置的XML和Class，\n缓存对应关系，并把\n真实类替换为MapperFactoryBean，\n由它负责创建MapperProxy类
 ```
 
-由上文可知，MyBatis在扫描`Mapper`文件时。会把我们自己定义的接口类代理为MapperProxy，我们看看是如何执行代理过程的。
+MyBatis在扫描`Mapper`接口时，由`GenericBeanDefinition`包装DAO接口。
 
 ## 2. Myabtis代理DAO接口类过程
 
