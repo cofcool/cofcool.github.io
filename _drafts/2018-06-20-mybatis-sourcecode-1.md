@@ -10,10 +10,12 @@ excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架�
 
 
 基础环境：
+
 * MyBatis 3.4.1
 * mybatis-spring 1.3.0
 
 Mybatis SQL执行源码分析系列文章：
+
 * Mybatis SQL执行源码分析 (一) Mapper扫描及代理
 * [Mybatis SQL执行源码分析 (二) SQL执行](./mybatis-sourcecode-2.md)
 
@@ -42,6 +44,7 @@ MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过�
 ### 1.1 Mapper扫描
 
 Mybatis依靠XML文件来映射数据库和对象之间关系，配置`Mapper`如下所示（也可使用MapperScan注解），其中`basePackage`定义了需要扫描的包路径。实现`BeanDefinitionRegistryPostProcessor`接口，Spring会在项目启动时触发扫描。
+
 ```xml
 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
   <!-- 扫描路径 -->
@@ -91,12 +94,12 @@ MapperProxy -> MapperFactoryBean
 
 ### 2.1 配置类
 
-**MapperScannerConfigurer**，根据`basePackage`，调用`ClassPathMapperScanner`的扫描方法进行扫描，可配置扫描路径，扫描条件，包括注解，父类等。
+**MapperScannerConfigurer**，根据`basePackage`，调用`ClassPathMapperScanner`的扫描方法进行扫描，可配置扫描路径，扫描条件，包括注解，父类等。
 
 ```java
 public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProcessor, InitializingBean, ApplicationContextAware, BeanNameAware {
 
-  // 扫描包路径，如果有多个路径，可用,或;等字符分割
+  // 扫描包路径，如果有多个路径，可用,或;等字符分割
   private String basePackage;
 
   private boolean addToConfig = true;
@@ -139,7 +142,7 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
 
 ### 2.2 扫描类
 
-**ClassPathMapperScanner**，执行具体的扫描，继承Spring的`ClassPathBeanDefinitionScanner`类，ClassPathBeanDefinitionScanner是Spring提供的一个用于扫描Bean定义配置的基础类，ClassPathMapperScanner在其基础上配置了扫描类的过滤条件和类定义替换等。
+**ClassPathMapperScanner**，执行具体的扫描，继承Spring的`ClassPathBeanDefinitionScanner`类，ClassPathBeanDefinitionScanner是Spring提供的一个用于扫描Bean定义配置的基础类，ClassPathMapperScanner在其基础上配置了扫描类的过滤条件和类定义替换等。
 
 ```java
 public class ClassPathMapperScanner extends ClassPathBeanDefinitionScanner {
@@ -367,7 +370,7 @@ public abstract class SqlSessionDaoSupport extends DaoSupport {
 }
 ```
 
-上文提到，`Configuration`类存储和管理Mapper，它通过`MapperRegistry`来添加和存储Mapper。
+上文提到，`Configuration`类存储和管理Mapper，它通过`MapperRegistry`来添加和存储Mapper。
 
 ```java
 public class Configuration {
@@ -390,7 +393,7 @@ public class Configuration {
 }
 ```
 
-**MapperRegistry**，管理Mapper的具体创建，通过`MapperProxyFactory`来创建`MapperProxy`实例。
+**MapperRegistry**，管理Mapper的具体创建，通过`MapperProxyFactory`来创建`MapperProxy`实例。
 
 ```java
 public class MapperRegistry {
@@ -432,7 +435,7 @@ public class MapperRegistry {
       try {
         // 缓存
         knownMappers.put(type, new MapperProxyFactory<T>(type));
-        // 方法解析，包括方法定义合法性检查，接口与XML映射，注解解析，缓存设置等，更多可查看MapperAnnotationBuilder类
+        // 方法解析，包括方法定义合法性检查，接口与XML映射，注解解析，缓存设置等，更多可查看MapperAnnotationBuilder类
         MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
         parser.parse();
         loadCompleted = true;
@@ -480,4 +483,4 @@ public class MapperProxyFactory<T> {
 }
 ```
 
-通过一系列的调用，最终创建了MapperProxy实例。该类负责把我们定义的DAO方法以代理的方式转换为可执行的SQL代码。
+通过一系列的调用，最终创建了MapperProxy实例。该类负责把我们定义的DAO方法以代理的方式转换为可执行的SQL代码。

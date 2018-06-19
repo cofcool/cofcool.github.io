@@ -9,10 +9,12 @@ excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架�
 {% include JB/setup %}
 
 基础环境：
+
 * MyBatis 3.4.1
 * mybatis-spring 1.3.0
 
 Mybatis SQL执行源码分析系列文章：
+
 * [Mybatis SQL执行源码分析 (一) Mapper扫描及代理](./mybatis-sourcecode-1.md)
 * Mybatis SQL执行源码分析 (二) SQL执行
 
@@ -63,9 +65,9 @@ note left: 代理扫描到的DAO接口
 MapperMethod -> SqlSessionTemplate: execute
 note left: 以执行query为例
 SqlSessionTemplate -> this.sqlSessionProxy: select
-note left: SqlSessionTemplate的\nsqlSessionProxy持有\nSqlSession接口的代理
+note left: SqlSessionTemplate的\nsqlSessionProxy持有\nSqlSession接口的代理
 this.sqlSessionProxy -> SqlSession: invoke
-note left: 具体可查看SqlSessionTemplate的\n内部类SqlSessionInterceptor
+note left: 具体可查看SqlSessionTemplate的\n内部类SqlSessionInterceptor
 SqlSession -> Executor: select
 Executor -> Executor: query
 note left: Executor负责具体的SQL执行，\n包含SIMPLE, REUSE, BATCH三种
@@ -101,7 +103,7 @@ note left: 调用Spring的DataSourceUtils\n.getConnection(this.dataSource)\n获�
 Configuration <-- SqlSessionFactoryBuilder
 
 SqlSessionFactory <.. SqlSessionFactoryBuilder
-note bottom: 根据Configuration创建\nSqlSessionFactory
+note bottom: 根据Configuration创建\nSqlSessionFactory
 SqlSessionFactory ..> SqlSession
 note bottom: 管理Sql执行和事务等
 
@@ -231,7 +233,7 @@ private TransactionFactory getTransactionFactoryFromEnvironment(Environment envi
 
 ### 2.2 SQL执行
 
-由“MapperProxy代理DAO接口类过程”可知，`MapperProxy`为真正的DAO接口实例，该类持有sqlSession，mapperInterface，sqlSession为`SqlSessionTemplate`实例，mapperInterface为定义的DAO接口类。
+由“MapperProxy代理DAO接口类过程”可知，`MapperProxy`为真正的DAO接口实例，该类持有sqlSession，mapperInterface，sqlSession为`SqlSessionTemplate`实例，mapperInterface为定义的DAO接口类。
 
 ```java
 public class MapperProxy<T> implements InvocationHandler, Serializable {
@@ -244,7 +246,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    // 如果是Object的方法，则直接调用
+    // 如果是Object的方法，则直接调用
     if (Object.class.equals(method.getDeclaringClass())) {
       try {
         return method.invoke(this, args);
@@ -253,7 +255,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
       }
     }
     // 执行代理方法
-    // MapperMethod封装了MethodSignature(方法参数，返回值等)和SqlCommand(Sql类型，方法ID)
+    // MapperMethod封装了MethodSignature(方法参数，返回值等)和SqlCommand(Sql类型，方法ID)
     final MapperMethod mapperMethod = cachedMapperMethod(method);
     // 通过sqlSession执行sql
     return mapperMethod.execute(sqlSession, args);
@@ -285,7 +287,7 @@ public class MapperMethod {
     this.method = new MethodSignature(config, mapperInterface, method);
   }
 
-  // 执行
+  // 执行
   // 根据SQL类型调用sqlSession对应的方法
   public Object execute(SqlSession sqlSession, Object[] args) {
       Object result;
@@ -342,7 +344,7 @@ private class SqlSessionInterceptor implements InvocationHandler {
         SqlSessionTemplate.this.executorType,
         SqlSessionTemplate.this.exceptionTranslator);
     try {
-      // 调用SqlSession的方法
+      // 调用SqlSession的方法
       Object result = method.invoke(sqlSession, args);
       if (!isSqlSessionTransactional(sqlSession, SqlSessionTemplate.this.sqlSessionFactory)) {
         // 提交事务
@@ -470,7 +472,7 @@ public final class MappedStatement {
   }
   ...
 
-  // BoundSql封装了xml或注解中定义的动态sql
+  // BoundSql封装了xml或注解中定义的动态sql
   // sql，parameterMappings，parameterObject，additionalParameters，metaParameters;
   public BoundSql getBoundSql(Object parameterObject) {
     BoundSql boundSql = sqlSource.getBoundSql(parameterObject);
