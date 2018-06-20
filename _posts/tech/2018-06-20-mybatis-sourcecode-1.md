@@ -17,7 +17,7 @@ excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架�
 Mybatis SQL执行源码分析系列文章：
 
 * Mybatis SQL执行源码分析 (一) Mapper扫描及代理
-* [Mybatis SQL执行源码分析 (二) SQL执行](./mybatis-sourcecode-2.md)
+* [Mybatis SQL执行源码分析 (二) SQL执行](#)
 
 
 MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和Java的POJOs映射成数据库中的记录。
@@ -483,4 +483,4 @@ public class MapperProxyFactory<T> {
 }
 ```
 
-通过一系列的调用，最终创建了MapperProxy实例。该类负责把我们定义的DAO方法以代理的方式转换为可执行的SQL代码。
+通过一系列的调用，最终创建了MapperProxy实例。该类负责把我们定义的DAO方法以代理的方式转换为可执行的SQL代码，至于它的具体作用以及代码解析将会在下一节中做详细介绍。
