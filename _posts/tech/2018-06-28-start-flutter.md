@@ -1,4 +1,12 @@
-# 快速开始Flutter开发
+---
+layout: post
+category: Tech
+title: 快速开始Flutter开发
+tags: [flutter, dart]
+excerpt: Flutter 是 Google推出并开源的移动应用开发框架，主打跨平台、高保真、高性能。开发者可以通过 Dart语言开发 App，一套代码同时运行在 iOS 和 Android平台。
+---
+
+{% include JB/setup %}
 
 Flutter 是 Google推出并开源的移动应用开发框架，主打跨平台、高保真、高性能。开发者可以通过 Dart语言开发 App，一套代码同时运行在 iOS 和 Android平台。 Flutter提供了丰富的组件、接口，开发者可以很快地为 Flutter添加 native扩展。同时 Flutter还使用 Native引擎渲染视图，这无疑能为用户提供良好的体验。对于开发者来说，只需一套代码即可实现多平台，大大提高了产品开发效率，另外Dart运行效率较JavaScript有所提升，应用无疑会运行更为流畅。
 
