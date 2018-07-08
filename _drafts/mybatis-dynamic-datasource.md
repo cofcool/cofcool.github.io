@@ -1,5 +1,15 @@
 # Spring Mybatis 实现动态数据源
 
+```xml
+ <bean id="dataSource" class="com.zx.tk.common.data.DynamicDataSource">
+    <property name="targetDataSources">
+        <map>
+            <entry key="dataSource1" value-ref="dataSource1"/>
+        </map>
+    </property>
+    <property name="defaultTargetDataSource" ref="dataSource1"/>
+</bean>
+```
 AbstractRoutingDataSource
 ```java
 /**
