@@ -133,7 +133,7 @@ public class WebConfigure extends WebMvcConfigurerAdapter{
 
 ### 2.1 Tomcat
 
-以下代码以Tomcat9源码为例。
+以下代码以Tomcat 9源码为例。
 
 ContextConfig类负责扫描和添加ServletContainerInitializer。
 
