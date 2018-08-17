@@ -77,21 +77,21 @@ private Object createResultObject(ResultSetWrapper rsw, ResultMap resultMap, Lis
     final Class<?> resultType = resultMap.getType();
     final MetaClass metaType = MetaClass.forClass(resultType, reflectorFactory);
     final List<ResultMapping> constructorMappings = resultMap.getConstructorResultMappings();
-    
+
     // resultMap的子元素配置 typeHandler
     if (hasTypeHandlerForResultObject(rsw, resultType)) {
         return createPrimitiveResultObject(rsw, resultMap, columnPrefix);
-    } 
+    }
     // resultMap中包含constructor元素
-    else if (!constructorMappings.isEmpty()) { 
+    else if (!constructorMappings.isEmpty()) {
         return createParameterizedResultObject(rsw, resultType, constructorMappings, constructorArgTypes, constructorArgs, columnPrefix);
-    } 
+    }
     // 类型为接口或定义无参构造方法
-    else if (resultType.isInterface() || metaType.hasDefaultConstructor()) { 
+    else if (resultType.isInterface() || metaType.hasDefaultConstructor()) {
         return objectFactory.create(resultType);
-    } 
+    }
     // 开启自动映射(默认开启)
-    else if (shouldApplyAutomaticMappings(resultMap, false)) { 
+    else if (shouldApplyAutomaticMappings(resultMap, false)) {
         return createByConstructorSignature(rsw, resultType, constructorArgTypes, constructorArgs, columnPrefix);
     }
     throw new ExecutorException("Do not know how to create an instance of " + resultType);
@@ -157,7 +157,7 @@ public boolean hasDefaultConstructor() {
 }
 ```
 
-hasDefaultConstructor方法调用`Reflector`的hasDefaultConstructor方法，该方法判断defaultConstructor是否为NULL。
+hasDefaultConstructor方法调用`Reflector`的hasDefaultConstructor方法，该方法判断defaultConstructor是否为"null"。
 
 ```java
 // 为defaultConstructor赋值

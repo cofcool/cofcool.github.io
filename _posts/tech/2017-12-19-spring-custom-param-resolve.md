@@ -2,7 +2,7 @@
 layout: post
 category : Tech
 title : Spring MVC 自定义接口参数解析器
-tags : [java]
+tags : [java, spring]
 excerpt: 在开发中，MVC提供的接口参数解析类型满足不了需求，这时就需要去自定义自己的参数解析器，无论是XML，JSON等数据类型。
 ---
 {% include JB/setup %}

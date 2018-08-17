@@ -1285,7 +1285,7 @@ public class MapperBuilderAssistant extends BaseBuilder {
 }
 ```
 
-decorator 装饰类，负责缓存大小，有效期等
+decorator 装饰类，负责缓存大小，有效期等
 implementation 实现类
 
 ```java
