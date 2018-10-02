@@ -124,3 +124,124 @@ static void countDownLatchTest() {
 //        0
 }
 ```
+
+**Phaser**
+```java
+public class FileSearch implements Runnable {
+
+    private String initPath;
+    private String end;
+    private List<String> results;
+
+    private Phaser phaser;
+
+    public FileSearch(String initPath, String end, Phaser phaser) {
+        this.initPath = initPath;
+        this.end = end;
+        this.phaser = phaser;
+
+        results = new ArrayList<>();
+    }
+
+    public static void main(String[] args) {
+        Phaser phaser = new Phaser(3);
+
+        FileSearch system = new FileSearch("/home/yi", "log", phaser);
+        FileSearch app = new FileSearch("/home/yi/bin", "log", phaser);
+        FileSearch documents = new FileSearch("/home/yi/app/doc", "log", phaser);
+
+        Thread sys = new Thread(system, "System");
+        sys.start();
+
+        Thread ap = new Thread(app, "App");
+        ap.start();
+
+        Thread doc = new Thread(documents, "Doc");
+        doc.start();
+
+        try {
+            sys.join();
+            ap.join();
+            doc.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Terminated: " + phaser.isTerminated());
+    }
+
+
+    private void directoryProcess(File file) {
+        File[] list = file.listFiles();
+        if (list != null) {
+            for (int i = 0; i < list.length; i++) {
+                if (list[i].isDirectory()) {
+                    directoryProcess(list[i]);
+                } else {
+                    fileProcess(list[i]);
+                }
+            }
+        }
+    }
+
+    private void fileProcess(File file) {
+        if (file.getName().endsWith(end)) {
+            results.add(file.getAbsolutePath());
+        }
+    }
+
+    private void filterResults() {
+        results = results
+                .stream()
+                .filter(filePath ->
+                    new File(filePath).lastModified() - (new Date().getTime()) < TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)
+                )
+                .collect(Collectors.toList());
+    }
+
+
+    private boolean checkResults() {
+        if (results.isEmpty()) {
+            System.out.printf("%s: Phase %d: 0 results.\n", Thread.currentThread().getName(), phaser.getPhase());
+            System.out.printf("%s: Phase %d: end.\n", Thread.currentThread().getName(), phaser.getPhase());
+
+            phaser.arriveAndDeregister();
+            return false;
+        } else {
+            phaser.arriveAndAwaitAdvance();
+            return true;
+        }
+    }
+
+    private void showinfo() {
+        results.forEach(path -> {
+            System.out.printf("%s: %s\n", Thread.currentThread().getName(), new File(path).getAbsolutePath());
+        });
+    }
+
+    @Override
+    public void run() {
+        phaser.arriveAndAwaitAdvance();
+        System.out.printf("%s: starting.\n", Thread.currentThread().getName());
+
+        File file = new File(initPath);
+        if (file.isDirectory()) {
+            directoryProcess(file);
+        }
+
+        if (!checkResults()) {
+            return;
+        }
+
+        filterResults();
+
+        if (!checkResults()) {
+            return;
+        }
+
+        showinfo();
+        phaser.arriveAndDeregister();
+        System.out.printf("%s work completed.\n", Thread.currentThread().getName());
+    }
+}
+```

@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Tech
-title: Mybatis SQL执行源码分析 (一) Mapper扫描及代理
+title: Mybatis 源码分析 (一) Mapper扫描及代理
 tags: [java, sourcode, mybatis]
 excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架上如何创建扫描，创建实例，以及SQL如何执行等核心功能。本文主要介绍Mybatis如何扫描Mapper建立接口和XML的映射关系等。
 ---
@@ -16,8 +16,8 @@ excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架�
 
 Mybatis SQL执行源码分析系列文章：
 
-* Mybatis SQL执行源码分析 (一) Mapper扫描及代理
-* [Mybatis SQL执行源码分析 (二) SQL执行](./2018-06-20-mybatis-sourcecode-2.md)
+* Mybatis 源码分析 (一) Mapper扫描及代理
+* [Mybatis 源码分析 (二) SQL执行，插件以及缓存](/tech/2018/09/24/mybatis-sourcecode-2)
 
 
 MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和Java的POJOs映射成数据库中的记录。

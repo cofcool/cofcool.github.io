@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Tech
-title: Mybatis SQL执行源码分析 (二) SQL执行
+title: Mybatis 源码分析 (二) SQL执行，插件以及缓存
 tags: [java, sourcode, mybatis]
 excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架上如何创建扫描，创建实例，以及SQL如何执行等核心功能。本文主要介绍SQL执行过程。
 ---
@@ -15,8 +15,8 @@ excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架�
 
 Mybatis SQL执行源码分析系列文章：
 
-* [Mybatis SQL执行源码分析 (一) Mapper扫描及代理](./2018-06-20-mybatis-sourcecode-1.md)
-* Mybatis SQL执行源码分析 (二) SQL执行
+* [Mybatis 源码分析 (一) Mapper扫描及代理](/tech/2018/06/20/mybatis-sourcecode-1)
+* Mybatis SQL执行源码分析 (二) SQL执行，插件以及缓存
 
 
 MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和Java的POJOs映射成数据库中的记录。
@@ -106,7 +106,7 @@ Executor -> UserMapper
 
 ### 2.1 创建 SqlSession
 
-**SqlSessionFactoryBean**，Spring容器调用它来创建SqlSessionFactory。
+**SqlSessionFactoryBean**，Spring容器调用它来创建SqlSessionFactory。
 
 ```java
 // 创建 SqlSessionFactory
@@ -447,7 +447,7 @@ public class MapperMethod {
 }
 ```
 
-经过`MapperMethod`处理之后，SqlSession开始登场，定义的DAO方法通过SqlSession开始执行。
+经过`MapperMethod`处理之后，SqlSession开始登场，定义的DAO方法通过SqlSession开始执行。
 
 SqlSession的默认实现为`DefaultSqlSession`，它的构造方法为`public DefaultSqlSession(Configuration configuration, Executor executor, boolean autoCommit)`，在创建实例的时候传入`Configuration`。DefaultSqlSession在执行Sql时需要获取配置的动态sql以及相关参数等，`MappedStatement`封装了这些数据，可通过Configuration获取`MappedStatement`实例。
 
@@ -467,6 +467,10 @@ public <E> List<E> selectList(String statement, Object parameter, RowBounds rowB
   }
 }
 ```
+
+执行查询操作可分为两步：创建MappedStatement，Executor执行查询。
+
+##### 1. 创建 MappedStatement
 
 MappedStatement,该类封装了Mapper定义的方法执行时需要的各种参数定义和配置。
 
@@ -564,7 +568,6 @@ public final class MappedStatement {
       boundSql = new BoundSql(configuration, boundSql.getSql(), parameterMap.getParameterMappings(), parameterObject);
     }
 
-    // check for nested result maps in parameter mappings (issue #30)
     for (ParameterMapping pm : boundSql.getParameterMappings()) {
       String rmId = pm.getResultMapId();
       if (rmId != null) {
@@ -580,7 +583,11 @@ public final class MappedStatement {
 }
 ```
 
-**Executor**负责执行具体的sql，定义了CURD等各种方法。
+MappedStatement创建成功之后，通过Executor执行Sql。
+
+##### 2. Executor执行Sql
+
+**Executor**负责执行具体的sql，定义了CURD等各种方法，包括事务处理等。
 
 ```java
 public interface Executor {
@@ -610,7 +617,7 @@ public interface Executor {
 }
 ```
 
-Configuration创建Executor。
+Executor由Configuration创建，在创建Executor时，提供三种BatchExecutor，ReuseExecutor，SimpleExecutor。CachingExecutor通过代理模式调用上述Executor，并缓存结果。
 
 ```java
 public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
@@ -662,20 +669,22 @@ BaseExecutor <|-- ReuseExecutor
 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="283px" preserveAspectRatio="none" style="width:438px;height:283px;" version="1.1" viewBox="0 0 438 283" width="438px" zoomAndPan="magnify"><defs><filter height="300%" id="fdfz5u8kgoels" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"></feGaussianBlur><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"></feColorMatrix><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"></feOffset><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"></feBlend></filter></defs><g><!--class Executor--><rect fill="#FEFECE" filter="url(#fdfz5u8kgoels)" height="48" id="Executor" style="stroke: #A80036; stroke-width: 1.5;" width="82" x="173.5" y="8"></rect><ellipse cx="188.5" cy="24" fill="#B4A7E5" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M184.4277,19.7651 L184.4277,17.6069 L191.8071,17.6069 L191.8071,19.7651 L189.3418,19.7651 L189.3418,27.8418 L191.8071,27.8418 L191.8071,30 L184.4277,30 L184.4277,27.8418 L186.8931,27.8418 L186.8931,19.7651 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="50" x="202.5" y="28.5352">Executor</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="174.5" x2="254.5" y1="40" y2="40"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="174.5" x2="254.5" y1="48" y2="48"></line><!--class BaseExecutor--><rect fill="#FEFECE" filter="url(#fdfz5u8kgoels)" height="48" id="BaseExecutor" style="stroke: #A80036; stroke-width: 1.5;" width="109" x="160" y="116"></rect><ellipse cx="175" cy="132" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M177.9731,137.6431 Q177.3921,137.9419 176.7529,138.0913 Q176.1138,138.2407 175.4082,138.2407 Q172.9014,138.2407 171.5815,136.5889 Q170.2617,134.937 170.2617,131.8159 Q170.2617,128.6865 171.5815,127.0347 Q172.9014,125.3828 175.4082,125.3828 Q176.1138,125.3828 176.7612,125.5322 Q177.4087,125.6816 177.9731,125.9805 L177.9731,128.7031 Q177.3423,128.1221 176.7488,127.8523 Q176.1553,127.5825 175.5244,127.5825 Q174.1797,127.5825 173.4949,128.6492 Q172.8101,129.7158 172.8101,131.8159 Q172.8101,133.9077 173.4949,134.9744 Q174.1797,136.041 175.5244,136.041 Q176.1553,136.041 176.7488,135.7712 Q177.3423,135.5015 177.9731,134.9204 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="77" x="189" y="136.5352">BaseExecutor</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="161" x2="268" y1="148" y2="148"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="161" x2="268" y1="156" y2="156"></line><!--class BatchExecutor--><rect fill="#FEFECE" filter="url(#fdfz5u8kgoels)" height="48" id="BatchExecutor" style="stroke: #A80036; stroke-width: 1.5;" width="113" x="6" y="224"></rect><ellipse cx="21" cy="240" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M23.9731,245.6431 Q23.3921,245.9419 22.7529,246.0913 Q22.1138,246.2407 21.4082,246.2407 Q18.9014,246.2407 17.5815,244.5889 Q16.2617,242.937 16.2617,239.8159 Q16.2617,236.6865 17.5815,235.0347 Q18.9014,233.3828 21.4082,233.3828 Q22.1138,233.3828 22.7612,233.5322 Q23.4087,233.6816 23.9731,233.9805 L23.9731,236.7031 Q23.3423,236.1221 22.7488,235.8523 Q22.1553,235.5825 21.5244,235.5825 Q20.1797,235.5825 19.4949,236.6492 Q18.8101,237.7158 18.8101,239.8159 Q18.8101,241.9077 19.4949,242.9744 Q20.1797,244.041 21.5244,244.041 Q22.1553,244.041 22.7488,243.7712 Q23.3423,243.5015 23.9731,242.9204 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="81" x="35" y="244.5352">BatchExecutor</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="118" y1="256" y2="256"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="7" x2="118" y1="264" y2="264"></line><!--class SimpleExecutor--><rect fill="#FEFECE" filter="url(#fdfz5u8kgoels)" height="48" id="SimpleExecutor" style="stroke: #A80036; stroke-width: 1.5;" width="120" x="154.5" y="224"></rect><ellipse cx="169.5" cy="240" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M172.4731,245.6431 Q171.8921,245.9419 171.2529,246.0913 Q170.6138,246.2407 169.9082,246.2407 Q167.4014,246.2407 166.0815,244.5889 Q164.7617,242.937 164.7617,239.8159 Q164.7617,236.6865 166.0815,235.0347 Q167.4014,233.3828 169.9082,233.3828 Q170.6138,233.3828 171.2612,233.5322 Q171.9087,233.6816 172.4731,233.9805 L172.4731,236.7031 Q171.8423,236.1221 171.2488,235.8523 Q170.6553,235.5825 170.0244,235.5825 Q168.6797,235.5825 167.9949,236.6492 Q167.3101,237.7158 167.3101,239.8159 Q167.3101,241.9077 167.9949,242.9744 Q168.6797,244.041 170.0244,244.041 Q170.6553,244.041 171.2488,243.7712 Q171.8423,243.5015 172.4731,242.9204 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="88" x="183.5" y="244.5352">SimpleExecutor</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="155.5" x2="273.5" y1="256" y2="256"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="155.5" x2="273.5" y1="264" y2="264"></line><!--class ReuseExecutor--><rect fill="#FEFECE" filter="url(#fdfz5u8kgoels)" height="48" id="ReuseExecutor" style="stroke: #A80036; stroke-width: 1.5;" width="117" x="310" y="224"></rect><ellipse cx="325" cy="240" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M327.9731,245.6431 Q327.3921,245.9419 326.7529,246.0913 Q326.1138,246.2407 325.4082,246.2407 Q322.9014,246.2407 321.5815,244.5889 Q320.2617,242.937 320.2617,239.8159 Q320.2617,236.6865 321.5815,235.0347 Q322.9014,233.3828 325.4082,233.3828 Q326.1138,233.3828 326.7612,233.5322 Q327.4087,233.6816 327.9731,233.9805 L327.9731,236.7031 Q327.3423,236.1221 326.7488,235.8523 Q326.1553,235.5825 325.5244,235.5825 Q324.1797,235.5825 323.4949,236.6492 Q322.8101,237.7158 322.8101,239.8159 Q322.8101,241.9077 323.4949,242.9744 Q324.1797,244.041 325.5244,244.041 Q326.1553,244.041 326.7488,243.7712 Q327.3423,243.5015 327.9731,242.9204 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="85" x="339" y="244.5352">ReuseExecutor</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="311" x2="426" y1="256" y2="256"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="311" x2="426" y1="264" y2="264"></line><!--link Executor to BaseExecutor--><path d="M214.5,76.2911 C214.5,89.8171 214.5,104.1835 214.5,115.8436 " fill="none" id="Executor-BaseExecutor" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"></path><polygon fill="none" points="207.5001,76.2373,214.5,56.2373,221.5001,76.2373,207.5001,76.2373" style="stroke: #A80036; stroke-width: 1.0;"></polygon><!--link BaseExecutor to BatchExecutor--><path d="M163.8632,175.9788 C141.7178,191.7137 116.3272,209.7544 96.4979,223.8436 " fill="none" id="BaseExecutor-BatchExecutor" style="stroke: #A80036; stroke-width: 1.0;"></path><polygon fill="none" points="160.0301,170.1152,180.3882,164.2373,168.1391,181.5278,160.0301,170.1152" style="stroke: #A80036; stroke-width: 1.0;"></polygon><!--link BaseExecutor to SimpleExecutor--><path d="M214.5,184.2911 C214.5,197.8171 214.5,212.1835 214.5,223.8436 " fill="none" id="BaseExecutor-SimpleExecutor" style="stroke: #A80036; stroke-width: 1.0;"></path><polygon fill="none" points="207.5001,184.2373,214.5,164.2373,221.5001,184.2373,207.5001,184.2373" style="stroke: #A80036; stroke-width: 1.0;"></polygon><!--link BaseExecutor to ReuseExecutor--><path d="M265.4717,175.7464 C287.9863,191.5358 313.8656,209.6849 334.0547,223.8436 " fill="none" id="BaseExecutor-ReuseExecutor" style="stroke: #A80036; stroke-width: 1.0;"></path><polygon fill="none" points="261.416,181.452,249.0606,164.2373,269.4545,169.9897,261.416,181.452" style="stroke: #A80036; stroke-width: 1.0;"></polygon></g></svg>
 
+Executor内部通过**StatementHandler**执行Sql，具体细节可查看相关源码。
+
 ### 2.3 事务处理
+
+Mybatis已经包含了事务管理，如果和Spring集成的话，也可使用Spring提供的事务管理，开发更为方便，利于管理维护。
 
 #### 2.3.1 Mybatis管理
 
-DefaultSqlSession
-```java
-@Override
-public void commit() {
-  commit(false);
-}
+SqlSession提供提交，回滚等事务相关API，以**DefaultSqlSession**为例。
 
+```java
+// 提交
 @Override
 public void commit(boolean force) {
   try {
+    // 调用Executor的相关方法
     executor.commit(isCommitOrRollbackRequired(force));
     dirty = false;
   } catch (Exception e) {
@@ -685,11 +694,7 @@ public void commit(boolean force) {
   }
 }
 
-@Override
-public void rollback() {
-  rollback(false);
-}
-
+// 回滚
 @Override
 public void rollback(boolean force) {
   try {
@@ -702,6 +707,7 @@ public void rollback(boolean force) {
   }
 }
 
+// 关闭连接
 @Override
 public void close() {
   try {
@@ -713,8 +719,11 @@ public void close() {
   }
 }
 ```
-BaseExecutor
+
+Executor的实现类BaseExecutor实现了相关方法。
+
 ```java
+// 关闭Connection，通过Transaction实现
 @Override
 public void close(boolean forceRollback) {
   try {
@@ -729,6 +738,7 @@ public void close(boolean forceRollback) {
     // Ignore.  There's nothing that can be done at this point.
     log.warn("Unexpected exception on closing transaction.  Cause: " + e);
   } finally {
+    // 清除相关数据
     transaction = null;
     deferredLoads = null;
     localCache = null;
@@ -737,6 +747,7 @@ public void close(boolean forceRollback) {
   }
 }
 
+// 提交，通过Transaction实现
 @Override
 public void commit(boolean required) throws SQLException {
   if (closed) {
@@ -749,6 +760,7 @@ public void commit(boolean required) throws SQLException {
   }
 }
 
+// 回滚，通过Transaction实现
 @Override
 public void rollback(boolean required) throws SQLException {
   if (!closed) {
@@ -764,6 +776,7 @@ public void rollback(boolean required) throws SQLException {
 }
 
 protected Connection getConnection(Log statementLog) throws SQLException {
+  // 通过Transaction获取Connection
   Connection connection = transaction.getConnection();
   if (statementLog.isDebugEnabled()) {
     return ConnectionLogger.newInstance(connection, statementLog, queryStack);
@@ -773,12 +786,14 @@ protected Connection getConnection(Log statementLog) throws SQLException {
 }
 ```
 
-事务管理器：
+Mybatis有两种事务管理器：
 
-* ManagedTransaction
 * JdbcTransaction
+* ManagedTransaction
 
 ##### 1. JdbcTransaction
+
+通过传入的DataSource创建Connection，并调用Connection的相关方法来处理事务。
 
 ```java
 public class JdbcTransaction implements Transaction {
@@ -816,13 +831,16 @@ public class JdbcTransaction implements Transaction {
   }
 
   @Override
-  public Connection getConnection() throws SQLException {
-    if (connection == null) {
-      openConnection();
+  public void rollback() throws SQLException {
+    if (connection != null && !connection.getAutoCommit()) {
+      if (log.isDebugEnabled()) {
+        log.debug("Rolling back JDBC Connection [" + connection + "]");
+      }
+      connection.rollback();
     }
-    return connection;
   }
 
+  // 创建 Connection
   protected void openConnection() throws SQLException {
     if (log.isDebugEnabled()) {
       log.debug("Opening JDBC Connection");
@@ -833,14 +851,17 @@ public class JdbcTransaction implements Transaction {
     }
     setDesiredAutoCommit(autoCommmit);
   }
+  ...
 }
 ```
 
 ##### 2. ManagedTransaction
 
+把事务提交和回滚操作交给运行Mybatis的容器处理，未实现提交和回滚相关方法。
+
 #### 2.3.2 Spring管理
 
-
+<!--
 ```plantuml
 
 TransactionFactory <|.. SpringManagedTransactionFactory
@@ -852,8 +873,12 @@ class SpringManagedTransaction {
 }
 note left: 调用Spring的DataSourceUtils\n.getConnection()\n获取连接
 ```
+-->
+
+<!--?xml version="1.0" encoding="UTF-8" standalone="no"?--><svg xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" contentscripttype="application/ecmascript" contentstyletype="text/css" height="404px" preserveAspectRatio="none" style="width:484px;height:404px;" version="1.1" viewBox="0 0 484 404" width="484px" zoomAndPan="magnify"><defs><filter height="300%" id="frn9mm0kp3gfo" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"></feGaussianBlur><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"></feColorMatrix><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"></feOffset><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"></feBlend></filter></defs><g><!--class TransactionFactory--><rect fill="#FEFECE" filter="url(#frn9mm0kp3gfo)" height="48" id="TransactionFactory" style="stroke: #A80036; stroke-width: 1.5;" width="152" x="272.5" y="8"></rect><ellipse cx="287.5" cy="24" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M290.4688,29.6406 Q289.8906,29.9375 289.25,30.0859 Q288.6094,30.2344 287.9063,30.2344 Q285.4063,30.2344 284.0859,28.5859 Q282.7656,26.9375 282.7656,23.8125 Q282.7656,20.6875 284.0859,19.0313 Q285.4063,17.375 287.9063,17.375 Q288.6094,17.375 289.2578,17.5313 Q289.9063,17.6875 290.4688,17.9844 L290.4688,20.7031 Q289.8438,20.125 289.25,19.8516 Q288.6563,19.5781 288.0313,19.5781 Q286.6875,19.5781 286,20.6484 Q285.3125,21.7188 285.3125,23.8125 Q285.3125,25.9063 286,26.9766 Q286.6875,28.0469 288.0313,28.0469 Q288.6563,28.0469 289.25,27.7734 Q289.8438,27.5 290.4688,26.9219 L290.4688,29.6406 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="120" x="301.5" y="28.1543">TransactionFactory</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="273.5" x2="423.5" y1="40" y2="40"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="273.5" x2="423.5" y1="48" y2="48"></line><!--class SpringManagedTransactionFactory--><rect fill="#FEFECE" filter="url(#frn9mm0kp3gfo)" height="48" id="SpringManagedTransactionFactory" style="stroke: #A80036; stroke-width: 1.5;" width="250" x="223.5" y="116"></rect><ellipse cx="238.5" cy="132" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M241.4688,137.6406 Q240.8906,137.9375 240.25,138.0859 Q239.6094,138.2344 238.9063,138.2344 Q236.4063,138.2344 235.0859,136.5859 Q233.7656,134.9375 233.7656,131.8125 Q233.7656,128.6875 235.0859,127.0313 Q236.4063,125.375 238.9063,125.375 Q239.6094,125.375 240.2578,125.5313 Q240.9063,125.6875 241.4688,125.9844 L241.4688,128.7031 Q240.8438,128.125 240.25,127.8516 Q239.6563,127.5781 239.0313,127.5781 Q237.6875,127.5781 237,128.6484 Q236.3125,129.7188 236.3125,131.8125 Q236.3125,133.9063 237,134.9766 Q237.6875,136.0469 239.0313,136.0469 Q239.6563,136.0469 240.25,135.7734 Q240.8438,135.5 241.4688,134.9219 L241.4688,137.6406 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="218" x="252.5" y="136.1543">SpringManagedTransactionFactory</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="224.5" x2="472.5" y1="148" y2="148"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="224.5" x2="472.5" y1="156" y2="156"></line><!--class SpringManagedTransaction--><rect fill="#FEFECE" filter="url(#frn9mm0kp3gfo)" height="60.8047" id="SpringManagedTransaction" style="stroke: #A80036; stroke-width: 1.5;" width="204" x="246.5" y="224"></rect><ellipse cx="261.5" cy="240" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M264.4688,245.6406 Q263.8906,245.9375 263.25,246.0859 Q262.6094,246.2344 261.9063,246.2344 Q259.4063,246.2344 258.0859,244.5859 Q256.7656,242.9375 256.7656,239.8125 Q256.7656,236.6875 258.0859,235.0313 Q259.4063,233.375 261.9063,233.375 Q262.6094,233.375 263.2578,233.5313 Q263.9063,233.6875 264.4688,233.9844 L264.4688,236.7031 Q263.8438,236.125 263.25,235.8516 Q262.6563,235.5781 262.0313,235.5781 Q260.6875,235.5781 260,236.6484 Q259.3125,237.7188 259.3125,239.8125 Q259.3125,241.9063 260,242.9766 Q260.6875,244.0469 262.0313,244.0469 Q262.6563,244.0469 263.25,243.7734 Q263.8438,243.5 264.4688,242.9219 L264.4688,245.6406 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="172" x="275.5" y="244.1543">SpringManagedTransaction</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="247.5" x2="449.5" y1="256" y2="256"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="247.5" x2="449.5" y1="264" y2="264"></line><rect fill="#F24D5C" height="6" style="stroke: #C82930; stroke-width: 1.0;" width="6" x="254.5" y="272.9023"></rect><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="99" x="266.5" y="278.2104">openConnection()</text><!--class Transaction--><rect fill="#FEFECE" filter="url(#frn9mm0kp3gfo)" height="48" id="Transaction" style="stroke: #A80036; stroke-width: 1.5;" width="106" x="295.5" y="345"></rect><ellipse cx="310.5" cy="361" fill="#ADD1B2" rx="11" ry="11" style="stroke: #A80036; stroke-width: 1.0;"></ellipse><path d="M313.4688,366.6406 Q312.8906,366.9375 312.25,367.0859 Q311.6094,367.2344 310.9063,367.2344 Q308.4063,367.2344 307.0859,365.5859 Q305.7656,363.9375 305.7656,360.8125 Q305.7656,357.6875 307.0859,356.0313 Q308.4063,354.375 310.9063,354.375 Q311.6094,354.375 312.2578,354.5313 Q312.9063,354.6875 313.4688,354.9844 L313.4688,357.7031 Q312.8438,357.125 312.25,356.8516 Q311.6563,356.5781 311.0313,356.5781 Q309.6875,356.5781 309,357.6484 Q308.3125,358.7188 308.3125,360.8125 Q308.3125,362.9063 309,363.9766 Q309.6875,365.0469 311.0313,365.0469 Q311.6563,365.0469 312.25,364.7734 Q312.8438,364.5 313.4688,363.9219 L313.4688,366.6406 Z "></path><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="74" x="324.5" y="365.1543">Transaction</text><line style="stroke: #A80036; stroke-width: 1.5;" x1="296.5" x2="400.5" y1="377" y2="377"></line><line style="stroke: #A80036; stroke-width: 1.5;" x1="296.5" x2="400.5" y1="385" y2="385"></line><path d="M6,227 L6,282.3984 A0,0 0 0 0 6,282.3984 L211,282.3984 A0,0 0 0 0 211,282.3984 L211,258.5 L246.2969,254.5 L211,250.5 L211,237 L201,227 L6,227 A0,0 0 0 0 6,227 " fill="#FBFB77" filter="url(#frn9mm0kp3gfo)" style="stroke: #A80036; stroke-width: 1.0;"></path><path d="M201,227 L201,237 L211,237 L201,227 " fill="#FBFB77" style="stroke: #A80036; stroke-width: 1.0;"></path><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="184" x="12" y="244.0669">调用Spring的DataSourceUtils</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="107" x="12" y="259.1997">.getConnection()</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="52" x="12" y="274.3325">获取连接</text><!--link TransactionFactory to SpringManagedTransactionFactory--><path d="M348.5,76.2911 C348.5,89.8171 348.5,104.1835 348.5,115.8436 " fill="none" id="TransactionFactory-SpringManagedTransactionFactory" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"></path><polygon fill="none" points="341.5001,76.2373,348.5,56.2373,355.5001,76.2373,341.5001,76.2373" style="stroke: #A80036; stroke-width: 1.0;"></polygon><!--link SpringManagedTransactionFactory to SpringManagedTransaction--><path d="M348.5,164.003 C348.5,179.8109 348.5,200.7944 348.5,218.5756 " fill="none" id="SpringManagedTransactionFactory-SpringManagedTransaction" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"></path><polygon fill="#A80036" points="348.5,223.9818,352.5,214.9818,348.5,218.9818,344.5,214.9818,348.5,223.9818" style="stroke: #A80036; stroke-width: 1.0;"></polygon><!--link SpringManagedTransaction to Transaction--><path d="M348.5,285.1839 C348.5,297.297 348.5,311.4489 348.5,324.6382 " fill="none" id="SpringManagedTransaction-Transaction" style="stroke: #A80036; stroke-width: 1.0;"></path><polygon fill="none" points="355.5001,324.7635,348.5,344.7634,341.5001,324.7634,355.5001,324.7635" style="stroke: #A80036; stroke-width: 1.0;"></polygon></g></svg>
 
 MyBatis使用SpringManagedTransactionFactory来获取通过Spring配置的Transaction。
+
 ```java
 @Override
 public Transaction newTransaction(DataSource dataSource, TransactionIsolationLevel level, boolean autoCommit) {
@@ -867,7 +892,9 @@ SpringManagedTransaction
 private void openConnection() throws SQLException {
   // 通过DataSourceUtils获取connection
   this.connection = DataSourceUtils.getConnection(this.dataSource);
+  // 是否自动提交
   this.autoCommit = this.connection.getAutoCommit();
+  // 是否启用事务管理，Spring配置
   this.isConnectionTransactional = DataSourceUtils.isConnectionTransactional(this.connection, this.dataSource);
 
   if (LOGGER.isDebugEnabled()) {
@@ -882,6 +909,7 @@ private void openConnection() throws SQLException {
 
 @Override
 public void commit() throws SQLException {
+  // 根据connection，autoCommit，isConnectionTransactional的值判断是否需要执行提交
   if (this.connection != null && !this.isConnectionTransactional && !this.autoCommit) {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Committing JDBC Connection [" + this.connection + "]");
@@ -892,6 +920,7 @@ public void commit() throws SQLException {
 
 @Override
 public void rollback() throws SQLException {
+  // 根据connection，autoCommit，isConnectionTransactional的值判断是否需要执行回滚
   if (this.connection != null && !this.isConnectionTransactional && !this.autoCommit) {
     if (LOGGER.isDebugEnabled()) {
       LOGGER.debug("Rolling back JDBC Connection [" + this.connection + "]");
@@ -902,6 +931,7 @@ public void rollback() throws SQLException {
 
 @Override
 public void close() throws SQLException {
+  // 调用Spring的方法，关闭数据库连接操作交给Spring处理
   DataSourceUtils.releaseConnection(this.connection, this.dataSource);
 }
 ```
@@ -988,49 +1018,17 @@ public static Connection doGetConnection(DataSource dataSource) throws SQLExcept
 }
 ```
 
-
-SqlSessionUtils
-```java
-public static void closeSqlSession(SqlSession session, SqlSessionFactory sessionFactory) {
-  notNull(session, NO_SQL_SESSION_SPECIFIED);
-  notNull(sessionFactory, NO_SQL_SESSION_FACTORY_SPECIFIED);
-
-  SqlSessionHolder holder = (SqlSessionHolder) TransactionSynchronizationManager.getResource(sessionFactory);
-  if ((holder != null) && (holder.getSqlSession() == session)) {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Releasing transactional SqlSession [" + session + "]");
-    }
-    holder.released();
-  } else {
-    if (LOGGER.isDebugEnabled()) {
-      LOGGER.debug("Closing non transactional SqlSession [" + session + "]");
-    }
-    session.close();
-  }
-}
-```
-
 ### 2.4 插件
 
 ```java
-// plugin
-public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-  ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
-  parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
-  return parameterHandler;
-}
+public interface Interceptor {
 
-public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
-    ResultHandler resultHandler, BoundSql boundSql) {
-  ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
-  resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
-  return resultSetHandler;
-}
+  Object intercept(Invocation invocation) throws Throwable;
 
-public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-  StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
-  statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
-  return statementHandler;
+  Object plugin(Object target);
+
+  void setProperties(Properties properties);
+
 }
 ```
 
@@ -1166,14 +1164,31 @@ public class Plugin implements InvocationHandler {
 }
 ```
 
-分页，插件通过 BoundSql，RowBounds
+```java
+// plugin
+public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+  ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
+  parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
+  return parameterHandler;
+}
 
-RowBounds
+public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
+    ResultHandler resultHandler, BoundSql boundSql) {
+  ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+  resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
+  return resultSetHandler;
+}
 
-MethodSignature
-this.rowBoundsIndex = getUniqueParamIndex(method, RowBounds.class);
+public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+  StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+  statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
+  return statementHandler;
+}
+```
 
 ## 3. 缓存
+
+Mybatis默认开启缓存，参考Configuration类： `protected boolean cacheEnabled = true;`。
 
 ```java
 public class CacheKey implements Cloneable, Serializable {
