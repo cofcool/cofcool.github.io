@@ -63,8 +63,8 @@ sudo apt install samba python3 openjdk-8-jdk smplayer vlc bluefish qtcreator fil
 # 剪切板
 sudo apt install diodon
 
-# ntfs
-sudo apt install ntfs-3g exfat-utils
+# ntfs, exfat
+sudo apt install ntfs-3g exfat-fuse
 
 # 空格预览
 sudo apt install unoconv

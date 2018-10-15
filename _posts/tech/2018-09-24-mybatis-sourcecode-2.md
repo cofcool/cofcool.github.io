@@ -16,7 +16,7 @@ excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架�
 Mybatis SQL执行源码分析系列文章：
 
 * [Mybatis 源码分析 (一) Mapper扫描及代理](/tech/2018/06/20/mybatis-sourcecode-1)
-* Mybatis SQL执行源码分析 (二) SQL执行，插件以及缓存
+* Mybatis 源码分析 (二) SQL执行，插件以及缓存
 
 
 MyBatis 是一款优秀的持久层框架，它支持定制化 SQL、存储过程以及高级映射。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和Java的POJOs映射成数据库中的记录。
@@ -1019,25 +1019,144 @@ public static Connection doGetConnection(DataSource dataSource) throws SQLExcept
 ```
 
 ### 2.4 插件
+
+通过Mybatis的插件系统，我们可以很容易的实现一些自定义逻辑，如查询分页等。
+
+ `Plugin`类是插件体系的核心，`Plugin.wrap()`方法通过JDK的Proxy代理Myabtis在查询中的的相关对象，并调用相关逻辑。
+
+```java
+public class Plugin implements InvocationHandler {
+
+  private Object target;
+  private Interceptor interceptor;
+  private Map<Class<?>, Set<Method>> signatureMap;
+
+  private Plugin(Object target, Interceptor interceptor, Map<Class<?>, Set<Method>> signatureMap) {
+    this.target = target;
+    this.interceptor = interceptor;
+    this.signatureMap = signatureMap;
+  }
+
+  // 代理操作，具体参考下文中的 Configuration 定义的相关方法
+  public static Object wrap(Object target, Interceptor interceptor) {
+    Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
+    Class<?> type = target.getClass();
+    Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
+    if (interfaces.length > 0) {
+      return Proxy.newProxyInstance(
+          type.getClassLoader(),
+          interfaces,
+          new Plugin(target, interceptor, signatureMap));
+    }
+    return target;
+  }
+
+  // 调用插件自定义逻辑
+  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    try {
+      Set<Method> methods = signatureMap.get(method.getDeclaringClass());
+      if (methods != null && methods.contains(method)) {
+        // 若为插件配置方法，则调用
+        return interceptor.intercept(new Invocation(target, method, args));
+      }
+      return method.invoke(target, args);
+    } catch (Exception e) {
+      throw ExceptionUtil.unwrapThrowable(e);
+    }
+  }
+
+  // 解析插件中配置的触发条件，注入数据等
+  private static Map<Class<?>, Set<Method>> getSignatureMap(Interceptor interceptor) {
+    Intercepts interceptsAnnotation = interceptor.getClass().getAnnotation(Intercepts.class);
+    // issue #251
+    if (interceptsAnnotation == null) {
+      throw new PluginException("No @Intercepts annotation was found in interceptor " + interceptor.getClass().getName());
+    }
+    Signature[] sigs = interceptsAnnotation.value();
+    Map<Class<?>, Set<Method>> signatureMap = new HashMap<Class<?>, Set<Method>>();
+    for (Signature sig : sigs) {
+      Set<Method> methods = signatureMap.get(sig.type());
+      if (methods == null) {
+        methods = new HashSet<Method>();
+        signatureMap.put(sig.type(), methods);
+      }
+      try {
+        Method method = sig.type().getMethod(sig.method(), sig.args());
+        methods.add(method);
+      } catch (NoSuchMethodException e) {
+        throw new PluginException("Could not find method on " + sig.type() + " named " + sig.method() + ". Cause: " + e, e);
+      }
+    }
+    return signatureMap;
+  }
+
+  // 读取被代理对象的实现接口，包括父接口
+  private static Class<?>[] getAllInterfaces(Class<?> type, Map<Class<?>, Set<Method>> signatureMap) {
+    Set<Class<?>> interfaces = new HashSet<Class<?>>();
+    while (type != null) {
+      for (Class<?> c : type.getInterfaces()) {
+        if (signatureMap.containsKey(c)) {
+          interfaces.add(c);
+        }
+      }
+      type = type.getSuperclass();
+    }
+    return interfaces.toArray(new Class<?>[interfaces.size()]);
+  }
+
+}
+```
+
+Configuration类定义了如下方法，创建相关对象的代理对象，使Mybatis在相关操作中调用插件逻辑。
+
+```java
+public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
+  ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
+  parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
+  return parameterHandler;
+}
+
+public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
+    ResultHandler resultHandler, BoundSql boundSql) {
+  ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
+  resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
+  return resultSetHandler;
+}
+
+public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
+  StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+  statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
+  return statementHandler;
+}
+```
+
+插件开发时，插件类继承`Interceptor`类。
 
 ```java
 public interface Interceptor {
 
+  // 逻辑处理
   Object intercept(Invocation invocation) throws Throwable;
 
+  // 装饰包裹target
+  // 调用 Plugin.wrap()，该方法会创建 target 类的代理对象，具体参考 Plugin 类
   Object plugin(Object target);
 
+  // 设置属性
   void setProperties(Properties properties);
 
 }
 ```
+
+InterceptorChain，管理`Interceptor`实例，Mybatis会根据插件的设定条件在合适的时机进行调用。
 
 ```java
 public class InterceptorChain {
 
   private final List<Interceptor> interceptors = new ArrayList<Interceptor>();
 
- // 注册插件，也就是设置代码，缓存方法等
+ // 调用自定义类的 plugin 方法
   public Object pluginAll(Object target) {
     for (Interceptor interceptor : interceptors) {
       target = interceptor.plugin(target);
@@ -1056,7 +1175,7 @@ public class InterceptorChain {
 }
 ```
 
-配置代理参数，
+Mybatis提供了一些注解用来定义插件的相关逻辑等，如触发条件，需要注入的数据等。
 ```java
 // 配置拦截器
 @Documented
@@ -1082,145 +1201,56 @@ public @interface Signature {
 }
 ```
 
-```java
-public class Plugin implements InvocationHandler {
-
-  private Object target;
-  private Interceptor interceptor;
-  private Map<Class<?>, Set<Method>> signatureMap;
-
-  private Plugin(Object target, Interceptor interceptor, Map<Class<?>, Set<Method>> signatureMap) {
-    this.target = target;
-    this.interceptor = interceptor;
-    this.signatureMap = signatureMap;
-  }
-
-  // 代理，如是查询插件，则为Executor
-  public static Object wrap(Object target, Interceptor interceptor) {
-    Map<Class<?>, Set<Method>> signatureMap = getSignatureMap(interceptor);
-    Class<?> type = target.getClass();
-    Class<?>[] interfaces = getAllInterfaces(type, signatureMap);
-    if (interfaces.length > 0) {
-      return Proxy.newProxyInstance(
-          type.getClassLoader(),
-          interfaces,
-          new Plugin(target, interceptor, signatureMap));
-    }
-    return target;
-  }
-
-  // 代理方法
-  @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    try {
-      Set<Method> methods = signatureMap.get(method.getDeclaringClass());
-      if (methods != null && methods.contains(method)) {
-        // 若为插件配置方法，则调用
-        return interceptor.intercept(new Invocation(target, method, args));
-      }
-      return method.invoke(target, args);
-    } catch (Exception e) {
-      throw ExceptionUtil.unwrapThrowable(e);
-    }
-  }
-
-  private static Map<Class<?>, Set<Method>> getSignatureMap(Interceptor interceptor) {
-    Intercepts interceptsAnnotation = interceptor.getClass().getAnnotation(Intercepts.class);
-    // issue #251
-    if (interceptsAnnotation == null) {
-      throw new PluginException("No @Intercepts annotation was found in interceptor " + interceptor.getClass().getName());
-    }
-    Signature[] sigs = interceptsAnnotation.value();
-    Map<Class<?>, Set<Method>> signatureMap = new HashMap<Class<?>, Set<Method>>();
-    for (Signature sig : sigs) {
-      Set<Method> methods = signatureMap.get(sig.type());
-      if (methods == null) {
-        methods = new HashSet<Method>();
-        signatureMap.put(sig.type(), methods);
-      }
-      try {
-        Method method = sig.type().getMethod(sig.method(), sig.args());
-        methods.add(method);
-      } catch (NoSuchMethodException e) {
-        throw new PluginException("Could not find method on " + sig.type() + " named " + sig.method() + ". Cause: " + e, e);
-      }
-    }
-    return signatureMap;
-  }
-
-  private static Class<?>[] getAllInterfaces(Class<?> type, Map<Class<?>, Set<Method>> signatureMap) {
-    Set<Class<?>> interfaces = new HashSet<Class<?>>();
-    while (type != null) {
-      for (Class<?> c : type.getInterfaces()) {
-        if (signatureMap.containsKey(c)) {
-          interfaces.add(c);
-        }
-      }
-      type = type.getSuperclass();
-    }
-    return interfaces.toArray(new Class<?>[interfaces.size()]);
-  }
-
-}
-```
+如下示例：
 
 ```java
-// plugin
-public ParameterHandler newParameterHandler(MappedStatement mappedStatement, Object parameterObject, BoundSql boundSql) {
-  ParameterHandler parameterHandler = mappedStatement.getLang().createParameterHandler(mappedStatement, parameterObject, boundSql);
-  parameterHandler = (ParameterHandler) interceptorChain.pluginAll(parameterHandler);
-  return parameterHandler;
-}
-
-public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler,
-    ResultHandler resultHandler, BoundSql boundSql) {
-  ResultSetHandler resultSetHandler = new DefaultResultSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
-  resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
-  return resultSetHandler;
-}
-
-public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-  StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
-  statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
-  return statementHandler;
-}
+@Intercepts(
+    {
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class}),
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class}),
+    }
+)
 ```
 
 ## 3. 缓存
 
-Mybatis默认开启缓存，参考Configuration类： `protected boolean cacheEnabled = true;`。
+Mybatis默认开启缓存，参考`Configuration`类：
+
+```java
+protected boolean cacheEnabled = true;
+```
+
+缓存数据时，使用`CacheKey`实例为key。该类存储了查询时的方法名，参数，SQL语句，分页等元数据，保证缓存数据时使用的key（与查询绑定）惟一。
 
 ```java
 public class CacheKey implements Cloneable, Serializable {
 
-}
-```
+  private final int multiplier;
+  private int hashcode;
+  private long checksum;
+  private int count;
+  private List<Object> updateList;
 
-```java
-public class CachingExecutor implements Executor {
+  ...
 
-  @Override
-  public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
-      throws SQLException {
-    Cache cache = ms.getCache();
-    if (cache != null) {
-      flushCacheIfRequired(ms);
-      if (ms.isUseCache() && resultHandler == null) {
-        ensureNoOutParams(ms, parameterObject, boundSql);
-        @SuppressWarnings("unchecked")
-        List<E> list = (List<E>) tcm.getObject(cache, key);
-        if (list == null) {
-          list = delegate.<E> query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
-          tcm.putObject(cache, key, list); // issue #578 and #116
-        }
-        return list;
-      }
-    }
-    return delegate.<E> query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+  // 计算更新 hashcode
+  public void update(Object object) {
+    int baseHashCode = object == null ? 1 : ArrayUtil.hashCode(object);
+
+    count++;
+    checksum += baseHashCode;
+    baseHashCode *= count;
+
+    hashcode = multiplier * hashcode + baseHashCode;
+
+    updateList.add(object);
   }
 
 }
 ```
+
+`BaseExecutor`定义了创建CacheKey的方法`createCacheKey`。
+
 ```java
 public abstract class BaseExecutor implements Executor {
 
@@ -1228,6 +1258,8 @@ public abstract class BaseExecutor implements Executor {
     if (closed) {
       throw new ExecutorException("Executor was closed.");
     }
+
+    // 保证同一查询具有相同的CacheKey
     CacheKey cacheKey = new CacheKey();
     cacheKey.update(ms.getId());
     cacheKey.update(rowBounds.getOffset());
@@ -1259,21 +1291,103 @@ public abstract class BaseExecutor implements Executor {
     }
     return cacheKey;
   }
+
+  ...
 }
 ```
+
+`CachingExecutor`通过过包裹其它`Executor`来缓存查询数据。
+
+```java
+public class CachingExecutor implements Executor {
+
+  @Override
+  public <E> List<E> query(MappedStatement ms, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, CacheKey key, BoundSql boundSql)
+      throws SQLException {
+    Cache cache = ms.getCache();
+    // 是否有缓存
+    if (cache != null) {
+      flushCacheIfRequired(ms);
+      if (ms.isUseCache() && resultHandler == null) {
+        ensureNoOutParams(ms, parameterObject, boundSql);
+        @SuppressWarnings("unchecked")
+        List<E> list = (List<E>) tcm.getObject(cache, key);
+        if (list == null) {
+          list = delegate.<E> query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+          tcm.putObject(cache, key, list);
+        }
+        return list;
+      }
+    }
+    return delegate.<E> query(ms, parameterObject, rowBounds, resultHandler, key, boundSql);
+  }
+
+  ...
+}
+```
+
+`Cache`的默认实现为`PerpetualCache`。该类使用HashMap来储存缓存数据。并通过“装饰者模式”来处理缓存失效等。默认为`LruCache`类，该类使用`LRU`算法，即“最近最少使用”原则。
 
 ```java
 public class LruCache implements Cache {
-    private final Cache delegate;
-    private Map<Object, Object> keyMap;
-    private Object eldestKey;
+  private final Cache delegate;
+  private Map<Object, Object> keyMap;
+  private Object eldestKey;
 
-    public LruCache(Cache delegate) {
-      this.delegate = delegate;
-      setSize(1024);
-    }
+  public LruCache(Cache delegate) {
+    this.delegate = delegate;
+    setSize(1024);
+  }
+
+  public void setSize(final int size) {
+    // LinkedHashMap 的 accessOrder 值为 true，即调用get()方法时会进行排序，并通过重写 removeEldestEntry 来移除超出最大数量的元素，即实现LRU
+    keyMap = new LinkedHashMap<Object, Object>(size, .75F, true) {
+      private static final long serialVersionUID = 4267176411845948333L;
+
+      @Override
+      protected boolean removeEldestEntry(Map.Entry<Object, Object> eldest) {
+        boolean tooBig = size() > size;
+        if (tooBig) {
+          eldestKey = eldest.getKey();
+        }
+        return tooBig;
+      }
+    };
+  }
+
+  ...
 }
 ```
+
+缓存的配置有两种方式：
+
+* 注解
+* XML
+
+本文以解析XML中定义的Cache标签为例，注解方式的解析可查看`MapperAnnotationBuilder`类。
+
+```java
+public class XMLMapperBuilder extends BaseBuilder {
+
+  private void cacheElement(XNode context) throws Exception {
+    if (context != null) {
+      String type = context.getStringAttribute("type", "PERPETUAL");
+      Class<? extends Cache> typeClass = typeAliasRegistry.resolveAlias(type);
+      String eviction = context.getStringAttribute("eviction", "LRU");
+      Class<? extends Cache> evictionClass = typeAliasRegistry.resolveAlias(eviction);
+      Long flushInterval = context.getLongAttribute("flushInterval");
+      Integer size = context.getIntAttribute("size");
+      boolean readWrite = !context.getBooleanAttribute("readOnly", false);
+      boolean blocking = context.getBooleanAttribute("blocking", false);
+      Properties props = context.getChildrenAsProperties();
+      builderAssistant.useNewCache(typeClass, evictionClass, flushInterval, size, readWrite, blocking, props);
+    }
+  }
+  ...
+}
+```
+
+通过`MapperBuilderAssistant`构建`Cache`实例：
 
 ```java
 public class MapperBuilderAssistant extends BaseBuilder {
@@ -1297,29 +1411,11 @@ public class MapperBuilderAssistant extends BaseBuilder {
     currentCache = cache;
     return cache;
   }
+
+  ...
 }
 ```
 
-decorator 装饰类，负责缓存大小，有效期等
-implementation 实现类
+---
 
-```java
-public class XMLMapperBuilder extends BaseBuilder {
-
-  private void cacheElement(XNode context) throws Exception {
-    if (context != null) {
-      String type = context.getStringAttribute("type", "PERPETUAL");
-      Class<? extends Cache> typeClass = typeAliasRegistry.resolveAlias(type);
-      String eviction = context.getStringAttribute("eviction", "LRU");
-      Class<? extends Cache> evictionClass = typeAliasRegistry.resolveAlias(eviction);
-      Long flushInterval = context.getLongAttribute("flushInterval");
-      Integer size = context.getIntAttribute("size");
-      boolean readWrite = !context.getBooleanAttribute("readOnly", false);
-      boolean blocking = context.getBooleanAttribute("blocking", false);
-      Properties props = context.getChildrenAsProperties();
-      builderAssistant.useNewCache(typeClass, evictionClass, flushInterval, size, readWrite, blocking, props);
-    }
-  }
-}
-```
-XML中定义Cache元素或CacheNamespace注解。
+以上就是Mybaits源码解析的全部内容了。
