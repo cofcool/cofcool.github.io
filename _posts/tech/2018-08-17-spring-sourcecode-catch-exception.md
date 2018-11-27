@@ -2,7 +2,7 @@
 layout: post
 category: Tech
 title: Spring MVC 异常处理源码解析及自定义异常解析器
-tags: [java, spring, sourcode]
+tags: [java, spring, sourcecode]
 excerpt: Spring MVC如何通过HandlerExceptionResolver来处理异常？
 ---
 

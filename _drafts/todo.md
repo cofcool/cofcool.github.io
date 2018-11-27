@@ -1,8 +1,8 @@
 2018:
 
 - [x] Spring MVC + Shiro 原理解析
-- [ ] Spring Mybatis 实现动态数据源
-- [ ] Mybatis SQL执行源码分析
+- [x] Spring Mybatis 实现动态数据源
+- [x] Mybatis SQL执行源码分析
 - [ ] RocketMQ, RabbitMQ等
 - [ ] Dubbo
 - [ ] Spring Boot

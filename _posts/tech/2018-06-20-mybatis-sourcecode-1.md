@@ -2,7 +2,7 @@
 layout: post
 category: Tech
 title: Mybatis 源码分析 (一) Mapper扫描及代理
-tags: [java, sourcode, mybatis]
+tags: [java, sourcecode, mybatis]
 excerpt: 本系列文章主要从源代码的角度解析Mybatis在Spirng框架上如何创建扫描，创建实例，以及SQL如何执行等核心功能。本文主要介绍Mybatis如何扫描Mapper建立接口和XML的映射关系等。
 ---
 

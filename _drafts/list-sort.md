@@ -1,6 +1,6 @@
 # List的sort函数实现解析
 
-最近在使用List的`void sort(Comparator<? super E> c)`函数时在想了解内部是如何实现的，于是看了源码，该默认方法在JDK1.8的时候添加，排序算法采用TimSort算法，如下所述。
+最近在使用List的`void sort(Comparator<? super E> c)`函数时在想了解内部是如何实现的，于是看了源码，该默认方法在JDK1.8的时候添加，排序算法采用TimSort算法，如下所述。
 
 ```
 The implementation was adapted from Tim Peters's list sort for Python

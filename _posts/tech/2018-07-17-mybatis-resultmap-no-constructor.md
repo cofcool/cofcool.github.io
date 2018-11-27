@@ -2,7 +2,7 @@
 layout: post
 category: Tech
 title: Mybaits执行查询时抛出 ExecutorException No constructor found 问题解析
-tags: [java, mybatis, sourcode]
+tags: [java, mybatis, sourcecode]
 excerpt: Mybatis执行查询时抛出 org.mybatis.spring.MyBatisSystemException nested exception is org.apache.ibatis.executor.ExecutorException No constructor found，到底是什么原因导致的？
 ---
 

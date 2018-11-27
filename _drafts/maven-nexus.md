@@ -49,3 +49,4 @@ Maven的配置文件settings.xml：
         </snapshotRepository>
 </distributionManagement>
 ```
+vim /usr/share/maven/conf/settings.xml
