@@ -95,4 +95,4 @@ public class WebMvcConfigurationSupport implements ApplicationContextAware, Serv
 
 因此在web项目中只需使用`@EnableWebMvc`注解即可实现项目自动配置。
 
-Spring Mvc 请求处理流程可参考[Spring MVC 自定义接口参数解析器](./2017-12-19-spring-custom-param-resolve.md)。
+Spring Mvc 请求处理流程可参考[Spring MVC 自定义接口参数解析器](/tech/2017/12/19/spring-custom-param-resolve)。
