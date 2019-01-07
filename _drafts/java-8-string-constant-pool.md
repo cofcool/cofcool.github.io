@@ -38,6 +38,8 @@ package testPackage;
 
 LEXICAL STRUCTURE
 Literals 3.10
+
+```java
        class Test {
            public static void main(String[] args) {
                String hello = "Hello", lo = "lo";
@@ -49,9 +51,16 @@ Literals 3.10
                System.out.println(hello == ("Hel"+lo).intern());
 } }
        class Other { static String hello = "Hello"; }
+```
+
 and the compilation unit:
+
+```java
        package other;
        public class Other { public static String hello = "Hello"; }
+       
+```
+
 produces the output:
        true true true true false true
 This example illustrates six points:
@@ -66,6 +75,7 @@ then treated as if they were literals.
 • Strings computed by concatenation at run time are newly created and therefore distinct.
 • The result of explicitly interning a computed string is the same string as any pre-existing literal string with the same contents.
 
+
 ## JVMS
 
 ### 5.1 The Run-Time Constant Pool
@@ -76,6 +86,8 @@ The Java programming language requires that identical string literals (that is, 
 To derive a string literal, the Java Virtual Machine examines the sequence of code points given by the CONSTANT_String_info structure.
 – If the method String.intern has previously been called on an instance of class String containing a sequence of Unicode code points identical to that given by the CONSTANT_String_info structure, then the result of string literal derivation is a reference to that same instance of class String.
 – Otherwise, a new instance of class String is created containing the sequence of Unicode code points given by the CONSTANT_String_info structure; a reference to that class instance is the result of string literal derivation. Finally, the intern method of the new String instance is invoked.
+
+## 引用
 
 * The Java® Language Specification Java SE 8 Edition
 * The Java® Virtual Machine Specification Java SE 8 Edition
