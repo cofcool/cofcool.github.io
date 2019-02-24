@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习系列2--滚动视图和表视图相关知识
 tagline: "ios学习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 

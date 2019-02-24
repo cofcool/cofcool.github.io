@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习系列9--核心动画
 tagline: "ios学习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 
@@ -75,4 +75,3 @@ CAAnimation是所有动画对象的父类，负责控制动画的持续时间和
    2. subtype：动画过渡方向。
    3. startProgress：动画起点(在整体动画的百分比)。
    4. endProgress：动画终点(在整体动画的百分比)。
-

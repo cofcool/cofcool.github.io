@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios练习系列1--简单的搜索
 tagline: "ios练习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 

@@ -3,7 +3,7 @@ layout: post
 category : Tech
 title : Ubuntu简介以及安装
 tagline: "Ubuntu的安装"
-tags : [菜鸟的Ubuntu学习之旅, 安装, 系统, Linux]
+tags : [菜鸟的Ubuntu学习之旅, Linux]
 ---
 {% include JB/setup %}
 

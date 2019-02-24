@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习系列10--多线程技术（一）
 tagline: "ios学习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 
@@ -211,4 +211,3 @@ tags : [ios,开发]
 		dispatch_group_notify(group, dispatch_get_main_queue(), ^{
 		    // 等前面的异步操作都执行完毕后，回到主线程...
 		});
-

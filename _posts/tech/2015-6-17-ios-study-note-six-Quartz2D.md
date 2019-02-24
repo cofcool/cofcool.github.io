@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习系列6--Quartz2D
 tagline: "ios学习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 
@@ -140,4 +140,3 @@ Quartz 2D是一个二维绘图引擎，同时支持iOS和Mac系统。Quartz 2D�
 调用view的layer的renderInContext:方法即可
 
     - (void)renderInContext:(CGContextRef)ctx;
-    

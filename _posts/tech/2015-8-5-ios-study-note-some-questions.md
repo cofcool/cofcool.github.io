@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习总结 August 5, 2015
 tagline: "ios学习总结"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 

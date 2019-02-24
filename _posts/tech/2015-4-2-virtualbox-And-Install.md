@@ -3,7 +3,7 @@ layout: post
 category : Tech
 title : virtualbox的简单介绍和安装
 tagline: "virtualBox的相关知识"
-tags : [virtualBox, 软件安装,菜鸟的Ubuntu学习之旅]
+tags : [virtualBox,菜鸟的Ubuntu学习之旅]
 ---
 {% include JB/setup %}
 

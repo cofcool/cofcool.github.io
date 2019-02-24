@@ -56,7 +56,7 @@
 
 ### 3.2 Response
 
-实现类为`org.apache.catalina.connector.Response`
+实现类为`org.apache.catalina.connector.Response`，底层 Servlet Request 实现。
 
 ## Core
 

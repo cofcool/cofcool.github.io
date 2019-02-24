@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习系列5--应用程序数据存储
 tagline: "ios学习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 
@@ -512,4 +512,3 @@ Core Data框架提供了对象-关系映射(ORM)的功能，即能够将OC对象
 		Card *card = [NSEntityDescription insertNewObjectForEntityForName:@”Card" inManagedObjectContext:context];
 		card.no = @”4414245465656";
 		person.card = card;
-

@@ -2,7 +2,7 @@
 layout: post
 category : Tech
 title : GitLab Jenkins 持续集成
-tags : [git, ci]
+tags : [git,ops]
 ---
 {% include JB/setup %}
 

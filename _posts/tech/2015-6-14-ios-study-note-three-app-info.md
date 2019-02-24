@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习系列3--应用程序相关知识
 tagline: "ios学习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 
@@ -173,4 +173,3 @@ tags : [ios,开发]
 代码中openURL的参数为B的URL,可以在Info.plist或是项目设置的Info选项卡中设置。
    
 ![image]({{ site.url }}/public/upload/images/ios_24.png)
-   

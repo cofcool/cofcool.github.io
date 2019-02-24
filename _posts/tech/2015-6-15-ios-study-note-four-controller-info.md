@@ -3,7 +3,7 @@ layout: post
 category : Development
 title : ios学习系列4--控制器相关知识
 tagline: "ios学习笔记"
-tags : [ios,开发]
+tags : [ios]
 ---
 {% include JB/setup %}
 
@@ -114,4 +114,3 @@ tags : [ios,开发]
 		- (void)presentViewController:(UIViewController *)viewControllerToPresent animated: (BOOL)flag completion:(void (^)(void))completion;
 		// 关闭当初Modal出来的控制器
 		- (void)dismissViewControllerAnimated: (BOOL)flag completion: (void (^)(void))completion;
-
