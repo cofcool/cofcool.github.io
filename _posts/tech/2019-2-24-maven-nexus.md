@@ -1,7 +1,7 @@
 ---
 layout: post
 category: Tech
-title: 如何搭建私有Maven服务器
+title: 如何搭建 Maven 私服
 tags: [java,ops]
 excerpt: 项目开发中为了可以重用工具类等，可通过搭建 Maven私服 的方式来简化开发和依赖管理
 ---
