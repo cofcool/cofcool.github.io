@@ -2,7 +2,7 @@
 layout: post
 category : others
 tagline: "写作"
-tags : [写作, 成长, 人生哲学]
+tags : [some]
 title : 写作的重要意义
 ---
 {% include JB/setup %}
