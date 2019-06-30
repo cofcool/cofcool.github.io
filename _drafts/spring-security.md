@@ -15,6 +15,8 @@
 
 `PermissionEvaluator`
 
+`excfilter` authenticationentrypoint
+
 权限控制, `AccessDecisionManager`
 
 ```plantuml
