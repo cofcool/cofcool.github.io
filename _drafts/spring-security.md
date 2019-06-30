@@ -13,11 +13,19 @@
 自定义 `org.springframework.security.web.authentication.AuthenticationFailureHandler`处理权限验证失败等情况,
 `org.springframework.security.web.authentication.AuthenticationSuccessHandler`处理成功情况
 
+`AbstractSecurityInterceptor`, 检查对象的调用安全
+
 `PermissionEvaluator`
 
-`excfilter` authenticationentrypoint
+`ExceptionTranslationFilter`处理`AccessDeniedException`和`AuthenticationException`, 通过`AuthenticationEntryPoint`处理
 
-权限控制, `AccessDecisionManager`
+权限控制, `AccessDecisionManager`, 处理权限验证等, 管理`AccessDecisionVoter`列表，通过它来进行角色验证。`AbstractInterceptUrlConfigurer`, `AbstractSecurityInterceptor`
+
+![Voting Decision Manager](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/images/access-decision-voting.png)
+
+![Security interceptors and the "secure object" model](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/images/security-interception.png)
+
+`ProviderManager`实现`AuthenticationManager`接口, 负责管理`AuthenticationProvider`实例
 
 ```plantuml
 filter-> AuthenticationManager
