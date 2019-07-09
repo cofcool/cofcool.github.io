@@ -4,20 +4,21 @@
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
-* [1. Tomcat结构解析](#1-tomcat结构解析)
-	* [1.1 Tomcat服务器核心组件](#11-tomcat服务器核心组件)
-* [2. Session](#2-session)
-	* [2.1 Session实现类](#21-session实现类)
-* [3. Http](#3-http)
-	* [3.1 HttpServlet](#31-httpservlet)
-	* [3.1 Request](#31-request)
-	* [3.2 Response](#32-response)
-* [Core](#core)
-	* [Executor](#executor)
-	* [Connector](#connector)
-		* [JNDI](#jndi)
-			* [Resource](#resource)
-* [资料引用](#资料引用)
+- [ 1. Tomcat结构解析](#1-tomcat结构解析)
+  - [ 1.1 Tomcat服务器核心组件](#11-tomcat服务器核心组件)
+- [ 2. Session](#2-session)
+  - [ 2.1 Session实现类](#21-session实现类)
+- [ 3. Http](#3-http)
+  - [ 3.1 HttpServlet](#31-httpservlet)
+  - [ 3.1 Request](#31-request)
+  - [ 3.2 Response](#32-response)
+- [ Core](#core)
+  - [ Executor](#executor)
+  - [ Connector](#connector)
+  - [ Host](#host)
+    - [ JNDI](#jndi)
+      - [ Resource](#resource)
+- [ 资料引用](#资料引用)
 
 <!-- /code_chunk_output -->
 
@@ -120,6 +121,30 @@ public class Connector extends LifecycleMBeanBase  {
       setThrowOnFailure(Boolean.getBoolean("org.apache.catalina.startup.EXIT_ON_INIT_FAILURE"));
   }
 }
+```
+
+### Host
+
+读取配置(`HostConfig`):
+
+配置`Context`:
+
+```java
+if (context.getDocBase() != null) {
+    File docBase = new File(context.getDocBase());
+    if (!docBase.isAbsolute()) {
+        docBase = new File(host.getAppBaseFile(), context.getDocBase());
+    }
+    ...
+}
+```
+
+未配置`Context`:
+
+```java
+// default to appBase dir + name
+// 未配置 Context 时从 ContextName 读取，即 “ROOT”
+expandedDocBase = new File(host.getAppBaseFile(), cn.getBaseName());
 ```
 
 #### JNDI

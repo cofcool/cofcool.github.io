@@ -12,3 +12,5 @@ public interface HttpMessageConverter<T> {
 			throws IOException, HttpMessageNotWritableException;
 }
 ```
+
+`HandlerMethodArgumentResolver` 参数解析器
