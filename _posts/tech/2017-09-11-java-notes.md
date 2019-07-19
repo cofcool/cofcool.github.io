@@ -11,49 +11,50 @@ tags : [java, notes]
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
-* [1. 配置](#1-配置)
-	* [1. Ubuntu安装Tomcat](#1-ubuntu安装tomcat)
-	* [2.Centos安装mysql](#2centos安装mysql)
-		* [1. 安装](#1-安装)
-		* [2. 配置](#2-配置)
-			* [1. 开启MySql远程连接](#1-开启mysql远程连接)
-			* [2. 安装配置tomcat](#2-安装配置tomcat)
-			* [3. centos6配置iptables](#3-centos6配置iptables)
-			* [4. Tomcat 在linux下开机自启动](#4-tomcat-在linux下开机自启动)
-			* [5. Apache映射到Tomcat](#5-apache映射到tomcat)
-			* [6. https](#6-https)
-* [2. Spring](#2-spring)
-	* [1. IOC](#1-ioc)
-		* [1. 注解](#1-注解)
-	* [2. AOP](#2-aop)
-		* [1. 配置](#1-配置-1)
-	* [3. MVC](#3-mvc)
-		* [1. 基本配置](#1-基本配置)
-		* [2. 启用jackson解析JSON](#2-启用jackson解析json)
-	* [4. 异常监测，统一管理](#4-异常监测统一管理)
-	* [5. 跨域](#5-跨域)
-* [3. Shiro](#3-shiro)
-	* [1. 依赖Jar包](#1-依赖jar包)
-	* [2. 配置](#2-配置-1)
-* [4. 集成Swagger](#4-集成swagger)
-	* [1. 依赖](#1-依赖)
-	* [2. 示例代码](#2-示例代码)
-	* [3. 集成UI](#3-集成ui)
-* [5. 常见问题](#5-常见问题)
-	* [1. IDEA 2016 使用junit4](#1-idea-2016-使用junit4)
-	* [2. tomcat无响应](#2-tomcat无响应)
-	* [3. Maven项目（spring, mybatis...）在eclipse中可以运行，无法在Idea中运行](#3-maven项目spring-mybatis在eclipse中可以运行无法在idea中运行)
-	* [4. 使用Idea时提示无法找到配置文件](#4-使用idea时提示无法找到配置文件)
-	* [5. 引入第三方库](#5-引入第三方库)
-	* [6. lib已存在但抛出java.lang.NoClassDefFoundError](#6-lib已存在但抛出javalangnoclassdeffounderror)
-	* [7. jetty多实例部署](#7-jetty多实例部署)
-	* [8. linux环境下调用so库](#8-linux环境下调用so库)
-	* [9. Spring MVC get请求带中文乱码](#9-spring-mvc-get请求带中文乱码)
-	* [10. Maven同时编译Jar和War包](#10-maven同时编译jar和war包)
-	* [11. Spring MVC中Cacheable未生效](#11-spring-mvc中cacheable未生效)
-	* [12. 同一对象的两个synchronized方法不能同时被访问](#12-同一对象的两个synchronized方法不能同时被访问)
-	* [13. Maven项目依赖的"scope"项配置为"system"时的问题](#13-maven项目依赖的scope项配置为system时的问题)
-* [参考资料](#参考资料)
+- [ 1. 配置](#1-配置)
+  - [ 1. Ubuntu安装Tomcat](#1-ubuntu安装tomcat)
+  - [ 2.Centos安装mysql](#2centos安装mysql)
+    - [ 1. 安装](#1-安装)
+    - [ 2. 配置](#2-配置)
+      - [ 1. 开启MySql远程连接](#1-开启mysql远程连接)
+      - [ 2. 安装配置tomcat](#2-安装配置tomcat)
+      - [ 3. centos6配置iptables](#3-centos6配置iptables)
+      - [ 4. Tomcat 在linux下开机自启动](#4-tomcat-在linux下开机自启动)
+      - [ 5. Apache映射到Tomcat](#5-apache映射到tomcat)
+      - [ 6. https](#6-https)
+- [ 2. Spring](#2-spring)
+  - [ 1. IOC](#1-ioc)
+    - [ 1. 注解](#1-注解)
+  - [ 2. AOP](#2-aop)
+    - [ 1. 配置](#1-配置-1)
+  - [ 3. MVC](#3-mvc)
+    - [ 1. 基本配置](#1-基本配置)
+    - [ 2. 启用jackson解析JSON](#2-启用jackson解析json)
+  - [ 4. 异常监测，统一管理](#4-异常监测统一管理)
+  - [ 5. 跨域](#5-跨域)
+- [ 3. Shiro](#3-shiro)
+  - [ 1. 依赖Jar包](#1-依赖jar包)
+  - [ 2. 配置](#2-配置-1)
+- [ 4. 集成Swagger](#4-集成swagger)
+  - [ 1. 依赖](#1-依赖)
+  - [ 2. 示例代码](#2-示例代码)
+  - [ 3. 集成UI](#3-集成ui)
+- [ 5. 常见问题](#5-常见问题)
+  - [ 1. IDEA 2016 使用junit4](#1-idea-2016-使用junit4)
+  - [ 2. tomcat无响应](#2-tomcat无响应)
+  - [ 3. Maven项目（spring, mybatis...）在eclipse中可以运行，无法在Idea中运行](#3-maven项目spring-mybatis在eclipse中可以运行无法在idea中运行)
+  - [ 4. 使用Idea时提示无法找到配置文件](#4-使用idea时提示无法找到配置文件)
+  - [ 5. 引入第三方库](#5-引入第三方库)
+  - [ 6. lib已存在但抛出java.lang.NoClassDefFoundError](#6-lib已存在但抛出javalangnoclassdeffounderror)
+  - [ 7. jetty多实例部署](#7-jetty多实例部署)
+  - [ 8. linux环境下调用so库](#8-linux环境下调用so库)
+  - [ 9. Spring MVC get请求带中文乱码](#9-spring-mvc-get请求带中文乱码)
+  - [ 10. Maven同时编译Jar和War包](#10-maven同时编译jar和war包)
+  - [ 11. Spring MVC中Cacheable未生效](#11-spring-mvc中cacheable未生效)
+  - [ 12. 同一对象的两个synchronized方法不能同时被访问](#12-同一对象的两个synchronized方法不能同时被访问)
+  - [ 13. Maven项目依赖的"scope"项配置为"system"时的问题](#13-maven项目依赖的scope项配置为system时的问题)
+  - [ 14. Spring MVC 打印请求日志](#14-spring-mvc-打印请求日志)
+- [ 参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
 
@@ -915,7 +916,7 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 
 ### 11. Spring MVC中Cacheable未生效
 
-`@Cacheable`标注的方法，如果其所在的类实现了某一个接口，那么该方法必须在接口中定义。Spring是根据AOP来实现缓存功能，如果该类的接口未定义该方法，导致代理中也没有该方法，所以缓存并没有生效。
+`@Cacheable`标注的方法，如果其所在的类实现了某一个接口，那么该方法必须在接口中定义。Spring是根据AOP来实现缓存功能，如果该类的接口未定义该方法，导致代理中也没有该方法，所以缓存并没有生效。注意: 调用内部方法并不会触发，原因是通过原始类调用的该方法，而不是通过代理类。
 
 ### 12. 同一对象的两个synchronized方法不能同时被访问
 
@@ -924,6 +925,16 @@ Idea在编译打包时并没有把某些资源文件包含进去，因此需手�
 ### 13. Maven项目依赖的"scope"项配置为"system"时的问题
 
 根据 [Introduction to the Dependency Mechanism](http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html)可知，`system`和`provided`功能类似，在编译阶段需要依赖，但是运行时依赖由 JDK 或运行环境提供
+
+### 14. Spring MVC 打印请求日志
+
+在 5.1 版本中`FrameworkServlet`添加了`enableLoggingRequestDetails` API，通过该 API 可打印请求参数和"header"信息。
+
+Spring Boot 项目配置:
+
+```properties
+spring.http.log-request-details=true
+```
 
 ## 参考资料
 
