@@ -162,11 +162,13 @@ chaos.auth.checked-keys=id
 `GlobalHandlerExceptionResolver`处理在请求中发生的异常，包括如下异常:
 
 * ServiceException
-* NullPointerException || IndexOutOfBoundsException || NoSuchElementException
+* NullPointerException, IndexOutOfBoundsException,  NoSuchElementException
 * HttpMessageNotReadableException
 * UnsupportedOperationException
 * MethodArgumentNotValidException
-* DuplicateKeyException
+* DataAccessException
+
+除以上异常外，其它异常由 Spring 的`DefaultHandlerExceptionResolver`处理。
 
 把异常信息包装为`Message`对象，保证发生异常时的响应格式符合接口规范。
 
@@ -181,4 +183,4 @@ chaos.auth.checked-keys=id
 
 `SimpleExceptionCodeDescriptor`为默认配置，包含了常见的描述代码和描述信息，例如操作成功，操作失败等。
 
-`ResourceExceptionCodeDescriptor` 从"messages"文件总读取配置的描述信息。
+`ResourceExceptionCodeDescriptor` 从"messages"文件中读取配置的描述信息。
