@@ -3,7 +3,7 @@ layout: post
 category: Tech
 title: 简单介绍 Chaos Server
 tags: [java]
-excerpt: chaos-server
+excerpt: Chaos Server 是基于 Spring Boot 的 Java Web Server 框架, 简化开发, 封装了常见的企业级项目开发框架, 如 Mybaits, Spring Security 等。
 ---
 
 {% include JB/setup %}
@@ -14,6 +14,16 @@ excerpt: chaos-server
 <!-- code_chunk_output -->
 
 - [ 1. 模块说明](#1-模块说明)
+  - [ 1.1 common](#11-common)
+  - [ 1.2 core](#12-core)
+  - [ 1.3 data-jpa](#13-data-jpa)
+  - [ 1.4 data-mybatis](#14-data-mybatis)
+  - [ 1.5 data-redis](#15-data-redis)
+  - [ 1.6 security-shiro](#16-security-shiro)
+  - [ 1.7 security-spring](#17-security-spring)
+  - [ 1.8 actuator](#18-actuator)
+  - [ 1.9 component-processor](#19-component-processor)
+  - [ 1.10 boot-starter](#110-boot-starter)
 - [ 2. 配置 ](#2-配置)
 - [ 3. 使用](#3-使用)
   - [ 3.1 授权处理](#31-授权处理)
@@ -27,36 +37,52 @@ excerpt: chaos-server
 
 <!-- /code_chunk_output -->
 
-基于 Spring Boot 的 Java Web Server 框架, 简化开发, 封装了常见的企业级项目开发框架, 如 `Mybaits`, `Spring Security` 等。
+Chaos Server 是基于 Spring Boot 的 Java Web Server 框架, 简化开发, 封装了常见的企业级项目开发框架, 如 `Mybaits`, `Spring Security` 等。
+
+在开发中会有很多模版式代码以及重复逻辑处理等，为了提高开发效率，把这些重复元素抽象提取封装，经过旧项目的多次迭代，最后封装为`Chaos Server`，代码已上传到 Github，地址为 [https://github.com/cofcool/chaos-server](https://github.com/cofcool/chaos-server)，示例代码地址为 [demo](https://github.com/cofcool/chaos-server/tree/master/demo)。
 
 ### 1. 模块说明
 
-项目模块:
 
-1. common
-2. core
-3. data-jpa
-4. data-mybatis
-5. data-redis
-6. security-shiro
-7. security-spring
-8. actuator
-9. component-processor
-10. boot-starter
+#### 1.1 common
 
-第三方依赖:
+该模块定义了基本接口和类等。
 
-1. Spring Boot
-2. Spring data Jpa
-3. MyBatis
-4. Mybatis-PageHelper
-5. Jackson
-7. Shiro
-8. Spring Security
-9. Spring data Redis
-10. Ehcache
-10. ...
+#### 1.2 core
 
+核心实现，包括拦截器, 国际化，Json 解析等
+
+#### 1.3 data-jpa
+
+`JPA`相关的基础`Service`和工具类等
+
+#### 1.4 data-mybatis
+
+`Mybatis`相关的基础`Service`和工具类等
+
+#### 1.5 data-redis
+
+提供`Redis`所需依赖。
+
+#### 1.6 security-shiro
+
+封装了`Shiro`，简化开发流程。
+
+#### 1.7 security-spring
+
+封装了`Spring Security`，简化开发流程。
+
+#### 1.8 actuator
+
+提供监控所需依赖。
+
+#### 1.9 component-processor
+
+编译时扫描`BaseComponent`注解，该注解可标识基础组件, 避免组件调用混乱。
+
+#### 1.10 boot-starter
+
+根据`Spring Boot`规范进行自动化配置。
 
 ### 2. 配置 
 
@@ -71,7 +97,7 @@ chaos.auth.using-captcha=false
 # 定义扫描 Scanned 注解的路径
 chaos.development.annotation-path=net.cofcool.chaos.server.demo
 # shiro授权路径配置
-chaos.auth.urls=/auth/**\=anon\n/error\=anon\n/**\=authc
+chaos.auth.urls=/auth/**\=anon,/error\=anon,/**\=authc
 # 登陆路径
 chaos.auth.login-url=/auth/login
 # 注入数据key配置, 多个时以","分隔
@@ -141,6 +167,10 @@ chaos.auth.checked-keys=id
 * UnsupportedOperationException
 * MethodArgumentNotValidException
 * DuplicateKeyException
+
+把异常信息包装为`Message`对象，保证发生异常时的响应格式符合接口规范。
+
+注意：当运行在`Debug`模式时，会优先调用`DefaultHandlerExceptionResolver`处理异常。
 
 ##### 3.5.2 描述信息
 
