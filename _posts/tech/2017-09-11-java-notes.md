@@ -56,6 +56,7 @@ tags : [java, notes]
   - [14. Spring MVC 打印请求日志](#14-spring-mvc-打印请求日志)
   - [15. MySql 索引未生效问题](#15-mysql-索引未生效问题)
   - [16. 动态修改 Java Class](#16-动态修改-java-class)
+  - [17. Mysql 字符串类型数据大小写敏感问题](#17-mysql-字符串类型数据大小写敏感问题)
 - [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -945,6 +946,13 @@ MySql 会把查询条件进行切分，如果某个条件命中索引，即会�
 ### 16. 动态修改 Java Class
 
 除了 ASM, cglib, javassist 等字节码修改工具外，也可使用 Java Agent, 接口定义等在 `java.lang.instrument` 下。另外可参考 `invokedynamic` 等指令的相关资料，了解 `MethodHandle`, `VarHandle` 等相关类, 这些类直接通过虚拟机指令实现方法动态调用，因此比通过反射方式调用的性能更好。
+
+### 17. Mysql 字符串类型数据大小写敏感问题
+
+Mysql 设置数据字符集时常用`utf8`, 这时默认的"collation"为`utf8_general_ci`，即大小写不敏感, 可通过`collation()`函数查看指定字段的字符集，建表时通过`COLLATE`指定需要的字符集。
+
+* utf8_bin 区分大小写
+* utf8_genera_ci 大小写不敏感
 
 ## 参考资料
 
