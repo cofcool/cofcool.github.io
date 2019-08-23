@@ -136,7 +136,7 @@ chaos.auth.checked-keys=id
 
 `DataAccess`定义"Service"常用的方法。
 
-`Result`封装运行结果，提供两个之接口，`QueryResult`封装查询结果，其它情况由`ExecuteResult`处理。
+`Result`封装运行结果，提供两个子接口，`QueryResult`封装查询结果，其它情况由`ExecuteResult`处理。
 
 抽象类`SimpleService`实现`DataAccess`类，实现`query`方法，简化分页操作，定义`queryWithPage`方法，用于分页查询。通过`ExceptionCodeManager`描述执行状态错误码等。JPA 应用的"Service"可继承`SimpleJpaService`。
 
