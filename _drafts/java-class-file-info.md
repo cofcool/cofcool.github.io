@@ -4,7 +4,7 @@
 
 * JDK 11.0.1
 
-本文简要概述 Java Class 文件格式，内容根据 "jvms11" 文档中的 `4. The class File Format`总结而来，主要内容是对 Class 文件格式的粗略描述。本文是为了加深我对该内容的理解而作，故行文为笔记格式，由于内容较为复杂，错误不可避免，大家可发邮件一起交流学习，另外也可参考 "The Java® Virtual Machine Specification Java SE 11 Edition"(如对 JVM 感兴趣可阅读)。
+本文简要概述 Java Class 文件格式，内容根据 "jvms11" 文档中的 `4. The class File Format`总结而来，主要内容是对 Class 文件格式的粗略描述。本文是为了加深我对该内容的理解而作，故行文为笔记格式，由于内容较为复杂，错误不可避免，大家可一起交流学习，另外也可参考 "The Java® Virtual Machine Specification Java SE 11 Edition"(如对 JVM 感兴趣可阅读)。
 
 Class 文件结构:
 
