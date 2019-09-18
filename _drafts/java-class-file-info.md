@@ -1,12 +1,29 @@
 # 简述 Java Class 文件
 
+目录:
+
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [1. 规范说明](#1-规范说明)
+  - [1.1 magic](#11-magic)
+  - [1.2 minor_version 和 major_version](#12-minor_version-和-major_version)
+  - [1.3 constant_pool_count 和 constant_pool[]](#13-constant_pool_count-和-constant_pool)
+  - [1.4 access_flags](#14-access_flags)
+- [2. 实践](#2-实践)
+
+<!-- /code_chunk_output -->
+
+
 环境:
 
 * JDK 11.0.1
 
 本文简要概述 Java Class 文件格式，内容根据 "jvms11" 文档中的 `4. The class File Format`总结而来，主要内容是对 Class 文件格式的粗略描述。本文是为了加深我对该内容的理解而作，故行文为笔记格式，由于内容较为复杂，错误不可避免，大家可一起交流学习，另外也可参考 "The Java® Virtual Machine Specification Java SE 11 Edition"(如对 JVM 感兴趣可阅读)。
 
-Class 文件结构:
+Class 文件结构定义如下:
 
 ```
 ClassFile {
@@ -29,6 +46,22 @@ ClassFile {
 }
 ```
 
+下面我们来看看每个字段的含义和作用。
+
+## 1. 规范说明
+
+### 1.1 magic
+
+`magic`标识文件为`class`文件, 值固定为`0xCAFEBABE`。
+
+JDK 的 `com.sun.tools.javac.jvm.ClassFile`中定义`JAVA_MAGIC`:
+```java
+public final static int JAVA_MAGIC = 0xCAFEBABE;
+```
+
+### 1.2 minor_version 和 major_version
+
+定义 `class` 文件版本。
 
 历年来的 Class 文件版本对照:
 
@@ -47,13 +80,27 @@ Java SE | class file format version range
 10 | 45.0 ≤ v ≤ 54.0
 11 | 45.0 ≤ v ≤ 55.0
 
-sun.jvm.hotspot.runtime.ClassConstants
-sun.jvm.hotspot.oops.Klass
-com.sun.tools.javac.jvm.ClassFile
-com.sun.tools.javac.jvm.ByteCodes
-```java
-public final static int JAVA_MAGIC = 0xCAFEBABE;
-```
+`Java SE Platform` 需按照上表规定进行支持。
+
+### 1.3 constant_pool_count 和 constant_pool[]
+
+`constant_pool_count`为常量池中常量的数目, `constant_pool[]`为常量结构表, 包括"string, class and interface names, field names, and other constants that are referred to within the ClassFile structure and its substructures", `constant_pool`索引从`1`开始到`constant_pool_count - 1`。
+
+### 1.4 access_flags
+
+| Flag Name | Value | Interpretation 
+| -- | -- | --
+| ACC_PUBLIC | 0x0001 | Declared public; may be accessed from outside its package.
+| ACC_FINAL | 0x0010 | Declared final; no subclasses allowed.
+| ACC_SUPER | 0x0020 | Treat superclass methods specially when invoked by the invokespecial instruction.
+| ACC_INTERFACE | 0x0200 | Is an interface, not a class.
+| ACC_ABSTRACT | 0x0400 | Declared abstract; must not be instantiated.
+| ACC_SYNTHETIC | 0x1000 | Declared synthetic; not present in the source code.
+| ACC_ANNOTATION | 0x2000 | Declared as an annotation type.
+| ACC_ENUM | 0x4000 | Declared as an enum type.
+| ACC_MODULE | 0x8000 | Is a module, not a class or interface.
+
+## 2. 实践
 
 以`ClassTest`为例，源码如下:
 
