@@ -2,7 +2,7 @@
 layout: post
 category: Tech
 title: 编译 OpenJDK 源码
-tags: [java, source]
+tags: [java, sourcecode]
 excerpt: 了解 JDK 的第一步就是了解如何编译 JDK
 ---
 
