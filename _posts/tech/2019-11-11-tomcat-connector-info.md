@@ -11,7 +11,7 @@ excerpt: Tomcat源码阅读笔记总结，记录在阅读过程中的要点和�
 
 * Tomcat 9.0.17
 
-`org.apache.catalina.connector.Connector` 定义了 Tomcat 运行中的相关配置项，包括支持协议，端口，以及解析相关参数等，实例由`org.apache.catalina.Service`持有和管理，下面我们来逐一看看它的这些属性。
+`org.apache.catalina.connector.Connector` 是 "Tomcat" 的核心组件，负责协议的解析(由它持有的`ProtocolHandler`处理)以及相关处理等，并定义了运行中需要的相关配置项，包括支持协议，端口，以及解析相关参数等，实例由`org.apache.catalina.Service`持有和管理，下面我们来逐一看看它的这些属性。
 
 ```java
 protected boolean allowTrace = false;
