@@ -3,7 +3,7 @@ layout: post
 category : Tech
 title : Tomcat源码阅读笔记 - Java Web Filter 调用链
 tags : [java, tomcat, sourcecode]
-excerpt: Tomcat源码阅读笔记总结，记录在阅读过程中的要点和相关内容分析
+excerpt: Tomcat源码阅读笔记总结，记录在阅读过程中的要点和相关内容分析，本文对 Filter 进行解析
 ---
 {% include JB/setup %}
 
