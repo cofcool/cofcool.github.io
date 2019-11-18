@@ -172,3 +172,11 @@ public class CustomerService {
     ...
 }
 ```
+
+
+----
+![Call chain](http://dubbo.apache.org/docs/en-us/dev/sources/images/dubbo-extension.jpg)
+
+![Expose service sequence](http://dubbo.apache.org/docs/en-us/dev/sources/images/dubbo-export.jpg)
+
+![Reference service sequence](http://dubbo.apache.org/docs/en-us/dev/sources/images/dubbo-refer.jpg)
