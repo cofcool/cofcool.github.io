@@ -39,6 +39,8 @@ The phases above do roughly this:
 
 depends [JEP 312: Thread-Local Handshakes](https://openjdk.java.net/jeps/312)
 
+[wiki](https://wiki.openjdk.java.net/display/zgc/Main)
+
 **Goals**
 
 1. GC pause times should not exceed 10ms
@@ -64,3 +66,20 @@ Develop a GC that handles memory allocation but does not implement any actual me
 **Goals**
 
 Provide a completely passive GC implementation with a bounded allocation limit and the lowest latency overhead possible, at the expense of memory footprint and memory throughput. A successful implementation is an isolated code change, does not touch other GCs, and makes minimal changes in the rest of JVM.
+
+#### [JEP 366: Deprecate the ParallelScavenge + SerialOld GC Combination](http://openjdk.java.net/jeps/366)
+
+Deprecate the combination of the Parallel Scavenge and Serial Old garbage collection algorithms.
+
+**Non-Goals**
+
+It is not a goal to remove this GC combination.
+
+It is not a goal to deprecate any other GC combinations.
+
+
+This combination is unusual since it pairs the parallel young generation and serial old generation GC algorithms. We think this combination is only useful for deployments with a very large young generation and a very small old generation. 
+
+The only advantage of this combination compared to using a parallel GC algorithm for both the young and old generations is slightly lower total memory usage. We believe that this small memory footprint advantage (at most ~3% of the Java heap size) is not enough to outweigh the costs of maintaining this GC combination.
+
+The only way to select the parallel young and old generation GC algorithms without a deprecation warning will to specify only -XX:+UseParallelGC on the command line.

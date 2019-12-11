@@ -13,6 +13,7 @@
   - [1.3 constant_pool_count 和 constant_pool[]](#13-constant_pool_count-和-constant_pool)
   - [1.4 access_flags](#14-access_flags)
 - [2. 实践](#2-实践)
+- [3. 浅析 javac](#3-浅析-javac)
 
 <!-- /code_chunk_output -->
 
@@ -287,6 +288,11 @@ Constant pool:
 }
 
 ```
+
+## 3. 浅析 javac
+
+`sun.tools.javac.Main`
+`sun.tools.java.ClassDefinition`
 
 参考资料
 
