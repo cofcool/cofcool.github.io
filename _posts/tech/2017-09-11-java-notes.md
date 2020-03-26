@@ -57,6 +57,7 @@ tags : [java, notes]
   - [15. MySql 索引未生效问题](#15-mysql-索引未生效问题)
   - [16. 动态修改 Java Class](#16-动态修改-java-class)
   - [17. Mysql 字符串类型数据大小写敏感问题](#17-mysql-字符串类型数据大小写敏感问题)
+  - [18. OpenJDK FontConfiguration.getVersion() 抛出空指针异常](#18-openjdk-fontconfigurationgetversion-抛出空指针异常)
 - [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -97,6 +98,8 @@ sudo chmod -R 777 /usr/share/tomcat7/conf
 `FLUSH PRIVILEGES;`
 
 ***NOTE:*** 如果是ubuntu的话需要更改配置文件，取消登录ip绑定。
+
+如果使用的是 MariaDB，默认登录为`unix_socket`，想使用账号密码登录，需把`mysql.user.plugin`改为`mysql_native_password`。
 
 ##### 2. 安装配置tomcat
 
@@ -953,6 +956,15 @@ Mysql 设置数据字符集时常用`utf8`, 这时默认的"collation"为`utf8_g
 
 * utf8_bin 区分大小写
 * utf8_genera_ci 大小写不敏感
+
+### 18. OpenJDK FontConfiguration.getVersion() 抛出空指针异常
+
+`OpenJDK 11 ` 中没带`FontConfig`服务，导致调用`java.desktop`包的绘制服务时抛出空指针异常，按如下安装即可(Centos)。
+
+```
+yum install fontconfig
+```
+
 
 ## 参考资料
 

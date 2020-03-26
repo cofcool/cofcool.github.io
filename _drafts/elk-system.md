@@ -25,12 +25,23 @@ tar -xzf elasticsearch-6.2.2.tar.gz
 cd elasticsearch-6.2.2
 ./bin/elasticsearch
 
+
+
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt-get update && sudo apt-get install elasticsearch
+
+
 vim config/elasticsearch.yml
 
 cluster.name=test
 node.name=node-1
 network.host=localhost
 http.port=9200
+
+v7
+
+network.host=0.0.0.0
+discovery.seed_hosts: ["127.0.0.1", "::1"]
 
 
 $ curl localhost:9200
@@ -87,6 +98,12 @@ cd logstash-6.2.2
 ./bin/logstash-plugin install logstash-input-log4j
 # install beats plugin
 ./bin/logstash-plugin install logstash-input-beats
+
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt-get update && sudo apt-get install logstash
+
+
 
 vim config/log4j_to_es.conf
 

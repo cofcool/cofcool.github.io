@@ -20,7 +20,23 @@ sudo apt-get update
 
 sudo apt-get install rabbitmq-server -y --fix-missing
 
-sudo service rabbitmq-server start
+sudo rabbitmq-server start
 ```
 
 [Configuration](https://www.rabbitmq.com/configure.html)
+
+配置文件:
+
+[rabbitmq.conf.example](https://raw.githubusercontent.com/rabbitmq/rabbitmq-server/master/docs/rabbitmq.conf.example)
+
+```sh
+
+sudo rabbitmqctl add_user cofcool
+sudo rabbitmqctl set_permissions --vhost / cofcool '.*' '.*' '.*'
+```
+
+```sh
+sudo rabbitmq-plugins enable rabbitmq_management
+sudo rabbitmq-server -detached
+sudo rabbitmqctl stop
+```

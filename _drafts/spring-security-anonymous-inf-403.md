@@ -1,0 +1,7 @@
+# 已登录用户访问匿名权限的路径时没有权限问题
+
+
+AuthenticationTrustResolver
+ExceptionTranslationFilter
+DefaultWebSecurityExpressionHandler
+AnonymousAuthenticationToken
