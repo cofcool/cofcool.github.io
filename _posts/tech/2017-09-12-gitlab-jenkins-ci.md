@@ -10,12 +10,13 @@ tags : [git,ops]
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
-* [1. 安装](#1-安装)
-* [2. 配置](#2-配置)
-* [3. 添加任务](#3-添加任务)
-* [4. 常见问题](#4-常见问题)
-	* [1. 忘记密码](#1-忘记密码)
-* [参考](#参考)
+- [1. 安装](#1-安装)
+- [2. 配置](#2-配置)
+- [3. 添加任务](#3-添加任务)
+- [4. 常见问题](#4-常见问题)
+  - [4.1 忘记密码](#41-忘记密码)
+  - [4.2 Blue Ocean](#42-blue-ocean)
+- [参考](#参考)
 
 <!-- /code_chunk_output -->
 
@@ -93,7 +94,7 @@ sudo service jenkins restart
 
 ## 4. 常见问题
 
-### 1. 忘记密码
+### 4.1 忘记密码
 
 用户的配置文件存储位置为`/var/lib/jenkins/users`，可通过修改用户目录下的`config.xml`来重置密码。
 
@@ -101,6 +102,18 @@ sudo service jenkins restart
 # 123456 对应的密码加密后的值
 #jbcrypt:$2a$10$NqPv3NpgxkpQi/ffEsEkhuMZYpbKc5cVVrP60cD6MX5IujYkLlOGm
 ```
+
+### 4.2 Blue Ocean
+
+Jenkins 团队为了提供更好的流水线构建体验从而设计了"Blue Ocean"，主要特性：
+
+* 持续交付(CD)Pipeline的 复杂可视化 ，可以让您快速直观地理解管道状态。
+* Pipeline 编辑器 - 引导用户通过直观的、可视化的过程来创建Pipeline，从而使Pipeline的创建变得平易近人。
+* 个性化 以适应团队中每个成员不同角色的需求。
+* 在需要干预和/或出现问题时 精确定位 。 Blue Ocean 展示 Pipeline中需要关注的地方， 简化异常处理，提高生产力
+* 本地集成分支和合并请求, 在与GitHub 和 Bitbucket中的其他人协作编码时实现最大程度的开发人员生产力。
+
+更多参考 [Blue Ocean](https://www.jenkins.io/zh/doc/book/blueocean/)
 
 ## 参考
 

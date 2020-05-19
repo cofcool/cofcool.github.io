@@ -104,3 +104,15 @@ server {
     }
 }
 ```
+
+### 5. gzip
+
+http://nginx.org/en/docs/http/ngx_http_gzip_module.html
+
+```
+gzip            on;
+gzip_min_length 1000;
+gzip_proxied    expired no-cache no-store private auth;
+gzip_types      text/plain application/xml;
+gzip_comp_level 2;
+```

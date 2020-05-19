@@ -15,38 +15,41 @@ tags : [react, notes]
 
 
 目录
+
 <!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
-* [1. 环境配置](#1-环境配置)
-	* [1. 安装:](#1-安装)
-	* [2. 远程开发React](#2-远程开发react)
-		* [1. 直接通过SSH远程登录](#1-直接通过ssh远程登录)
-		* [2. 本地开发远程运行](#2-本地开发远程运行)
-* [2. 新建项目](#2-新建项目)
-	* [1. generator-react-webpack](#1-generator-react-webpack)
-		* [1. 安装](#1-安装-1)
-		* [2. 创建项目](#2-创建项目)
-		* [3. 集成typescript](#3-集成typescript)
-		* [4. 添加airbnb-eslint代码检查](#4-添加airbnb-eslint代码检查)
-* [3. 常用概念](#3-常用概念)
-	* [1. 组件](#1-组件)
-	* [2. JSX](#2-jsx)
-	* [3. Virtual DOM](#3-virtual-dom)
-	* [4. Data Flow](#4-data-flow)
-	* [5. Flux](#5-flux)
-	* [6. webpack](#6-webpack)
-	* [7. CSS Modules](#7-css-modules)
-* [4. 常用组件](#4-常用组件)
-* [5. 源码解读](#5-源码解读)
-* [6. 浅谈Flux](#6-浅谈flux)
-* [7. 浅谈Redux](#7-浅谈redux)
-* [8. 常见问题](#8-常见问题)
-	* [1. 文件过多时，npm start失败](#1-文件过多时npm-start失败)
-	* [2. 使用Pods](#2-使用pods)
-	* [3. webpack环境下，require中使用变量](#3-webpack环境下require中使用变量)
-	* [4. TypeScriptReact环境下，报React refers to a UMD global, but the current file is a module.错误](#4-typescriptreact环境下报react-refers-to-a-umd-global-but-the-current-file-is-a-module错误)
-* [引用文档](#引用文档)
+- [1. 环境配置](#1-环境配置)
+  - [1. 安装:](#1-安装)
+  - [2. 远程开发React](#2-远程开发react)
+    - [1. 直接通过SSH远程登录](#1-直接通过ssh远程登录)
+    - [2. 本地开发远程运行](#2-本地开发远程运行)
+- [2. 新建项目](#2-新建项目)
+  - [1. generator-react-webpack](#1-generator-react-webpack)
+    - [1. 安装](#1-安装-1)
+    - [2. 创建项目](#2-创建项目)
+    - [3. 集成typescript](#3-集成typescript)
+    - [4. 添加airbnb-eslint代码检查](#4-添加airbnb-eslint代码检查)
+- [3. 常用概念](#3-常用概念)
+  - [1. 组件](#1-组件)
+  - [2. JSX](#2-jsx)
+  - [3. Virtual DOM](#3-virtual-dom)
+  - [4. Data Flow](#4-data-flow)
+  - [5. Flux](#5-flux)
+  - [6. webpack](#6-webpack)
+  - [7. CSS Modules](#7-css-modules)
+- [4. 常用组件](#4-常用组件)
+- [5. 源码解读](#5-源码解读)
+- [6. 浅谈Flux](#6-浅谈flux)
+- [7. 浅谈Redux](#7-浅谈redux)
+- [8. 常见问题](#8-常见问题)
+  - [1. 文件过多时，npm start失败](#1-文件过多时npm-start失败)
+  - [2. 使用Pods](#2-使用pods)
+  - [3. webpack环境下，require中使用变量](#3-webpack环境下require中使用变量)
+  - [4. TypeScriptReact环境下，报React refers to a UMD global, but the current file is a module.错误](#4-typescriptreact环境下报react-refers-to-a-umd-global-but-the-current-file-is-a-module错误)
+  - [5. 分割过大文件](#5-分割过大文件)
+  - [6. UmiJs 根据不同环境激活对应配置](#6-umijs-根据不同环境激活对应配置)
+- [引用文档](#引用文档)
 
 <!-- /code_chunk_output -->
 
@@ -499,6 +502,14 @@ require("./template/" + name + ".jade");
 ```js
 import * as React  from 'react'
 ```
+
+### 5. 分割过大文件
+
+参考 webpack 插件 [SplitChunksPlugin](https://webpack.js.org/plugins/split-chunks-plugin/)
+
+### 6. UmiJs 根据不同环境激活对应配置
+
+可以通过环境变量 `UMI_ENV` 区分不同环境来指定配置，如环境变量为`local`时的配置文件为 `.umirc.local.js`，参考 [多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)，环境变量配置参考 [环境变量](https://umijs.org/zh-CN/docs/env-variables)
 
 更新中....
 

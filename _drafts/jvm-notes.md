@@ -83,3 +83,9 @@ This combination is unusual since it pairs the parallel young generation and ser
 The only advantage of this combination compared to using a parallel GC algorithm for both the young and old generations is slightly lower total memory usage. We believe that this small memory footprint advantage (at most ~3% of the Java heap size) is not enough to outweigh the costs of maintaining this GC combination.
 
 The only way to select the parallel young and old generation GC algorithms without a deprecation warning will to specify only -XX:+UseParallelGC on the command line.
+
+#### JVMCI
+
+#### 其它
+
+适用于 CLion 的  [CMakeLists.txt](https://github.com/ojdkbuild/ojdkbuild/blob/master/src/java-12-openjdk/CMakeLists.txt)
