@@ -1,0 +1,12 @@
+# Spring Data Jpa 源码解析
+
+@EnableJpaRepositories
+JpaRepositoryFactoryBean
+JpaRepositoryFactory
+CrudMethodMetadataPostProcessor
+SimpleJpaRepository
+JpaRepositoryImplementation
+JpaRepositoryConfigExtension
+
+@DomainEvents
+@AfterDomainEventPublication

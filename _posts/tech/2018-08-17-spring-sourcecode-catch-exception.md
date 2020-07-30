@@ -460,7 +460,7 @@ protected final void addDefaultHandlerExceptionResolvers(List<HandlerExceptionRe
 
 ### 2.4 自定义异常解析器
 
-通过以上分析，我们对Spring MVC的异常处理流程有了较为清晰的认识。如果要自定义异常解析器，需实现`HandlerExceptionResolver`接口，Spring MVC中的`AbstractHandlerExceptionResolver`实现了该接口，我们继承该类实现自定义逻辑即可。要启用该解析器，可使用上文提到的注解并实现`WebMvcConfigurer`接口的`extendHandlerExceptionResolvers`方法，也可直接在自定义类上使用`@Component`注解。
+通过以上分析，我们对Spring MVC的异常处理流程有了较为清晰的认识。如果要自定义异常解析器，需实现`HandlerExceptionResolver`接口，Spring MVC中的`AbstractHandlerExceptionResolver`实现了该接口，我们继承该类实现自定义逻辑即可。要启用该解析器，可使用上文提到的注解并实现`WebMvcConfigurer`接口的`extendHandlerExceptionResolvers`方法，也可直接在自定义类上使用`@Component`注解(参考 `DispatcherServlet.initHandlerExceptionResolvers` 方法)。
 
 示例代码:
 
