@@ -58,6 +58,7 @@ tags : [java, notes]
   - [16. 动态修改 Java Class](#16-动态修改-java-class)
   - [17. Mysql 字符串类型数据大小写敏感问题](#17-mysql-字符串类型数据大小写敏感问题)
   - [18. OpenJDK FontConfiguration.getVersion() 抛出空指针异常](#18-openjdk-fontconfigurationgetversion-抛出空指针异常)
+  - [19. Spring 范型不一致时会导致 Bean 注入失败](#19-spring-范型不一致时会导致-bean-注入失败)
 - [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -964,6 +965,8 @@ Mysql 设置数据字符集时常用`utf8`, 这时默认的"collation"为`utf8_g
 ```
 yum install fontconfig
 ```
+
+### 19. Spring 范型不一致时会导致 Bean 注入失败
 
 
 ## 参考资料

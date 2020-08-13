@@ -11,10 +11,10 @@ excerpt: Windows使用脚本实现自动锁频。
 <!-- @import "[TOC]" {cmd="toc" depthFrom=3 depthTo=6 orderedList=false} -->
 <!-- code_chunk_output -->
 
-* [1.  构建锁屏软件](#1-构建锁屏软件)
-* [2. 建立计划任务](#2-建立计划任务)
-	* [2.1 创建基本任务](#21-创建基本任务)
-	* [2.2 配置计划任务](#22-配置计划任务)
+- [1.  构建锁屏软件](#1-构建锁屏软件)
+- [2. 建立计划任务](#2-建立计划任务)
+  - [2.1 创建基本任务](#21-创建基本任务)
+  - [2.2 配置计划任务](#22-配置计划任务)
 
 <!-- /code_chunk_output -->
 
@@ -62,3 +62,6 @@ namespace OneKeyLock
 触发器配置如下图所示：
 
 ![autolock](http://cofcool.net/imgs/autolock-03.jpg)
+
+
+经过网友 [@qq8-------6](https://github.com/qq8-------6) 提醒，可直接通过命令行运行，不需要编译成可执行文件，详情参考 [【Windows实现定时自动锁屏】小小改进建议](https://github.com/cofcool/cofcool.github.io/issues/1)
