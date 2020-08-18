@@ -13,27 +13,29 @@ excerpt: Chaos Server 是基于 Spring Boot 的 Java Web Server 框架, 简化�
 
 <!-- code_chunk_output -->
 
-- [ 1. 模块说明](#1-模块说明)
-  - [ 1.1 common](#11-common)
-  - [ 1.2 core](#12-core)
-  - [ 1.3 data-jpa](#13-data-jpa)
-  - [ 1.4 data-mybatis](#14-data-mybatis)
-  - [ 1.5 data-redis](#15-data-redis)
-  - [ 1.6 security-shiro](#16-security-shiro)
-  - [ 1.7 security-spring](#17-security-spring)
-  - [ 1.8 actuator](#18-actuator)
-  - [ 1.9 component-processor](#19-component-processor)
-  - [ 1.10 boot-starter](#110-boot-starter)
-- [ 2. 配置 ](#2-配置)
-- [ 3. 使用](#3-使用)
-  - [ 3.1 授权处理](#31-授权处理)
-  - [ 3.2 Service 层](#32-service-层)
-  - [ 3.3 Dao 层](#33-dao-层)
-  - [ 3.4 Controller 层](#34-controller-层)
-    - [ 3.4.1 Json解析](#341-json解析)
-  - [ 3.5 异常处理](#35-异常处理)
-    - [ 3.5.1 默认处理异常类型](#351-默认处理异常类型)
-    - [ 3.5.2 描述信息](#352-描述信息)
+- [1. 模块说明](#1-模块说明)
+  - [1.1 common](#11-common)
+  - [1.2 core](#12-core)
+  - [1.3 data-jpa](#13-data-jpa)
+  - [1.4 data-mybatis](#14-data-mybatis)
+  - [1.5 data-redis](#15-data-redis)
+  - [1.6 security-shiro](#16-security-shiro)
+  - [1.7 security-spring](#17-security-spring)
+  - [1.8 actuator](#18-actuator)
+  - [1.9 component-processor](#19-component-processor)
+  - [1.10 boot-starter](#110-boot-starter)
+- [2. 配置](#2-配置)
+- [3. 使用](#3-使用)
+  - [3.1 授权处理](#31-授权处理)
+  - [3.2 Service 层](#32-service-层)
+  - [3.3 Dao 层](#33-dao-层)
+  - [3.4 Controller 层](#34-controller-层)
+    - [3.4.1 Json解析](#341-json解析)
+  - [3.5 异常处理](#35-异常处理)
+    - [3.5.1 默认处理异常类型](#351-默认处理异常类型)
+    - [3.5.2 描述信息](#352-描述信息)
+- [4. 常见问题](#4-常见问题)
+  - [4.1 跨域等导致的登录失败](#41-跨域等导致的登录失败)
 
 <!-- /code_chunk_output -->
 
@@ -184,3 +186,34 @@ chaos.auth.checked-keys=id
 `SimpleExceptionCodeDescriptor`为默认配置，包含了常见的描述代码和描述信息，例如操作成功，操作失败等。
 
 `ResourceExceptionCodeDescriptor` 从"messages"文件中读取配置的描述信息。
+
+### 4. 常见问题
+
+#### 4.1 跨域等导致的登录失败
+
+配置文件:
+
+```
+# 关闭 CSRF 验证
+chaos.auth.csrf-enabled=false
+
+# 跨域配置，允许跨域
+chaos.auth.cors-enabled=true
+```
+
+创建 `CorsConfigurationSource` 使 `CorsFilter` 生效，如未使用 `Spring Security`，则通过 `WebMvcConfigurer` 配置跨域即可。
+
+```java
+@Bean
+public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.applyPermitDefaultValues();
+    // 通过 header 携带 session id 时的 header name
+    configuration.addAllowedHeader("Authorization");
+    configuration.addExposedHeader("Authorization");
+    configuration.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+}
+```

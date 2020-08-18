@@ -59,6 +59,7 @@ tags : [java, notes]
   - [17. Mysql 字符串类型数据大小写敏感问题](#17-mysql-字符串类型数据大小写敏感问题)
   - [18. OpenJDK FontConfiguration.getVersion() 抛出空指针异常](#18-openjdk-fontconfigurationgetversion-抛出空指针异常)
   - [19. Spring 范型不一致时会导致 Bean 注入失败](#19-spring-范型不一致时会导致-bean-注入失败)
+  - [20. Driver 自动注册机制](#20-driver-自动注册机制)
 - [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -967,6 +968,13 @@ yum install fontconfig
 ```
 
 ### 19. Spring 范型不一致时会导致 Bean 注入失败
+
+### 20. Driver 自动注册机制
+
+JDBC 4 以后可通过 SPI 机制实现驱动自动注入，参考 `DriverManager.loadInitialDrivers()`方法，`DriverManager` 自动注册描述如下
+
+> The DriverManager methods getConnection and getDrivers have been enhanced to support the Java Standard Edition Service Provider mechanism. JDBC 4.0 Drivers must include the file META-INF/services/java.sql.Driver. This file contains the name of the JDBC drivers implementation of java.sql.Driver. For example, to load the my.sql.Driver class, the META-INF/services/java.sql.Driver file would contain the entry:
+   my.sql.Driver
 
 
 ## 参考资料
