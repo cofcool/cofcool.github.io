@@ -81,3 +81,8 @@ public ModelAndView findMessagesForUser(@AuthenticationPrincipal CustomUser cust
     // .. find messages for this user and return them ...
 }
 ```
+
+`WebExpressionVoter` 类解析 `ConfigAttribute` 时
+
+1. 通过“SPEL表达式”解析器 `SpelExpression`来获取解析结果即 `boolean` 值，运行表达式时 `SpelNode`实现类`PropertyOrFieldReference` 通过反射调用 `SecurityExpressionOperations` 类对应的方法，它通过 `PropertyAccessor` 获取该表达式对应的方法的返回值，例如表达式为 `admin`它会调用 `boolean getAdmin()` 或 `boolean isAdmin()` 来方法获取返回值
+2. 

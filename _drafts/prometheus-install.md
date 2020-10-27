@@ -2,7 +2,7 @@
 
 ## 安装
 
-https://prometheus.io/docs/prometheus/latest/installation/
+参考官方文档 https://prometheus.io/docs/prometheus/latest/installation/，推荐使用 docker 方式运行。
 
 ```sh
 docker run \
@@ -11,13 +11,16 @@ docker run \
     prom/prometheus
 ```
 
-grafana, [Download Grafana](https://grafana.com/grafana/download?platform=docker)
+
+`Grafana`, 下载地址 https://grafana.com/grafana/download?platform=docker，docker 运行:
+
 ```sh
 docker run -d --name=grafana -p 3000:3000 grafana/grafana:7.1.5-ubuntu
 ```
 
+## 配置
 
-```
+```yml
 global:
   scrape_interval:     15s # By default, scrape targets every 15 seconds.
 
@@ -38,21 +41,22 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  # Details to connect Prometheus with Spring Boot actuator end point to scrap the data
-  # The job name is added as a label `job=` to any time series scraped from this config.
+  # 监控 spring boot 项目
+  # spring actuator
   - job_name: 'spring-actuator'
    
-    # Actuator end point to collect the data. 
+    # 数据暴露点
     metrics_path: '/actuator/prometheus'
 
-    #How frequently to scape the data from the end point
+    # 每次采集间隔时间
     scrape_interval: 5s
 
-    #target end point. We are using the Docker, so local host will not work. You can change it with
-    #localhost if not using the Docker.
+    # 被监控的服务器地址
     static_configs:
-    - targets: ['HOST_IP:8080']
+      - targets: ['HOST_IP:8080']
 ```
+
+以自定义配置的方式运行:
 
 ```sh
 docker run \
@@ -61,19 +65,25 @@ docker run \
     prom/prometheus
 ```
 
----
+## 采集
 
+### 采集节点信息
+
+```sh
 wget https://github.com/prometheus/node_exporter/releases/download/v*/node_exporter-*.*-amd64.tar.gz
 tar xvfz node_exporter-*.*-amd64.tar.gz
 cd node_exporter-*.*-amd64
 ./node_exporter
+```
 
-
+```yml
 scrape_configs:
-- job_name: node
-  static_configs:
-  - targets: ['localhost:9100']
----
+  - job_name: node
+    static_configs:
+      - targets: ['localhost:9100']
+```
+
+dashboard 模版:
 
 JVM (Micrometer) dashboard
 https://grafana.com/grafana/dashboards/4701
@@ -81,7 +91,9 @@ https://grafana.com/grafana/dashboards/4701
 node export
 https://grafana.com/grafana/dashboards/1860
 
-## 集成
+### Spring 应用
+
+依赖:
 
 ```xml
 <dependency>
@@ -94,6 +106,8 @@ https://grafana.com/grafana/dashboards/1860
 </dependency>
 ```
 
+配置文件:
+
 ```properties
 management.endpoint.metrics.enabled=true
 management.endpoints.web.exposure.include=*
@@ -101,6 +115,8 @@ management.endpoint.prometheus.enabled=true
 management.metrics.export.prometheus.enabled=true
 management.metrics.export.prometheus.step=1
 ```
+
+示例代码:
 
 ```java
 public class Application extends SpringBootServletInitializer {
@@ -126,7 +142,7 @@ public class Application extends SpringBootServletInitializer {
         }
 
     }
-
-
 }
 ```
+
+访问"/actuator/demo"即可获取信息，
