@@ -89,3 +89,26 @@ The only way to select the parallel young and old generation GC algorithms witho
 #### 其它
 
 适用于 CLion 的  [CMakeLists.txt](https://github.com/ojdkbuild/ojdkbuild/blob/master/src/java-12-openjdk/CMakeLists.txt)
+
+jmap
+
+VirtualMachine vm = VirtualMachine.attach(pid)
+
+```plantuml
+interface VirtualMachine
+abstract HotSpotVirtualMachine implements VirtualMachine
+class VirtualMachineImpl extends HotSpotVirtualMachine
+```
+
+
+```plantuml
+@startuml
+activate VirtualMachine
+VirtualMachine -> VirtualMachine: attach(pid)
+VirtualMachine -> VirtualMachine: AttachProvider.providers()
+VirtualMachine -> HotSpotVirtualMachine
+deactivate VirtualMachine
+HotSpotVirtualMachine -> VirtualMachineImpl: execute 
+note right: System.loadLibrary(\"attach\");
+@enduml
+```

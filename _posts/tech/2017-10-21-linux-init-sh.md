@@ -58,7 +58,7 @@ tags : [Ubuntu, notes]
 ### 1.1 常用软件
 
 ```shell
-sudo apt install samba python3 openjdk-8-jdk smplayer vlc bluefish qtcreator filezilla p7zip-full p7zip-rar ubuntu-restricted-extras blender wireshark kazam audacity git gitg subversion vim zsh docky gimp stardict meld thunderbird tree dconf-editor remmina deluge uget -y
+sudo apt install samba python3 openjdk-11-jdk smplayer vlc bluefish qtcreator filezilla p7zip-full p7zip-rar ubuntu-restricted-extras blender wireshark kazam audacity git gitg vim zsh gimp meld tree gnome-tweak-tool remmina deluge uget -y
 
 # 剪切板
 sudo apt install diodon
@@ -110,7 +110,7 @@ git clone git://github.com/zsh-users/zsh-autosuggestions .oh-my-zsh/custom/plugi
 
 ```sh
 sudo apt install curl
-curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+curl -sL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
 sudo apt install nodejs -y
 ```
 

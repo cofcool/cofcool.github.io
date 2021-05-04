@@ -8,12 +8,13 @@ excerpt: 项目开发中为了可以重用工具类等，可通过搭建 Maven�
 
 {% include JB/setup %}
 
-[Sonatype Nexus](https://www.sonatype.com/nexus-repository-oss) 是一个免费的包管理器，包含Maven/Java, npm, NuGet, RubyGems等，这里我们通过它来管理 jar 包。
+[Sonatype Nexus](https://www.sonatype.com/nexus/repository-oss) 是一个免费的包管理器，包含Maven/Java, npm, NuGet, RubyGems等，这里我们通过它来管理 jar 包。
 
 ## 安装 配置Sonatype Nexus
 
 ```sh
 # 下载
+# https://www.sonatype.com/nexus/repository-oss-download
 wget https://sonatype-download.global.ssl.fastly.net/repository/repositoryManager/3/nexus-3.14.0-04-unix.tar.gz
 tar -xzf nexus-3.14.0-04-unix.tar.gz
 mv nexus-3.14.0-04 /opt/nexus
@@ -70,7 +71,11 @@ sudo systemctl start nexus.service
 
 ## 常见问题
 
-#### 1. 签名
+#### 1. Cannot run program "gpg"
+
+安装 `GnuPG` 即可, 如 "macOS" 安装: `brew install gnupg`
+
+#### 2. 签名
 
 Gpg服务器列表:
 

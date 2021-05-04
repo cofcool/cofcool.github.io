@@ -16,7 +16,7 @@ Samba是在Linux和UNIX系统上实现SMB协议的一个免费软件，由服务
         
 2. 简单的配置
 
-        sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.back
+        sudo cp /etc/samba/smb.conf /etc/samba/smb.conf.back
         sudo vim /etc/samba/smb.conf
         
         # 输入以下内容：
