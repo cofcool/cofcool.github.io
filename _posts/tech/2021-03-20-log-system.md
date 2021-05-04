@@ -76,7 +76,7 @@ docker pull grafana/grafana:7.3.6
 
 ### 2.2 安装包
 
-官网下载安装包安装, 下载页面为 [Download Elastic Products | Elastic](https://www.elastic.co/downloads/), 系统环境为 "Ubuntu 18.04 LTS"。
+官网下载安装包安装, 下载页面为 [Download Elastic Products](https://www.elastic.co/downloads/)
 
 **Elasticsearch**
 
