@@ -1,4 +1,4 @@
-# Hibernate 实体自动更新源码解析
+# Hibernate 源码解析
 
 DefaultFlushEntityEventListener.onFlushEntity
 
@@ -139,3 +139,9 @@ protected Serializable performSave(
     );
 }
 ```
+
+`AbstractEntityPersister`, 持久化实体, `EntityLoader` 负责载入实体, `org.hibernate.loader.Loader#loadEntity(org.hibernate.engine.spi.SharedSessionContractImplementor, java.lang.Object, org.hibernate.type.Type, java.lang.Object, java.lang.String, java.io.Serializable, org.hibernate.persister.entity.EntityPersister, org.hibernate.LockOptions, java.lang.Boolean)` 方法执行具体操作, 
+
+`org.hibernate.loader.entity.CacheEntityLoaderHelper` 负责多级缓存处理
+
+`org.hibernate.loader.Loader#instanceNotYetLoaded` 创建实体

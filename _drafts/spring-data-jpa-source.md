@@ -1,4 +1,16 @@
-# Spring Boot JPA自动配置分析
+# Spring Boot JPA 源码
+
+
+@EnableJpaRepositories
+JpaRepositoryFactoryBean
+JpaRepositoryFactory
+CrudMethodMetadataPostProcessor
+SimpleJpaRepository
+JpaRepositoryImplementation
+JpaRepositoryConfigExtension
+
+@DomainEvents
+@AfterDomainEventPublication
 
 ```java
 @Configuration

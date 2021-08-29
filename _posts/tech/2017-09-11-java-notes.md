@@ -60,6 +60,9 @@ tags : [java, notes]
   - [18. OpenJDK FontConfiguration.getVersion() 抛出空指针异常](#18-openjdk-fontconfigurationgetversion-抛出空指针异常)
   - [19. Spring 范型不一致时会导致 Bean 注入失败](#19-spring-范型不一致时会导致-bean-注入失败)
   - [20. Driver 自动注册机制](#20-driver-自动注册机制)
+  - [21. Stream#reduce 使用](#21-streamreduce-使用)
+  - [22. RestTemplate 请求数据类型为 String 时返回中文乱码](#22-resttemplate-请求数据类型为-string-时返回中文乱码)
+  - [23. 通过反射构造内部非静态类实例](#23-通过反射构造内部非静态类实例)
 - [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
@@ -976,6 +979,19 @@ JDBC 4 以后可通过 SPI 机制实现驱动自动注入，参考 `DriverManage
 > The DriverManager methods getConnection and getDrivers have been enhanced to support the Java Standard Edition Service Provider mechanism. JDBC 4.0 Drivers must include the file META-INF/services/java.sql.Driver. This file contains the name of the JDBC drivers implementation of java.sql.Driver. For example, to load the my.sql.Driver class, the META-INF/services/java.sql.Driver file would contain the entry:
    my.sql.Driver
 
+### 21. Stream#reduce 使用
+
+`Optional<T> java.util.stream.Stream#reduce(java.util.function.BinaryOperator<T>)` 返回 Optional 类型的原因是 Stream 内部可能无元素
+
+### 22. RestTemplate 请求数据类型为 String 时返回中文乱码
+
+注意 RestTemplate 中的 StringHttpMessageConverter 使用无参构造方法，默认使用 'ISO-8859-1'，因此中文会乱码
+
+### 23. 通过反射构造内部非静态类实例
+
+内部非静态类反射构造实例失败, 调用 `BeanUtils.instantiateClass(clazz.getDeclaredConstructor(Demo.class), (Object) this)` 创建, 失败原因:
+
+> If this Class object represents an inner class declared in a non-static context, the formal parameter types include the explicit enclosing instance as the first parameter.
 
 ## 参考资料
 

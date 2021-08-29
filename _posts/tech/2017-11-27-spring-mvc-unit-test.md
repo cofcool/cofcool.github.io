@@ -10,19 +10,22 @@ excerpt: 在开发中，测试的重要性不言而喻。今天我们来看看�
 在开发中，测试的重要性不言而喻。今天我们来看看，Spring MVC如何进行单元测试。
 
 目录:
-<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
 <!-- code_chunk_output -->
 
-* [1. 依赖配置](#1-依赖配置)
-* [2. 编写测试代码](#2-编写测试代码)
-* [3. 常见问题](#3-常见问题)
-	* [3.1 项目集成Swagger](#31-项目集成swagger)
-	* [3.2 添加数据源](#32-添加数据源)
-	* [3.3 使用Hibernate Validator](#33-使用hibernate-validator)
-	* [3.4 Junit版本](#34-junit版本)
-	* [3.5 执行Maven打包时跳过测试](#35-执行maven打包时跳过测试)
+- [1. 依赖配置](#1-依赖配置)
+- [2. 编写测试代码](#2-编写测试代码)
+- [3. 常见问题](#3-常见问题)
+  - [3.1 项目集成Swagger](#31-项目集成swagger)
+  - [3.2 添加数据源](#32-添加数据源)
+  - [3.3 使用Hibernate Validator](#33-使用hibernate-validator)
+  - [3.4 Junit版本](#34-junit版本)
+  - [3.5 执行Maven打包时跳过测试](#35-执行maven打包时跳过测试)
 
 <!-- /code_chunk_output -->
+
 
 
 ### 1. 依赖配置
@@ -36,10 +39,17 @@ excerpt: 在开发中，测试的重要性不言而喻。今天我们来看看�
         <version>${junit.version}</version>
         <scope>test</scope>
     </dependency>
+    <!-- spring mvc -->
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-test</artifactId>
         <version>${spring.version}</version>
+    </dependency>
+    <!-- spring boot -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-test</artifactId>
+        <scope>test</scope>
     </dependency>
 </dependencies>
 ...
@@ -81,6 +91,22 @@ public class SpringTest {
 public class TestAll {
 
 }
+```
+
+Spring Boot:
+
+```java
+// junt 5, spring-boot-test 2.4
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+// MockMvc
+@AutoConfigureMockMvc
+// web mvc
+@AutoConfigureWebMvc
+// JPA
+@AutoConfigureDataJpa
+@EnableJpaRepositories
+@EntityScan
 ```
 
 ### 3. 常见问题

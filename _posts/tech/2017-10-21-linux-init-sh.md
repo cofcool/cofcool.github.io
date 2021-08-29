@@ -341,3 +341,9 @@ HIST_STAMPS="yyyy-mm-dd""
 ├── tomcat
 └── xmind
 ```
+
+## 4. 常用命令
+
+1. unzip 设定字符编码
+
+ `unzip -O GB18030 xxx.zip`
