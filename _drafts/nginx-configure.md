@@ -89,6 +89,9 @@ http {
 
 ### 4. 端口转发
 
+[Module ngx_http_proxy_module](https://nginx.org/en/docs/http/ngx_http_proxy_module.html)
+[Nginx: Everything about proxy_pass](https://dev.to/danielkun/nginx-everything-about-proxypass-2ona)
+
 ```
 server {
     listen 80;

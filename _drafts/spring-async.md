@@ -1,0 +1,5 @@
+# Spring Async
+
+org.springframework.scheduling.annotation.AsyncResult
+org.springframework.aop.interceptor.AsyncExecutionAspectSupport
+org.springframework.aop.interceptor.AsyncExecutionInterceptor

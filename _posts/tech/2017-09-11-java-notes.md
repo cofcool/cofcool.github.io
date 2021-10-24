@@ -993,6 +993,15 @@ JDBC 4 以后可通过 SPI 机制实现驱动自动注入，参考 `DriverManage
 
 > If this Class object represents an inner class declared in a non-static context, the formal parameter types include the explicit enclosing instance as the first parameter.
 
+### 24. 使用 API 根据域名获取 IP 地址
+
+`java.net.InetAddress#getByName(java.lang.String)`
+java.net.NetworkInterface#getByName0
+
+NetworkInterface.c
+Java_java_net_NetworkInterface_getByName0
+static jobject createNetworkInterface(JNIEnv *env, netif *ifs)
+
 ## 参考资料
 
 * [Spring MVC – Component-Scan, Annotation-Config, Annotation-Driven](https://scotch.io/@ethanmillar/spring-mvc-component-scan-annotation-config-annotation-driven)

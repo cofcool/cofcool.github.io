@@ -282,3 +282,14 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource da
 LocalContainerEntityManagerFactoryBean
 ```java
 ```
+
+根据查询结果实例化对象
+
+AnnotationBinder
+org.hibernate.persister.entity.EntityPersister
+org.hibernate.loader.Loader#getRowsFromResultSet
+org.hibernate.loader.Loader#instanceNotYetLoaded
+org.hibernate.loader.Loader#loadFromResultSet
+org.hibernate.persister.entity.Loadable#hydrate
+org.hibernate.persister.entity.AbstractEntityPersister#hydrate
+org.hibernate.type.Type#hydrate

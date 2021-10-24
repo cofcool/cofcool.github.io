@@ -66,10 +66,25 @@ sudo snap install dbeaver-ce
 cat script/init-table.sql | xargs | tr '\n' ' ' | xargs | sed 's/;/;\n/g' > init.sql
 ```
 
-允许非本机访问, `vim /etc/clickhouse-server/config.xml`
+允许非本机访问, `vim /etc/clickhouse-server/config.xml`(`/etc/clickhouse-server/config.d/listen.xml`)
 ```xml
 <!-- Same for hosts without support for IPv6: -->
 <listen_host>0.0.0.0</listen_host>
+```
+
+更改数据路径时注入目录权限
+
+从sql文件初始化:
+```sh
+#!/usr/bin/env bash
+sql_file=$1
+passwd=$2
+echo "start write $sql_file sql file"
+cat $sql_file | xargs | tr '\n' ' ' | xargs | sed 's/;/;\n/g' | while read line; do
+  if [ "$line" != '' ]; then
+      clickhouse-client -q "$line" --password $passwd
+  fi
+done
 ```
 
 example data
@@ -86,6 +101,10 @@ MergeTree:
 * CollapsingMergeTree
 * VersionedCollapsingMergeTree
 * GraphiteMergeTree
+
+
+clickhouse projection 可预处理需要大量聚合场景
+
 
 开发中直接使用 `JdbcTemplate` 来调用"JDBC 驱动"，提高开发效率
 
