@@ -92,3 +92,24 @@ Gpg签名时报`signing failed: Inappropriate ioctl for device`错误，执行�
 ```
 export GPG_TTY=$(tty)
 ```
+
+#### 3. 仓库镜像配置
+
+官方文档: [Using Mirrors for Repositories](https://maven.apache.org/guides/mini/guide-mirror-settings.html#using-mirrors-for-repositories)
+
+`mirrorOf` 根据 `repository.id` 进行配置, 项目内部配置仓库信息后，mirrorOf 中配置该 `id` 即可让镜像只对该仓库生效，`!id` 即为忽略该仓库
+
+```xml
+    <settings>
+      ...
+      <mirrors>
+        <mirror>
+          <id>other-mirror</id>
+          <name>Other Mirror Repository</name>
+          <url>https://other-mirror.repo.other-company.com/maven2</url>
+          <mirrorOf>central</mirrorOf>
+        </mirror>
+      </mirrors>
+      ...
+    </settings>
+```

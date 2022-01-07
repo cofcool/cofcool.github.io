@@ -1002,6 +1002,16 @@ NetworkInterface.c
 Java_java_net_NetworkInterface_getByName0
 static jobject createNetworkInterface(JNIEnv *env, netif *ifs)
 
+### 25. 修改 JVM 时区
+
+JVM 获取时区信息流程:
+
+1. `user.timezone` 系统属性
+2. 硬件时区 ID
+3. 如果硬件时区获取失败，使用 GMT
+
+因此修改 `user.timezone` 系统属性即可, 如改为中国上海时区: `-Duser.timezone=Asia/Shanghai`。Clock 类内部使用 `System.currentTimeMillis()` 等方法获取时间，再根据时区信息转换为相应时区的时间，这样就不会出去更改了时区导致时间错乱问题
+
 ## 参考资料
 
 * [Spring MVC – Component-Scan, Annotation-Config, Annotation-Driven](https://scotch.io/@ethanmillar/spring-mvc-component-scan-annotation-config-annotation-driven)

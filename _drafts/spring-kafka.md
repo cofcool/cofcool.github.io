@@ -101,7 +101,9 @@ protected void pollAndInvoke() {
 }
 ```
 
-在调用listener失败时, 默认的批量信息异常处理器为`org.springframework.kafka.listener.RecoveringBatchErrorHandler`, 当异常为 `BatchListenerFailedException` 且包含错误消息时尝试提交正确的消息偏移量, 如果其他情况则调用 `SeekToCurrentBatchErrorHandler` 把该组的偏移量进行seek到正确位置, 并抛出异常
+在调用listener失败时, 默认的批量信息异常处理器为`org.springframework.kafka.listener.RecoveringBatchErrorHandler`, 当异常为 `BatchListenerFailedException` 且包含错误消息时尝试提交正确的消息偏移量, 如果其他情况则调用 `SeekToCurrentBatchErrorHandler` 把该组的偏移量进行seek到错误数据之前的位置, 并抛出异常
+
+org.springframework.boot.autoconfigure.kafka.KafkaAnnotationDrivenConfiguration
 
 `org.springframework.kafka.listener.KafkaMessageListenerContainer#publishConsumerStoppedEvent` 关闭应用时发布相关事件
 
@@ -114,3 +116,42 @@ Kafka Server:
 
 > o.a.kafka.clients.FetchSessionHandler    : [Consumer clientId=consumer-app-data-engine-1, groupId=app-data-engine] Error sending fetch request (sessionId=INVALID, epoch=INITIAL) to node 0:
  org.apache.kafka.common.errors.DisconnectException: null
+
+ Error registering AppInfo mbean
+
+ ## 常用命令:
+
+ 1. 组列表: ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
+ 1. 主题列表: ./kafka-topics.sh --bootstrap-server localhost:9092 --list
+ 3. 修改消费进度: ./kafka-consumer-groups.sh --bootstrap-server localhost:9092 --topic xxx_topic  --group xxx_group --reset-offsets --to-latest --execute
+
+ ## 其它
+
+### 1. Kafka 3.0
+
+ Kafka 3.0 推出，基本上是常规升级，api 优化等，另外还有 “A preview of KRaft mode is available“， “The producer should enable the strongest message delivery guarantee by default.”
+
+ * [KIP-679: Producer will enable the strongest delivery guarantee by default](https://cwiki.apache.org/confluence/display/KAFKA/KIP-679%3A+Producer+will+enable+the+strongest+delivery+guarantee+by+default)
+ * [KIP-98 - Exactly Once Delivery and Transactional Messaging](https://cwiki.apache.org/confluence/display/KAFKA/KIP-98+-+Exactly+Once+Delivery+and+Transactional+Messaging)
+
+ ### 2. Kafka Tools
+
+ [System Tools](https://cwiki.apache.org/confluence/display/KAFKA/System+Tools)
+
+* Consumer Offset Checker
+* Dump Log Segment
+* Export Zookeeper Offsets
+* Get Offset Shell
+* Import Zookeeper Offsets
+* JMX Tool
+* Kafka Migration Tool
+* Mirror Maker
+* Replay Log Producer
+* Simple Consumer Shell
+* State Change Log Merger
+* Update Offsets In Zookeeper
+* Verify Consumer Rebalance
+
+### 参考资料
+
+ * [message format](https://kafka.apache.org/documentation/#messages)

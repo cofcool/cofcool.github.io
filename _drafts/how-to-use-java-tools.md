@@ -1,5 +1,20 @@
 # 详解 jstat 等 Java 工具
 
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [详解 jstat 等 Java 工具](#详解-jstat-等-java-工具)
+  - [jinfo](#jinfohttpsdocsoraclecomjavase10toolsjinfohtmjswor744)
+  - [jps](#jpshttpsdocsoraclecomenjavajavase11toolsjpshtmlguid-6eb65b96-f9dd-4356-b825-6146e9eec81e)
+    - [jstat](#jstathttpsdocsoraclecomenjavajavase11toolsjstathtmlguid-5f72a7f9-5d5a-4486-8201-e1d1ba8accb5)
+    - [JProfile](#jprofile)
+    - [JFR](#jfrhttpsdocsoraclecomjavacomponentsjmc-5-4jfr-runtime-guidetochtm)
+    - [JReleaser](#jreleaser)
+
+<!-- /code_chunk_output -->
+
 * jinfo
 * jps
 * jstat 
@@ -176,3 +191,9 @@ WB is Waiting
 [Test prototype] starts at [Prototype design]'s end
 @endgantt
 ```
+
+### JProfile
+
+### [JFR](https://docs.oracle.com/javacomponents/jmc-5-4/jfr-runtime-guide/toc.htm)
+
+### JReleaser

@@ -29,6 +29,8 @@ excerpt: 大量服务部署时及时了解服务运行状态对整个系统来�
   - [3.3 logstash](#33-logstash)
   - [3.4 filebeta](#34-filebeta)
   - [3.5 监控 Spring Boot 项目](#35-监控-spring-boot-项目)
+    - [3.5.1 log 配置](#351-log-配置)
+    - [3.5.2 Spring Boot 应用配置](#352-spring-boot-应用配置)
 
 <!-- /code_chunk_output -->
 
@@ -285,7 +287,43 @@ docker run -d \
 
 ### 3.5 监控 Spring Boot 项目
 
-**Spring Boot 应用配置**
+#### 3.5.1 log 配置 
+
+从 spring-boot 2.4 开始，默认使用 logback，日志保存时间为七天，具体参考 `org.springframework.boot.logging.LoggingSystemFactory`，`org.springframework.boot.logging.logback.LogbackLoggingSystemProperties` 等类
+
+
+spring.factories 定义:
+
+```
+# Logging Systems
+org.springframework.boot.logging.LoggingSystemFactory=\
+org.springframework.boot.logging.logback.LogbackLoggingSystem.Factory,\
+org.springframework.boot.logging.log4j2.Log4J2LoggingSystem.Factory,\
+org.springframework.boot.logging.java.JavaLoggingSystem.Factory
+```
+
+**file-appender.xml** 定义:
+
+```xml
+<included>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<encoder>
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+			<charset>${FILE_LOG_CHARSET}</charset>
+		</encoder>
+		<file>${LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOGBACK_ROLLINGPOLICY_FILE_NAME_PATTERN:-${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz}</fileNamePattern>
+			<cleanHistoryOnStart>${LOGBACK_ROLLINGPOLICY_CLEAN_HISTORY_ON_START:-false}</cleanHistoryOnStart>
+			<maxFileSize>${LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE:-10MB}</maxFileSize>
+			<totalSizeCap>${LOGBACK_ROLLINGPOLICY_TOTAL_SIZE_CAP:-0}</totalSizeCap>
+			<maxHistory>${LOGBACK_ROLLINGPOLICY_MAX_HISTORY:-7}</maxHistory>
+		</rollingPolicy>
+	</appender>
+</included>
+```
+
+#### 3.5.2 Spring Boot 应用配置
 
 Maven 依赖:
 
