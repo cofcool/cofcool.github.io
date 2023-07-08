@@ -12,7 +12,7 @@ excerpt: SkyWalking 是一个分布式系统的应用程序性能监视工具，
 
 > 分布式系统的应用程序性能监视工具，专为微服务、云原生架构和基于容器（Docker、K8s、Mesos）架构而设计。
 
-![skywalking-frame](https://skywalking.apache.org/assets/frame.jpeg)
+![skywalking-frame](https://skywalking.apache.org/images/home/architecture_2160x720.png?t=20220617)
 
 `OPA` 服务负责分析处理从 `Agent` 客户端上报上来的数据, 然后由 `UI` 呈现出来。
 
