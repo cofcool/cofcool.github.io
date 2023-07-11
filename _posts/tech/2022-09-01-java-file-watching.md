@@ -66,7 +66,7 @@ private void processEvent(int wd, int mask, final UnixPath name) {
 }
 ```
 
-另外，`java.io.FileSystem#list` 在 Linux 中的实现 `src/java.base/unix/native/libjava/UnixFileSystem_md.c` 中的 `Java_java_io_UnixFileSystem_list(JNIEnv *env, jobject this, jobject file)` 调用 [readdir](https://linux.die.net/man/3/readdir) 读取文件夹，`dirent->d_name` 读取文件夹内文件名，因为文件夹内的文件是文件夹的属性，因此速度很快，但是想要获取文件夹内文件本身的属性信息需要根据文件 `inode` 值去遍历读取因此比较慢，读取文件属性函数为 [stat](https://www.man7.org/linux/man-pages/man2/stat.2.html)。
+另外，使用 `java.io.FileSystem#list` 遍历大量文件时比较慢，它在 Linux 中的实现为 `src/java.base/unix/native/libjava/UnixFileSystem_md.c` 中的 `Java_java_io_UnixFileSystem_list(JNIEnv *env, jobject this, jobject file)`，内部调用 [readdir](https://linux.die.net/man/3/readdir) 读取文件夹，`dirent->d_name` 读取文件夹内文件名，因为文件夹内的文件是文件夹的属性，因此速度很快，但是想要获取文件夹内文件本身的属性信息需要根据文件 `inode` 值去遍历读取因此比较慢，读取文件属性函数为 [stat](https://www.man7.org/linux/man-pages/man2/stat.2.html)。
 
 ##### WindowsWatchService
 
