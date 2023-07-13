@@ -48,7 +48,7 @@ public interface Tool {
 
 重点我们来看看打包环节，看 GraalVM 如何大显身手，可执行文件如何摆脱对 Java 的依赖的。
 
-GraalVM 提供了 `org.graalvm.buildtools:native-maven-plugin` 插件构建本地执行文件。构建流程：
+GraalVM 提供了 `org.graalvm.buildtools:native-maven-plugin` 插件构建原生可执行文件。构建流程：
 
 1. 分析编译后的代码
 2. 获取反射、资源文件、JNI 等信息
