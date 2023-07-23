@@ -14,10 +14,8 @@ excerpt: 开发通用接口时，参数序列化/反序列化是一个比较棘�
 不过 `ObjectMapper#setDefaultTyping` 调用比较麻烦，推荐使用 `ObjectMapper#activateDefaultTypingAsProperty(PolymorphicTypeValidator, DefaultTyping, String)`。使用示例：
 
 ```java
-// 提供 `getIoDataType` 属性
+// 提供 `ioDataType` 属性
 public interface DataType {
-
-    String TYPE_KEY = "ioDataType";
 
     default String getIoDataType() {
         return getClass().getName();
