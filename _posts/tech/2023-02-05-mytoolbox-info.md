@@ -7,7 +7,7 @@ excerpt: 想不想使用最新 Java 技术开发一款属于你自己的小工�
 ---
 {% include JB/setup %}
 
-2020年底受疫情影响，有了一些空闲时间，思维便开始发散起来，在想要做个什么好了。正好需要把 Trello 里的内容导入到 Logseq，突然想到为什么不利用最新的 Java 技术来开发，这样既可以了解最新的 Java 特性，也可以实现导入目的。于是 [MyToolbox](https://github.com/cofcool/my-toolbox) 就呱呱坠地了。
+2022年底受疫情影响，有了一些空闲时间，思维便开始发散起来，在想要做个什么好了。正好需要把 Trello 里的内容导入到 Logseq，突然想到为什么不利用最新的 Java 技术来开发，这样既可以了解最新的 Java 特性，也可以实现导入目的。于是 [MyToolbox](https://github.com/cofcool/my-toolbox) 就呱呱坠地了。
 
 建立项目后，先开始思索项目整体架构应该是什么样的：
 
@@ -46,7 +46,7 @@ public interface Tool {
 }
 ```
 
-重点我们来看看打包环节，看 GraalVM 如何大显身手，可执行文件如何摆脱对 Java 的依赖的。
+重点来看看打包环节，看 GraalVM 如何大显身手，可执行文件如何摆脱对 Java 的依赖的。
 
 GraalVM 提供了 `org.graalvm.buildtools:native-maven-plugin` 插件构建原生可执行文件。构建流程：
 
@@ -54,7 +54,7 @@ GraalVM 提供了 `org.graalvm.buildtools:native-maven-plugin` 插件构建原�
 2. 获取反射、资源文件、JNI 等信息
 3. 根据配置信息构建原生可执行文件
 
-运行 `java -agentlib:native-image-agent=config-merge-dir=./src/main/resources/META-INF/native-image/config -jar ./target/my-toolbox-fat.jar` 生成配置信息，`mvn package` 即可生产原生可执行文件。
+运行 `java -agentlib:native-image-agent=config-merge-dir=./src/main/resources/META-INF/native-image/config -jar ./target/my-toolbox-fat.jar` 生成配置信息，`mvn package` 即可生成原生可执行文件。
 
 🎉🎉🎉，就这样我们的工具箱就完成了。
 
