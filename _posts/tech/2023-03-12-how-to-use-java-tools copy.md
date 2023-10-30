@@ -1,30 +1,38 @@
-# 详解 jstat 等 Java 工具
+---
+layout: post
+category : Tech
+title : JDK 常用工具介绍
+tags : [java]
+excerpt: JDK 内置工具使用介绍，如 jinfo、jstack、jstat 等
+---
+{% include JB/setup %}
 
 
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [详解 jstat 等 Java 工具](#详解-jstat-等-java-工具)
+- [常用命令](#常用命令)
   - [jinfo](#jinfohttpsdocsoraclecomjavase10toolsjinfohtmjswor744)
   - [jps](#jpshttpsdocsoraclecomenjavajavase11toolsjpshtmlguid-6eb65b96-f9dd-4356-b825-6146e9eec81e)
-    - [jstat](#jstathttpsdocsoraclecomenjavajavase11toolsjstathtmlguid-5f72a7f9-5d5a-4486-8201-e1d1ba8accb5)
-    - [JProfile](#jprofile)
-    - [JFR](#jfrhttpsdocsoraclecomjavacomponentsjmc-5-4jfr-runtime-guidetochtm)
-    - [JReleaser](#jreleaser)
+  - [jstat](#jstathttpsdocsoraclecomenjavajavase11toolsjstathtmlguid-5f72a7f9-5d5a-4486-8201-e1d1ba8accb5)
+  - [jcmd](#jcmd)
+  - [jmap](#jmap)
+  - [jstack](#jstack)
+  - [jhsdb](#jhsdb)
+  - [jconsole/jvisualvm](#jconsolejvisualvm)
+  - [JProfile](#jprofile)
+  - [JFR](#jfrhttpsdocsoraclecomjavacomponentsjmc-5-4jfr-runtime-guidetochtm)
+  - [JReleaser](#jreleaser)
+- [参考资料](#参考资料)
 
 <!-- /code_chunk_output -->
 
-* jinfo
-* jps
-* jstat 
-* jcmd
-* jmap
-* jstack
+开发中需要对 JVM 的运行状态有详细的了解，因此 JVM 内置了相关命令用于跟踪和调试。
 
-* jhsdb
+## 常用命令
 
-## [jinfo](https://docs.oracle.com/javase/10/tools/jinfo.htm#JSWOR744)
+### [jinfo](https://docs.oracle.com/javase/10/tools/jinfo.htm#JSWOR744)
 
 生成指定线程的 Java 配置信息，注意：实验性质，未来可能会移除。
 
@@ -75,7 +83,7 @@ sun.jnu.encoding=UTF-8
 ...
 ```
 
-## [jps](https://docs.oracle.com/en/java/javase/11/tools/jps.html#GUID-6EB65B96-F9DD-4356-B825-6146E9EEC81E)
+### [jps](https://docs.oracle.com/en/java/javase/11/tools/jps.html#GUID-6EB65B96-F9DD-4356-B825-6146E9EEC81E)
 
 列出当前系统运行的 JVM 实例
 
@@ -169,31 +177,18 @@ Timestamp         S0     S1     E      O      M     CCS    YGC     YGCT    FGC  
 
 S0 为 from 空间的空间利用率，S1 为 to 空间的空间利用率，E 为 eden 空间的空间利用率，O 为老生代的空间利用率，M 为元数据空间的空间利用率，CCS 为类指针压缩率，YGC 为新生代发生 GC 事件的次数，YGCT 为新生代 GC 消耗的时间，FGC 为发生 Full GC 事件的次数，FGCT 为 Full GC 消耗的时间，CGC 为并行 GC 次数，CGCT 为并行 GC 消耗时间，GCT 为 gc 总消耗时间
 
-```plantuml
-@startuml
-robust "Web Browser" as WB
-concise "Web User" as WU
-@0
-WU is Idle
-WB is Idle
-@100
-WU is Waiting
-WB is Processing
-@300
-WB is Waiting
-@enduml
-```
-
-```plantuml
-@startgantt
-[Prototype design] lasts 15 days
-[Test prototype] lasts 10 days
-[Test prototype] starts at [Prototype design]'s end
-@endgantt
-```
+### jcmd
+###  jmap
+###  jstack
+###  jhsdb
+###  jconsole/jvisualvm
 
 ### JProfile
 
 ### [JFR](https://docs.oracle.com/javacomponents/jmc-5-4/jfr-runtime-guide/toc.htm)
 
 ### JReleaser
+
+## 参考资料
+
+* https://docs.oracle.com/en/java/javase/17/docs/specs/man/index.html
